@@ -3,6 +3,11 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+appsettings.*.json
+!appsettings.development.json
+*.Importer-*.config
+wwwroot/
+
 # User-specific files
 *.rsuser
 *.suo
@@ -396,3 +401,50 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+
+.vs/
+.vscode/
+.fake/
+.idea/
+.ionide/
+.paket/
+dotCover.Output/
+dotCover.Output.html
+
+[Pp]ackages/
+[Pp]aket-files/
+[Dd]ebug/
+[Rr]elease/
+[Bb]uild/
+[Bb]in/
+[Oo]bj/
+[Xx]64/
+[Dd]ist/
+[Tt]est[Rr]esults/
+
+*.suo
+*.user
+*.sln.docstates
+*.ntvs*
+*.njsproj
+
+node_modules/
+bower_components/
+debug.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.ncrunchproject
+*ncrunchsolution
+_Ncrunch_*
+TestResults.xml
+tracing*.log
+
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+
+crabimport-request-*.json
+structurizr-*.json
