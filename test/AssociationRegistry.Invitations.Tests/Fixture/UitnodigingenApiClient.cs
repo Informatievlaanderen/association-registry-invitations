@@ -1,4 +1,7 @@
-﻿namespace AssociationRegistry.Invitations.Tests.Fixture;
+﻿using System.Net.Http.Json;
+using AssociationRegistry.Invitations.Uitnodingen.Requests;
+
+namespace AssociationRegistry.Invitations.Tests.Fixture;
 
 public class UitnodigingenApiClient : IDisposable
 {
@@ -16,4 +19,7 @@ public class UitnodigingenApiClient : IDisposable
 
     public async Task<HttpResponseMessage> GetUitnodigingenOpVcode(string vCode)
         => await _httpClient.GetAsync($"/uitnodigingen?vcode={vCode}");
+
+    public async Task<HttpResponseMessage> RegistreerUitnodiging(UitnodigingsRequest uitnodigingsRequest)
+        => await _httpClient.PostAsJsonAsync($"/uitnodigingen", uitnodigingsRequest);
 }

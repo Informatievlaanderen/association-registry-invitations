@@ -1,5 +1,6 @@
 using AssociationRegistry.Invitations.Constants;
 using AssociationRegistry.Invitations.Infrastructure.Extentions;
+using AssociationRegistry.Invitations.Uitnodingen.Requests;
 using IdentityModel.AspNetCore.OAuth2Introspection;
 using Marten;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -42,11 +43,9 @@ builder.Services.AddAuthentication(options =>
     );
 builder.Services.AddAuthorization(
     options =>
-        options.AddPolicy(
-            GlobalPolicyName,
-            new AuthorizationPolicyBuilder()
+        options.FallbackPolicy = new AuthorizationPolicyBuilder()
                 .RequireClaim(Security.ClaimTypes.Scope, Security.Scopes.Uitnodigingen)
-                .Build()));
+                .Build());
 
 var app = builder.Build();
 
@@ -62,8 +61,8 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers().RequireAuthorization(GlobalPolicyName);
-app.MapGet("/", Results.NoContent).RequireAuthorization(GlobalPolicyName);
-app.MapGet("/uitnodigingen", ([FromQuery] string vcode) => new { vcode }).RequireAuthorization(GlobalPolicyName);
+app.MapGet("/", Results.NoContent);
+app.MapGet("/uitnodigingen", ([FromQuery] string vcode) => new { vcode });
+app.MapPost("/uitnodigingen", (UitnodigingsRequest request) => Results.Created("uitnodigingen/0", new {}));
 
 app.Run();
