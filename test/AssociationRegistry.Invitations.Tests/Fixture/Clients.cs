@@ -42,9 +42,9 @@ public class Clients : IDisposable
             client: () => new HttpClient(),
             new TokenClientOptions
             {
-                Address = $"{_oAuth2IntrospectionOptions.Authority}/connect/token",
-                ClientId = clientId,
-                ClientSecret = clientSecret,
+                Address = $"http://127.0.0.1:15051/connect/token",
+                ClientId = "vloketClient",
+                ClientSecret = "secret",
                 Parameters = new Parameters(
                     new[]
                     {

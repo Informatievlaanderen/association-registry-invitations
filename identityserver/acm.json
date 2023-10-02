@@ -4,13 +4,13 @@
       "name": "dv",
       "displayName": "Digitaal Vlaanderen",
       "userClaims": [
-        "dv_verenigingsregister_hoofdvertegenwoordigers",
+        "dv_verenigingsregister_uitnodigingen",
         "vo_info"
       ]
     }
   ],
   "apiScopes": [
-    "dv_verenigingsregister_hoofdvertegenwoordigers",
+    "dv_verenigingsregister_uitnodigingen",
     "vo_info"
   ],
   "apiResources": [
@@ -21,7 +21,7 @@
       ],
       "scopes": [
         "vo_info",
-        "dv_verenigingsregister_hoofdvertegenwoordigers"
+        "dv_verenigingsregister_uitnodigingen"
       ]
     }
   ],
@@ -36,7 +36,7 @@
         "standardscopes.openid",
         "standardscopes.profile",
         "vo_info",
-        "dv_verenigingsregister_hoofdvertegenwoordigers"
+        "dv_verenigingsregister_uitnodigingen"
       ],
       "alwaysSendClientClaims": true,
       "alwaysIncludeUserClaimsInIdToken": true
@@ -49,7 +49,7 @@
       "allowedGrantTypes": "clientCredentials",
       "allowedScopes": [
         "vo_info",
-        "dv_verenigingsregister_hoofdvertegenwoordigers"
+        "dv_verenigingsregister_uitnodigingen"
       ],
       "accessTokenLifetime": -1,
       "identityTokenLifetime": -1,
