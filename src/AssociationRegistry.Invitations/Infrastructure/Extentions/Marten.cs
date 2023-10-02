@@ -1,7 +1,7 @@
 ﻿using AssociationRegistry.Invitations.Infrastructure.ConfigurationBindings;
+using AssociationRegistry.Invitations.Uitnodingen.Models;
 using JasperFx.CodeGeneration;
 using Marten;
-using Marten.Events;
 using Marten.Services;
 using Newtonsoft.Json;
 using Weasel.Core;
@@ -14,14 +14,16 @@ public static class Marten
         this IServiceCollection services,
         PostgreSqlOptionsSection postgreSqlOptions)
     {
+        services.AddSingleton(postgreSqlOptions);
+
         var martenConfiguration = services.AddMarten(
             serviceProvider =>
             {
                 var opts = new StoreOptions();
                 opts.Connection(postgreSqlOptions.GetConnectionString());
-                opts.Events.StreamIdentity = StreamIdentity.AsString;
                 opts.Serializer(CreateMartenSerializer());
-                opts.Events.MetadataConfig.EnableAll();
+
+                opts.RegisterDocumentType<Uitnodiging>();
 
                 if (serviceProvider.GetRequiredService<IHostEnvironment>().IsDevelopment())
                 {

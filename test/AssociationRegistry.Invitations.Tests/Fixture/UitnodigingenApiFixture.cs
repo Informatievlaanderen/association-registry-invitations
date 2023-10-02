@@ -1,12 +1,14 @@
 ﻿using AssociationRegistry.Invitations.Infrastructure.ConfigurationBindings;
 using AssociationRegistry.Invitations.Infrastructure.Extentions;
 using AssociationRegistry.Invitations.Tests.Fixture.Helpers;
+using AssociationRegistry.Invitations.Uitnodingen.Models;
 using IdentityModel.AspNetCore.OAuth2Introspection;
+using Marten;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Npgsql;
 
 namespace AssociationRegistry.Invitations.Tests.Fixture;
@@ -33,6 +35,14 @@ public class UitnodigingenApiFixture
             GetConfiguration().GetSection(nameof(OAuth2IntrospectionOptions))
                 .Get<OAuth2IntrospectionOptions>()!,
             _application.CreateClient);
+    }
+
+    public void RestDatabase()
+    {
+        var store = _application.Services.GetRequiredService<IDocumentStore>();
+        var session = store.LightweightSession();
+        session.DeleteWhere<Uitnodiging>(u => true);
+        session.SaveChanges();
     }
 
     private static void DropCreateDatabase(PostgreSqlOptionsSection postgreSqlOptionsSection)

@@ -5,11 +5,11 @@ namespace AssociationRegistry.Invitations.Tests.BijHetOpvragenVanUitnodigingen.O
 using Fixture;
 
 [Collection(UitnodigingenApiCollection.Name)]
-public class GivenGeenRegistraties
+public class GegevenGeenRegistraties
 {
     private readonly UitnodigingenApiClient _client;
 
-    public GivenGeenRegistraties(UitnodigingenApiFixture fixture)
+    public GegevenGeenRegistraties(UitnodigingenApiFixture fixture)
     {
         _client = fixture.Clients.Authenticated;
     }

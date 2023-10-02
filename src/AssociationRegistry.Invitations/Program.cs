@@ -1,10 +1,14 @@
 using AssociationRegistry.Invitations.Constants;
 using AssociationRegistry.Invitations.Infrastructure.Extentions;
+using AssociationRegistry.Invitations.Uitnodingen.Mapping;
+using AssociationRegistry.Invitations.Uitnodingen.Querries;
 using AssociationRegistry.Invitations.Uitnodingen.Requests;
+using AssociationRegistry.Invitations.Uitnodingen.Responses;
 using IdentityModel.AspNetCore.OAuth2Introspection;
 using Marten;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 const string GlobalPolicyName = "Global";
@@ -44,8 +48,8 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization(
     options =>
         options.FallbackPolicy = new AuthorizationPolicyBuilder()
-                .RequireClaim(Security.ClaimTypes.Scope, Security.Scopes.Uitnodigingen)
-                .Build());
+            .RequireClaim(Security.ClaimTypes.Scope, Security.Scopes.Uitnodigingen)
+            .Build());
 
 var app = builder.Build();
 
@@ -62,7 +66,25 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapGet("/", Results.NoContent);
-app.MapGet("/uitnodigingen", ([FromQuery] string vcode) => new { vcode });
-app.MapPost("/uitnodigingen", (UitnodigingsRequest request) => Results.Created("uitnodigingen/0", new {}));
+app.MapGet("/uitnodigingen", async ([FromQuery] string vcode, IDocumentStore store) =>
+{
+    var uitnodigingen = await GetUitnodigingen.MetVCode(vcode).ExecuteAsync(store);
+    return Results.Ok(new UitnodigingenResponse()
+    {
+        Uitnodigingen = uitnodigingen.Select(UitnodigingsMapper.ToResponse).ToArray(),
+    });
+});
+app.MapPost("/uitnodigingen",
+    async ([FromBody] UitnodigingsRequest request, IDocumentStore store, CancellationToken cancellationToken) =>
+    {
+        var lightweightSession = store.LightweightSession();
+        var uitnodiging = request.ToModel();
+        lightweightSession.Store(uitnodiging);
+        await lightweightSession.SaveChangesAsync(cancellationToken);
+        return Results.Created("uitnodigingen/0", new RegistratieResponse()
+        {
+            Id = uitnodiging.Id,
+        });
+    });
 
 app.Run();

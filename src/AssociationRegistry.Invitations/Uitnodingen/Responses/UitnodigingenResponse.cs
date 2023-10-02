@@ -1,9 +1,13 @@
-using AssociationRegistry.Invitations.Uitnodingen.Models;
+﻿namespace AssociationRegistry.Invitations.Uitnodingen.Responses;
 
-namespace AssociationRegistry.Invitations.Uitnodingen.Requests;
-
-public class UitnodigingsRequest
+public class UitnodigingenResponse
 {
+    public Uitnodiging[] Uitnodigingen { get; set; }
+}
+
+public class Uitnodiging
+{
+    public Guid Id { get; set; }
     public string VCode { get; set; }
     public string Boodschap { get; set; }
     public Uitnodiger Uitnodiger { get; set; }
