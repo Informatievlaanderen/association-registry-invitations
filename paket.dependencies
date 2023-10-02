@@ -11,3 +11,4 @@ nuget IdentityModel.AspnetCore.OAuth2Introspection
 nuget Microsoft.AspNetCore.Authentication.JwtBearer
 nuget Microsoft.AspNetCore.Mvc.Testing
 nuget FluentAssertions
+nuget Marten

@@ -9,6 +9,5 @@ public class Security
 
     public static class Scopes
     {
-        public const string Admin = "dv_verenigingsregister_uitnodigingen";
-    }
+        public const string Uitnodigingen = "dv_verenigingsregister_uitnodigingen"; }
 }

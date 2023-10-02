@@ -8,11 +8,12 @@ public class UitnodigingenApiClient : IDisposable
     {
         _httpClient = httpClient;
     }
-
-    public async Task<HttpResponseMessage> GetRoot() => await _httpClient.GetAsync("/");
-
     public void Dispose()
     {
         _httpClient.Dispose();
     }
+    public async Task<HttpResponseMessage> GetRoot() => await _httpClient.GetAsync("/");
+
+    public async Task<HttpResponseMessage> GetUitnodigingenOpVcode(string vCode)
+        => await _httpClient.GetAsync($"/uitnodigingen?vcode={vCode}");
 }

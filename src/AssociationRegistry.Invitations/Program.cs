@@ -1,12 +1,20 @@
 using AssociationRegistry.Invitations.Constants;
+using AssociationRegistry.Invitations.Infrastructure.Extentions;
 using IdentityModel.AspNetCore.OAuth2Introspection;
+using Marten;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 const string GlobalPolicyName = "Global";
 var builder = WebApplication.CreateBuilder(args);
 
+var postgreSqlOptions = builder.Configuration.GetPostgreSqlOptionsSection();
+
+
 // Add services to the container.
+
+builder.Services.AddMarten(postgreSqlOptions);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -37,7 +45,7 @@ builder.Services.AddAuthorization(
         options.AddPolicy(
             GlobalPolicyName,
             new AuthorizationPolicyBuilder()
-                .RequireClaim(Security.ClaimTypes.Scope, Security.Scopes.Admin)
+                .RequireClaim(Security.ClaimTypes.Scope, Security.Scopes.Uitnodigingen)
                 .Build()));
 
 var app = builder.Build();
@@ -56,5 +64,6 @@ app.UseAuthorization();
 
 app.MapControllers().RequireAuthorization(GlobalPolicyName);
 app.MapGet("/", Results.NoContent).RequireAuthorization(GlobalPolicyName);
+app.MapGet("/uitnodigingen", ([FromQuery] string vcode) => new { vcode }).RequireAuthorization(GlobalPolicyName);
 
 app.Run();

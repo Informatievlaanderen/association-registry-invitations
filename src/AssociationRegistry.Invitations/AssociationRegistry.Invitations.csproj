@@ -6,7 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
     <ItemGroup>
-        <InternalsVisibleTo Include="AssociationRegistry.Invitations.Tests"/>
+        <InternalsVisibleTo Include="AssociationRegistry.Invitations.Tests" />
     </ItemGroup>
-    <Import Project="..\..\.paket\Paket.Restore.targets"/>
+    <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

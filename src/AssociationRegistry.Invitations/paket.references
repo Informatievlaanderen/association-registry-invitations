@@ -3,3 +3,4 @@ Swashbuckle.AspNetCore
 IdentityModel
 IdentityModel.AspnetCore.OAuth2Introspection
 Microsoft.AspNetCore.Authentication.JwtBearer
+Marten
