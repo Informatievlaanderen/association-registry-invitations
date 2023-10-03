@@ -129,8 +129,6 @@ jobs:
         with:
           path: packages
           key: paket-${{ runner.os }}-${{ hashFiles('paket.lock') }}
-          restore-keys: |
-            paket-${{ runner.os }}
 
       - name: Create testresults directory
         run: mkdir -p testresults
