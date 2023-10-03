@@ -1,5 +1,3 @@
-using AssociationRegistry.Invitations.Uitnodingen.Models;
-
 namespace AssociationRegistry.Invitations.Uitnodingen.Requests;
 
 public class UitnodigingsRequest

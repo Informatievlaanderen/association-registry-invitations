@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using AssociationRegistry.Invitations.Tests.Autofixture;
 using AssociationRegistry.Invitations.Tests.Fixture;
 using AssociationRegistry.Invitations.Uitnodingen.Requests;
 using Newtonsoft.Json.Linq;
@@ -31,8 +32,14 @@ public class GegevenEenRegistratie : IClassFixture<GegevenEenRegistratie.Setup>
         var content = await response.Content.ReadAsStringAsync();
 
         var token = JToken.Parse(content);
-        token["uitnodigingen"].Should().HaveCount(1);
-        token["uitnodigingen"][0]["id"].Value<string>().Should().Be(_setup.UitnodigingsId.ToString());
+        var uitnodiging = token["uitnodigingen"].Should().ContainSingle().Subject;
+        uitnodiging["id"].Value<string>().Should().Be(_setup.UitnodigingsId.ToString());
+        uitnodiging["vCode"].Value<string>().Should().Be(_setup.Uitnodiging.VCode);
+        uitnodiging["boodschap"].Value<string>().Should().Be(_setup.Uitnodiging.Boodschap);
+        uitnodiging["uitnodiger"]["vertegenwoordigerId"].Value<int>().Should().Be(_setup.Uitnodiging.Uitnodiger.VertegenwoordigerId);
+        uitnodiging["uitgenodigde"]["insz"].Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Insz);
+        uitnodiging["uitgenodigde"]["naam"].Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Naam);
+        uitnodiging["uitgenodigde"]["voornaam"].Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Voornaam);
     }
 
     public class Setup : IDisposable, IAsyncLifetime
@@ -48,10 +55,7 @@ public class GegevenEenRegistratie : IClassFixture<GegevenEenRegistratie.Setup>
             _fixture = fixture;
             _client = fixture.Clients.Authenticated;
 
-            Uitnodiging = new UitnodigingsRequest()
-            {
-                VCode = "V0000001"
-            };
+            Uitnodiging = new UitnodigingenFixture().Create<UitnodigingsRequest>();
         }
 
         public void Dispose()

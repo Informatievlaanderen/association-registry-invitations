@@ -4,14 +4,13 @@ using AssociationRegistry.Invitations.Uitnodingen.Mapping;
 using AssociationRegistry.Invitations.Uitnodingen.Querries;
 using AssociationRegistry.Invitations.Uitnodingen.Requests;
 using AssociationRegistry.Invitations.Uitnodingen.Responses;
+using AssociationRegistry.Invitations.Uitnodingen.Validators;
 using IdentityModel.AspNetCore.OAuth2Introspection;
 using Marten;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
-const string GlobalPolicyName = "Global";
 var builder = WebApplication.CreateBuilder(args);
 
 var postgreSqlOptions = builder.Configuration.GetPostgreSqlOptionsSection();
@@ -69,7 +68,7 @@ app.MapGet("/", Results.NoContent);
 app.MapGet("/uitnodigingen", async ([FromQuery] string vcode, IDocumentStore store) =>
 {
     var uitnodigingen = await GetUitnodigingen.MetVCode(vcode).ExecuteAsync(store);
-    return Results.Ok(new UitnodigingenResponse()
+    return Results.Ok(new UitnodigingenResponse
     {
         Uitnodigingen = uitnodigingen.Select(UitnodigingsMapper.ToResponse).ToArray(),
     });
@@ -77,11 +76,18 @@ app.MapGet("/uitnodigingen", async ([FromQuery] string vcode, IDocumentStore sto
 app.MapPost("/uitnodigingen",
     async ([FromBody] UitnodigingsRequest request, IDocumentStore store, CancellationToken cancellationToken) =>
     {
+        var result = new UitnodigingsValidator().Validate(request);
+        if (!result.IsValid)
+        {
+            return Results.ValidationProblem(result.ToDictionary());
+        }
+
         var lightweightSession = store.LightweightSession();
         var uitnodiging = request.ToModel();
         lightweightSession.Store(uitnodiging);
         await lightweightSession.SaveChangesAsync(cancellationToken);
-        return Results.Created("uitnodigingen/0", new RegistratieResponse()
+
+        return Results.Created("uitnodigingen/0", new RegistratieResponse
         {
             Id = uitnodiging.Id,
         });

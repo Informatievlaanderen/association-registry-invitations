@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using Microsoft.Extensions.Configuration;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 
 namespace AssociationRegistry.Invitations.Tests.Fixture.Helpers;
 

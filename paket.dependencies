@@ -12,3 +12,5 @@ nuget Microsoft.AspNetCore.Authentication.JwtBearer
 nuget Microsoft.AspNetCore.Mvc.Testing
 nuget FluentAssertions
 nuget Marten
+nuget FluentValidation
+nuget AutoFixture

@@ -1,6 +1,5 @@
 using AssociationRegistry.Invitations.Infrastructure.ConfigurationBindings;
 using AssociationRegistry.Invitations.Infrastructure.Utilities;
-using Newtonsoft.Json;
 
 namespace AssociationRegistry.Invitations.Infrastructure.Extentions;
 

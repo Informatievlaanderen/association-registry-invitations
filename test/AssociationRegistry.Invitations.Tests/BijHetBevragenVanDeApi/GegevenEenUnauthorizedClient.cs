@@ -1,7 +1,7 @@
 using System.Net;
 using AssociationRegistry.Invitations.Tests.Fixture;
 
-namespace AssociationRegistry.Invitations.Tests.WhenAccessingTheApi;
+namespace AssociationRegistry.Invitations.Tests.BijHetBevragenVanDeApi;
 
 [Collection(UitnodigingenApiCollection.Name)]
 public class GivenAnUnauthorizedClient

@@ -7,15 +7,15 @@ public static class UitnodigingsMapper
         {
             VCode = request.VCode,
             Boodschap = request.Boodschap,
-            Uitnodiger = new Models.Uitnodiger()
+            Uitnodiger = new Models.Uitnodiger
             {
-                VertegenwoordigerId = request.Uitnodiger?.VertegenwoordigerId ?? 0,
+                VertegenwoordigerId = request.Uitnodiger.VertegenwoordigerId,
             },
-            Uitgenodigde = new Models.Uitgenodigde()
+            Uitgenodigde = new Models.Uitgenodigde
             {
-                Insz = request.Uitgenodigde?.Insz,
-                Voornaam = request.Uitgenodigde?.Voornaam,
-                Naam = request.Uitgenodigde?.Voornaam,
+                Insz = request.Uitgenodigde.Insz,
+                Voornaam = request.Uitgenodigde.Voornaam,
+                Naam = request.Uitgenodigde.Naam,
             },
         };
 
@@ -25,15 +25,15 @@ public static class UitnodigingsMapper
             Id = model.Id,
             VCode = model.VCode,
             Boodschap = model.Boodschap,
-            Uitnodiger = new Responses.Uitnodiger()
+            Uitnodiger = new Responses.Uitnodiger
             {
-                VertegenwoordigerId = model.Uitnodiger?.VertegenwoordigerId ?? 0,
+                VertegenwoordigerId = model.Uitnodiger.VertegenwoordigerId,
             },
-            Uitgenodigde = new Responses.Uitgenodigde()
+            Uitgenodigde = new Responses.Uitgenodigde
             {
-                Insz = model.Uitgenodigde?.Insz,
-                Voornaam = model.Uitgenodigde?.Voornaam,
-                Naam = model.Uitgenodigde?.Voornaam,
+                Insz = model.Uitgenodigde.Insz,
+                Voornaam = model.Uitgenodigde.Voornaam,
+                Naam = model.Uitgenodigde.Naam,
             },
         };
 }

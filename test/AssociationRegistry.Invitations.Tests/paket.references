@@ -4,3 +4,4 @@ xunit.runner.visualstudio
 Microsoft.AspNetCore.Mvc.Testing
 FluentAssertions
 coverlet.collector
+AutoFixture

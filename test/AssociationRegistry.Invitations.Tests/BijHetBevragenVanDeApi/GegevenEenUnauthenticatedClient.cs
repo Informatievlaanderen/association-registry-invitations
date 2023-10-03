@@ -1,14 +1,14 @@
 ﻿using System.Net;
 using AssociationRegistry.Invitations.Tests.Fixture;
 
-namespace AssociationRegistry.Invitations.Tests.WhenAccessingTheApi;
+namespace AssociationRegistry.Invitations.Tests.BijHetBevragenVanDeApi;
 
 [Collection(UitnodigingenApiCollection.Name)]
-public class GivenAnUnauthenticatedClient
+public class GegevenEenUnauthenticatedClient
 {
     private readonly UitnodigingenApiClient _client;
 
-    public GivenAnUnauthenticatedClient(UitnodigingenApiFixture fixture)
+    public GegevenEenUnauthenticatedClient(UitnodigingenApiFixture fixture)
     {
         _client = fixture.Clients.Unauthenticated;
     }
