@@ -141,7 +141,7 @@ jobs:
       - name: Run dependencies
         shell: bash
         run: |
-          docker compose up
+          docker compose up -d
 
       - name: Run tests again
         shell: bash
