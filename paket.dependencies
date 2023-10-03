@@ -1,5 +1,7 @@
 source https://api.nuget.org/v3/index.json
 
+nuget Be.Vlaanderen.Basisregisters.Build.Pipeline 6.0.4
+
 nuget coverlet.collector 3.1.2
 nuget Microsoft.AspNetCore.OpenApi 7.0.1
 nuget Microsoft.NET.Test.Sdk 17.3.2
