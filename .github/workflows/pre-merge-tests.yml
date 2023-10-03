@@ -164,7 +164,7 @@ jobs:
       - name: Run tests again
         shell: bash
         run: |
-          docker run --network host --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 dotnet tool restore && dotnet paket install && dotnet test --logger html
+          docker run --network host --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 dotnet tool restore && dotnet paket restore && dotnet test --logger html
       
 
       - name: Archive code coverage results
