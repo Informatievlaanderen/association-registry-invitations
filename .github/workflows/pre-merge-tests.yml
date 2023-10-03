@@ -127,10 +127,10 @@ jobs:
         id: cache-paket-packages
         uses: actions/cache@v3
         with:
-          path: .paket/packages
+          path: packages
           key: paket-${{ runner.os }}-${{ hashFiles('paket.lock') }}
           restore-keys: |
-            paket-${{ runner.os }}-
+            paket-${{ runner.os }}
 
       - name: Create testresults directory
         run: mkdir -p testresults
@@ -153,7 +153,7 @@ jobs:
         if: steps.cache-paket-packages.outputs.cache-hit != 'true'
         uses: actions/cache@v3
         with:
-          path: .paket/packages
+          path: packages
           key: paket-${{ runner.os }}-${{ hashFiles('paket.lock') }}
           
       - name: Run dependencies
