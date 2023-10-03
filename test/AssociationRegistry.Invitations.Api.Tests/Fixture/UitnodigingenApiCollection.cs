@@ -4,4 +4,5 @@
 public class UitnodigingenApiCollection : ICollectionFixture<UitnodigingenApiFixture>
 {
     public const string Name = nameof(UitnodigingenApiCollection);
+
 }
