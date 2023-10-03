@@ -7,13 +7,13 @@ using Newtonsoft.Json.Linq;
 namespace AssociationRegistry.Invitations.Api.Tests.BijHetRegistrerenVanEenUitnodiging;
 
 [Collection(UitnodigingenApiCollection.Name)]
-public class GegevenEenUitnodigingZonderNaam : IDisposable
+public class GegevenEenUitnodigingZonderEmail : IDisposable
 {
     private readonly UitnodigingenApiClient _client;
     private readonly UitnodigingenApiFixture _fixture;
     private readonly UitnodigingsRequest _request;
 
-    public GegevenEenUitnodigingZonderNaam(UitnodigingenApiFixture fixture)
+    public GegevenEenUitnodigingZonderEmail(UitnodigingenApiFixture fixture)
     {
         _fixture = fixture;
         _client = fixture.Clients.Authenticated;
@@ -22,7 +22,7 @@ public class GegevenEenUitnodigingZonderNaam : IDisposable
             .With(u => u.Uitgenodigde,
                 new UitnodigingenFixture()
                     .Build<Uitgenodigde>()
-                    .Without(u2=>u2.Naam)
+                    .Without(u2=>u2.Email)
                     .Create())
             .Create();
     }
@@ -43,9 +43,9 @@ public class GegevenEenUitnodigingZonderNaam : IDisposable
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);
         token["errors"]!.ToObject<Dictionary<string, string[]>>()
-            .Should().ContainKey("Uitgenodigde.Naam")
+            .Should().ContainKey("Uitgenodigde.Email")
             .WhoseValue
-            .Should().ContainEquivalentOf("Naam is verplicht.");
+            .Should().ContainEquivalentOf("Email is verplicht.");
     }
 
     public void Dispose()

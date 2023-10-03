@@ -1,4 +1,6 @@
-﻿using AssociationRegistry.Invitations.Api.Infrastructure.ConfigurationBindings;
+﻿
+
+using AssociationRegistry.Invitations.Api.Infrastructure.ConfigurationBindings;
 using AssociationRegistry.Invitations.Api.Infrastructure.Extentions;
 using AssociationRegistry.Invitations.Api.Tests.Fixture.Helpers;
 using AssociationRegistry.Invitations.Api.Uitnodingen.Models;
@@ -9,7 +11,6 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Npgsql;
 
 namespace AssociationRegistry.Invitations.Api.Tests.Fixture;

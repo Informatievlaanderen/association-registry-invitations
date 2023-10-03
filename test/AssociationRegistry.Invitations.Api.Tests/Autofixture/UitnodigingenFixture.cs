@@ -8,7 +8,7 @@ public class UitnodigingenFixture : AutoFixture.Fixture
     {
         Customize<UitnodigingsRequest>(
             composer => composer
-                .With(u => u.VCode, $"V{composer.Create<int>():0000000}")
+                .With(u => u.VCode, $"V{this.Create<int>():0000000}")
                 .With(u => u.Boodschap)
                 .With(u => u.Uitgenodigde)
                 .With(u => u.Uitnodiger)
@@ -18,6 +18,7 @@ public class UitnodigingenFixture : AutoFixture.Fixture
                 .With(u => u.Insz, "01020312316")
                 .With(u => u.Naam)
                 .With(u => u.Voornaam)
+                .With(u => u.Email, "test@example.org")
                 .OmitAutoProperties());
         Customize<Uitnodiger>(
             composer => composer

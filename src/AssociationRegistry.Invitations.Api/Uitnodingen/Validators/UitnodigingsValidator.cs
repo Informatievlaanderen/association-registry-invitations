@@ -1,10 +1,15 @@
-﻿using AssociationRegistry.Invitations.Api.Uitnodingen.Requests;
+﻿using System.Text.RegularExpressions;
+using AssociationRegistry.Invitations.Api.Uitnodingen.Requests;
 using FluentValidation;
 
 namespace AssociationRegistry.Invitations.Api.Uitnodingen.Validators;
 
 public class UitnodigingsValidator : AbstractValidator<UitnodigingsRequest>
 {
+    private static readonly Regex EmailRegex = new(
+        @"^(([a-z0-9]+[\.!#$%&'*+/=?^_`{|}~-]*)*[a-z0-9]+)@(([a-z0-9]+[\.-]?)*[a-z0-9]\.)+[a-z]{2,}$",
+        RegexOptions.IgnoreCase);
+
     public UitnodigingsValidator()
     {
         RuleFor(u => u.VCode)
@@ -48,19 +53,31 @@ public class UitnodigingsValidator : AbstractValidator<UitnodigingsRequest>
             .WithName(u => $"{nameof(u.Uitgenodigde)}.{nameof(u.Uitgenodigde.Voornaam)}")
             .WithMessage("Voornaam is verplicht.")
             .When(u => u.Uitgenodigde != null);
+        RuleFor(u => u.Uitgenodigde.Email)
+            .NotNull()
+            .WithName(u => $"{nameof(u.Uitgenodigde)}.{nameof(u.Uitgenodigde.Email)}")
+            .WithMessage("Email is verplicht.")
+            .When(u => u.Uitgenodigde != null);
+        RuleFor(u => u.Uitgenodigde.Email)
+            .Must(BeValidEmail)
+            .WithName(u => $"{nameof(u.Uitgenodigde)}.{nameof(u.Uitgenodigde.Email)}")
+            .WithMessage("Email is ongeldig.")
+            .When(u => u.Uitgenodigde != null && u.Uitgenodigde.Email != null);
     }
+
+    private static bool BeValidEmail(string email) => EmailRegex.IsMatch(email);
 
     private static bool BeValidInsz(string insz)
     {
         if (insz.Length == 15 &&
             (insz[2] != '.' || insz[5] != '.' || insz[8] != '-' || insz[12] != '.')) return false;
 
-        var trimmedInsz = insz.Length<13 ? insz : insz.Remove(12, 1).Remove(8, 1).Remove(5, 1).Remove(2, 1);
+        var trimmedInsz = insz.Length < 13 ? insz : insz.Remove(12, 1).Remove(8, 1).Remove(5, 1).Remove(2, 1);
         if (trimmedInsz.Length != 11) return false;
         if (!trimmedInsz.All(char.IsDigit)) return false;
 
         var inszNumber = long.Parse(trimmedInsz);
-        if (97-((inszNumber / 100) % 97) != inszNumber % 100) return false;
+        if (97 - ((inszNumber / 100) % 97) != inszNumber % 100) return false;
 
         return true;
     }

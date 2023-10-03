@@ -43,6 +43,8 @@ builder.Services.AddAuthorization(
             .RequireClaim(Security.ClaimTypes.Scope, Security.Scopes.Uitnodigingen)
             .Build());
 
+builder.Services.AddControllers();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -57,4 +59,10 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapControllers();
+
 app.Run();
+
+public partial class Program
+{
+}
