@@ -131,7 +131,14 @@ jobs:
       - name: Run tests
         shell: bash
         run: |
-          ./run-tests.sh
+          if [ -d "/tmp/.docker-layers/" ]; then
+            docker load -i /tmp/.docker-layers/image.tar
+          else
+            docker compose --profile run-tests up --build --exit-code-from tests
+            
+            mkdir -p /tmp/.docker-layers/
+            docker save -o /tmp/.docker-layers/image.tar my-image-name
+          fi
 
       - name: Archive code coverage results
         if: ${{ always() }}
