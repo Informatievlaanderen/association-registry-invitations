@@ -24,7 +24,11 @@ public class UitnodigingenApiFixture
 
     public UitnodigingenApiFixture()
     {
-        var postgreSqlOptionsSection = GetConfiguration().GetPostgreSqlOptionsSection();
+        var config = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.testrunner.json").Build();
+        var postgreSqlOptionsSection = config.GetPostgreSqlOptionsSection();
+        
         WaitFor.Postgres.ToBecomeAvailable(new NullLogger<UitnodigingenApiFixture>(),
             GetConnectionString(postgreSqlOptionsSection, RootDatabase));
 
@@ -33,13 +37,14 @@ public class UitnodigingenApiFixture
         _application = new WebApplicationFactory<Program>()
             .WithWebHostBuilder(
                 builder => { builder.UseContentRoot(Directory.GetCurrentDirectory()); });
+        
         Clients = new Clients(
-            GetConfiguration().GetSection(nameof(OAuth2IntrospectionOptions))
+            config.GetSection(nameof(OAuth2IntrospectionOptions))
                 .Get<OAuth2IntrospectionOptions>()!,
             _application.CreateClient);
     }
 
-    public void RestDatabase()
+    public void ResetDatabase()
     {
         var store = _application.Services.GetRequiredService<IDocumentStore>();
         var session = store.LightweightSession();
@@ -72,13 +77,6 @@ public class UitnodigingenApiFixture
             connection.Close();
             connection.Dispose();
         }
-    }
-
-    private IConfigurationRoot GetConfiguration()
-    {
-        var tempConfiguration = ConfigurationHelper.GetConfiguration();
-
-        return tempConfiguration;
     }
 
     private static string GetConnectionString(PostgreSqlOptionsSection postgreSqlOptions, string? database = null)
