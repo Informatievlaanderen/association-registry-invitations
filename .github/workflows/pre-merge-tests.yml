@@ -137,6 +137,17 @@ jobs:
             mkdir -p /tmp/.docker-layers/
             docker save -o /tmp/.docker-layers/image.tar invitation-api-tests
           fi
+          
+      - name: Run dependencies
+        shell: bash
+        run: |
+          docker compose up
+
+      - name: Run tests again
+        shell: bash
+        run: |
+          docker run --network host --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 dotnet tool restore && dotnet paket install && dotnet test --logger html
+      
 
       - name: Archive code coverage results
         if: ${{ always() }}
