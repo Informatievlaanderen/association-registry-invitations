@@ -63,7 +63,7 @@ Target.create "Publish_Solution" (fun _ ->
     "AssociationRegistry.Invitations"
   ] |> List.iter publishSource)
 
-Target.create "Containerize_InvitationsApi" (fun _ -> containerize "AssociationRegistry.Invitations.Api" "invitations-api")
+Target.create "Containerize_InvitationsApi" (fun _ -> containerize "AssociationRegistry.Invitations" "invitations-api")
 Target.create "PushContainer_InvitationsApi" (fun _ -> push "invitations-api")
 
 
