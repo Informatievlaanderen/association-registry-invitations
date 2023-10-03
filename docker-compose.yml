@@ -33,6 +33,7 @@ services:
       context: .
       dockerfile: test/AssociationRegistry.Invitations.Api.Tests/Dockerfile
     network_mode: host
+    image: invitation-api-tests
     depends_on:
       - db
       - acm
