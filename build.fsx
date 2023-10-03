@@ -49,7 +49,7 @@ Target.create "Restore_Solution" (fun _ -> restore "AssociationRegistry")
 
 Target.create "Build_Solution" (fun _ ->
   setVersions "SolutionInfo.cs"
-  buildSolution "AssociationRegistry")
+  buildSolution "AssociationRegistry.Invitations")
 
 Target.create "SetSolutionInfo" (fun _ ->
   setVersions "SolutionInfo.cs"
@@ -60,27 +60,12 @@ Target.create "Test_Solution" (fun _ -> testSolution "AssociationRegistry")
 
 Target.create "Publish_Solution" (fun _ ->
   [
-    "AssociationRegistry.Acm.Api"
-    "AssociationRegistry.Public.Api"
-    "AssociationRegistry.Public.ProjectionHost"
-    "AssociationRegistry.Admin.Api"
-    "AssociationRegistry.Admin.ProjectionHost"
+    "AssociationRegistry.Invitations"
   ] |> List.iter publishSource)
 
-Target.create "Containerize_AcmApi" (fun _ -> containerize "AssociationRegistry.Acm.Api" "acm-api")
-Target.create "PushContainer_AcmApi" (fun _ -> push "acm-api")
+Target.create "Containerize_InvitationsApi" (fun _ -> containerize "AssociationRegistry.Invitations" "invitations-api")
+Target.create "PushContainer_InvitationsApi" (fun _ -> push "invitations-api")
 
-Target.create "Containerize_PublicApi" (fun _ -> containerize "AssociationRegistry.Public.Api" "public-api")
-Target.create "PushContainer_PublicApi" (fun _ -> push "public-api")
-
-Target.create "Containerize_PublicProjections" (fun _ -> containerize "AssociationRegistry.Public.ProjectionHost" "public-projections")
-Target.create "PushContainer_PublicProjections" (fun _ -> push "public-projections")
-
-Target.create "Containerize_AdminApi" (fun _ -> containerize "AssociationRegistry.Admin.Api" "admin-api")
-Target.create "PushContainer_AdminApi" (fun _ -> push "admin-api")
-
-Target.create "Containerize_AdminProjections" (fun _ -> containerize "AssociationRegistry.Admin.ProjectionHost" "admin-projections")
-Target.create "PushContainer_AdminProjections" (fun _ -> push "admin-projections")
 
 // --------------------------------------------------------------------------------
 
@@ -111,11 +96,7 @@ Target.create "Push" ignore
 
 "Containerize"
   ==> "DockerLogin"
-  ==> "PushContainer_AcmApi"
-  ==> "PushContainer_PublicApi"
-  ==> "PushContainer_PublicProjections"
-  ==> "PushContainer_AdminApi"
-  ==> "PushContainer_AdminProjections"
+  ==> "PushContainer_InvitationsApi"
   ==> "Push"
 // Possibly add more projects to push here
 
