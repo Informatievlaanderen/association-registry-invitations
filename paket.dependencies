@@ -1,13 +1,17 @@
 source https://api.nuget.org/v3/index.json
+framework: net6.0
 
-nuget coverlet.collector 3.1.2
-nuget Microsoft.AspNetCore.OpenApi 7.0.1
-nuget Microsoft.NET.Test.Sdk 17.3.2
-nuget Swashbuckle.AspNetCore 6.4.0
-nuget xunit 2.4.2
-nuget xunit.runner.visualstudio 2.4.5
+nuget coverlet.collector
+nuget Microsoft.NET.Test.Sdk
+nuget Swashbuckle.AspNetCore
+nuget xunit
+nuget xunit.runner.visualstudio
 nuget IdentityModel
 nuget IdentityModel.AspnetCore.OAuth2Introspection
-nuget Microsoft.AspNetCore.Authentication.JwtBearer
-nuget Microsoft.AspNetCore.Mvc.Testing
+nuget Microsoft.AspNetCore.Authentication.JwtBearer 6.0.3
+nuget Microsoft.AspNetCore.Mvc.Testing 6.0.3
+nuget Microsoft.AspNetCore.TestHost 6.0.3
 nuget FluentAssertions
+nuget Marten
+nuget FluentValidation
+nuget AutoFixture
