@@ -28,19 +28,5 @@ services:
     ports:
       - "14317:4317"   # OTLP gRPC receiver
 
-  tests:
-    build:
-      context: .
-      dockerfile: test/AssociationRegistry.Invitations.Api.Tests/Dockerfile
-    network_mode: host
-    image: invitation-api-tests
-    depends_on:
-      - db
-      - acm
-    profiles:
-      - run-tests
-    volumes:
-      - ./testresults:/app/TestResults
-      - ./packages:/app/packages
 volumes:
   pg-data:

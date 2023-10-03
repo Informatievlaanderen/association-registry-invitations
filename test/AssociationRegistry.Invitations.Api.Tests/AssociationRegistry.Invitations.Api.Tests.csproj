@@ -23,9 +23,6 @@
     <ProjectReference Include="..\..\src\AssociationRegistry.Invitations.Api\AssociationRegistry.Invitations.Api.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\.dockerignore">
-      <Link>.dockerignore</Link>
-    </Content>
     <None Remove="appsettings.testrunner.json" />
     <Content Include="appsettings.testrunner.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
