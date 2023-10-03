@@ -114,15 +114,12 @@ jobs:
         
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
-        
-      - name: Cache Docker layers
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.docker-layers
-          key: ${{ runner.os }}-docker-layers-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-docker-layers-
 
+      - name: Run dependencies
+        shell: bash
+        run: |
+          docker compose up -d
+          
       - name: Restore paket packages
         id: cache-paket-restore
         uses: actions/cache/restore@v3
@@ -140,21 +137,6 @@ jobs:
         run: |
           docker run --network host --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 /bin/sh run-tests-docker.sh
       
-      
-      - name: Run tests via docker build
-        shell: bash
-        run: |
-          if [ -d "/tmp/.docker-layers/" ]; then
-            docker load -i /tmp/.docker-layers/image.tar
-            docker compose --profile run-tests up --build --exit-code-from tests
-
-          else
-            docker compose --profile run-tests up --build --exit-code-from tests
-            
-            mkdir -p /tmp/.docker-layers/
-            docker save -o /tmp/.docker-layers/image.tar invitation-api-tests
-          fi
-          
       - name: Save packages
         id: cache-paket-save
         uses: actions/cache/save@v3
@@ -162,12 +144,6 @@ jobs:
           path: |
             packages
           key: ${{ steps.cache-paket-restore.outputs.cache-primary-key }}
-
-          
-      - name: Run dependencies
-        shell: bash
-        run: |
-          docker compose up -d
 
       - name: Archive code coverage results
         if: ${{ always() }}
