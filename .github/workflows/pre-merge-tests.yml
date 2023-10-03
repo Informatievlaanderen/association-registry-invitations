@@ -128,7 +128,7 @@ jobs:
       - name: Run tests
         shell: bash
         run: |
-          ./run_tests.sh
+          ./run-tests.sh
 
       - name: Archive code coverage results
         if: ${{ always() }}
