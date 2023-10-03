@@ -131,6 +131,8 @@ jobs:
         run: |
           if [ -d "/tmp/.docker-layers/" ]; then
             docker load -i /tmp/.docker-layers/image.tar
+            docker compose --profile run-tests up --build --exit-code-from tests
+
           else
             docker compose --profile run-tests up --build --exit-code-from tests
             
