@@ -45,7 +45,7 @@ let testSolution sln =
 
 // Solution -----------------------------------------------------------------------
 
-Target.create "Restore_Solution" (fun _ -> restore "AssociationRegistry")
+Target.create "Restore_Solution" (fun _ -> restore "AssociationRegistry.Invitations")
 
 Target.create "Build_Solution" (fun _ ->
   setVersions "SolutionInfo.cs"
@@ -56,14 +56,14 @@ Target.create "SetSolutionInfo" (fun _ ->
  )
 
 
-Target.create "Test_Solution" (fun _ -> testSolution "AssociationRegistry")
+Target.create "Test_Solution" (fun _ -> testSolution "AssociationRegistry.Invitations")
 
 Target.create "Publish_Solution" (fun _ ->
   [
     "AssociationRegistry.Invitations"
   ] |> List.iter publishSource)
 
-Target.create "Containerize_InvitationsApi" (fun _ -> containerize "AssociationRegistry.Invitations" "invitations-api")
+Target.create "Containerize_InvitationsApi" (fun _ -> containerize "AssociationRegistry.Invitations.Api" "invitations-api")
 Target.create "PushContainer_InvitationsApi" (fun _ -> push "invitations-api")
 
 
