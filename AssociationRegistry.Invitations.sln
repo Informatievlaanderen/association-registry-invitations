@@ -15,6 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		.gitignore = .gitignore
 		otel-collector-config.yaml = otel-collector-config.yaml
 		global.json = global.json
+		run-tests.sh = run-tests.sh
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "identityserver", "identityserver", "{580B24EC-9E76-455D-B55A-26E2B1E12F81}"
@@ -28,6 +29,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssociationRegistry.Invitations.Api", "src\AssociationRegistry.Invitations.Api\AssociationRegistry.Invitations.Api.csproj", "{41DF165A-28FB-4AF8-A692-0212A34459F4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssociationRegistry.Invitations.Api.Tests", "test\AssociationRegistry.Invitations.Api.Tests\AssociationRegistry.Invitations.Api.Tests.csproj", "{CFB9F416-B520-452B-B4A8-BF5341C88E79}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{D9F1A1F8-730F-489F-9632-43AF574A0DA3}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\pre-merge-tests.yml = .github\workflows\pre-merge-tests.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,5 +55,6 @@ Global
 		{39123255-1A6F-4F7E-9E07-92E321BF81E7} = {31048724-CEBD-49F5-B488-0A4C3D397F9D}
 		{41DF165A-28FB-4AF8-A692-0212A34459F4} = {5D03F387-BF1D-4752-9736-C529A42C4F48}
 		{CFB9F416-B520-452B-B4A8-BF5341C88E79} = {EEDE61AC-4B92-4865-BD3D-EA2B13A7CF57}
+		{D9F1A1F8-730F-489F-9632-43AF574A0DA3} = {39123255-1A6F-4F7E-9E07-92E321BF81E7}
 	EndGlobalSection
 EndGlobal

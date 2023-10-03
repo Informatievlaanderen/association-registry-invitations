@@ -5,6 +5,7 @@
 
 appsettings.*.json
 !appsettings.development.json
+!appsettings.testrunner.json
 *.Importer-*.config
 wwwroot/
 

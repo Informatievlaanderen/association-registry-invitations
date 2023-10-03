@@ -4,7 +4,7 @@ using AssociationRegistry.Invitations.Api.Tests.Fixture;
 namespace AssociationRegistry.Invitations.Api.Tests.BijHetBevragenVanDeApi;
 
 [Collection(UitnodigingenApiCollection.Name)]
-public class GivenAnUnauthorizedClient
+public class GivenAnUnauthorizedClient: IDisposable
 {
     private readonly UitnodigingenApiClient _client;
 
@@ -19,5 +19,10 @@ public class GivenAnUnauthorizedClient
     {
         var response = await _client.GetRoot();
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+    }
+
+    public void Dispose()
+    {
+        _client.Dispose();
     }
 }

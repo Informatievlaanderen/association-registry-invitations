@@ -6,8 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-  <ItemGroup Condition="@(InternalsVisibleToSuffix->Count()) == 0 AND @(InternalsVisibleTo->Count()) == 0">
-    <InternalsVisibleToSuffix Include=".Tests" />
+  <ItemGroup>
+    <InternalsVisibleTo Include="AssociationRegistry.Invitations.Api.Tests" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
