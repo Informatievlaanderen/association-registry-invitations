@@ -19,6 +19,13 @@ public class GegevenEenUnauthenticatedClient: IDisposable
         var response = await _client.GetRoot();
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
+    
+    [Fact]
+    public async Task Then_It_Returns_401_With_Unauthenticated_Client()
+    {
+        Assert.True(false);
+    }
+
 
     public void Dispose()
     {
