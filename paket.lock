@@ -128,7 +128,7 @@ NUGET
     FSharp.Core (7.0.400)
     Humanizer.Core (2.14.1)
     IdentityModel (6.2)
-    IdentityModel.AspnetCore.OAuth2Introspection (6.2)
+    IdentityModel.AspNetCore.OAuth2Introspection (6.2)
       IdentityModel (>= 6.0)
     JasperFx.CodeGeneration (3.1.1)
       FastExpressionCompiler (>= 3.3.4)

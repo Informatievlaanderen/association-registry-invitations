@@ -1,10 +1,5 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{543F16B2-DF03-4EBB-9DC7-E1104527236A}"
-	ProjectSection(SolutionItems) = preProject
-		paket.dependencies = paket.dependencies
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssociationRegistry.Invitations", "src\AssociationRegistry.Invitations\AssociationRegistry.Invitations.csproj", "{94D7E03E-A4B0-42BF-AA3D-6BFB5C874784}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5D03F387-BF1D-4752-9736-C529A42C4F48}"
@@ -19,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		.gitignore = .gitignore
 		otel-collector-config.yaml = otel-collector-config.yaml
 		package.json = package.json
+		paket.dependencies = paket.dependencies
+		paket.lock = paket.lock
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "identityserver", "identityserver", "{580B24EC-9E76-455D-B55A-26E2B1E12F81}"
