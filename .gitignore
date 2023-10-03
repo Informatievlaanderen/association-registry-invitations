@@ -409,7 +409,6 @@ FodyWeavers.xsd
 .fake/
 .idea/
 .ionide/
-.paket/
 dotCover.Output/
 dotCover.Output.html
 

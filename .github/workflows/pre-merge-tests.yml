@@ -126,12 +126,12 @@ jobs:
         with:
           path: |
             packages
-          key: ${{ runner.os }}-paket
+            .paket/Paket.Restore.targets
+          key: ${{ runner.os }}-paket-${{ hashFiles('paket.lock', '.paket/Paket.Restore.targets') }}
 
       - name: Create testresults directory
         run: mkdir -p testresults
         
-
       - name: Run tests via docker run
         shell: bash
         run: |
@@ -143,6 +143,7 @@ jobs:
         with:
           path: |
             packages
+            .paket/Paket.Restore.targets
           key: ${{ steps.cache-paket-restore.outputs.cache-primary-key }}
 
       - name: Archive code coverage results
