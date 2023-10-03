@@ -1,1 +1,1 @@
-dotnet tool restore; dotnet paket restore; dotnet test --logger html
+dotnet tool restore; dotnet paket restore -v; dotnet test --logger html
