@@ -41,5 +41,6 @@ services:
       - run-tests
     volumes:
       - ./testresults:/app/TestResults
+      - ./packages:/app/packages
 volumes:
   pg-data:
