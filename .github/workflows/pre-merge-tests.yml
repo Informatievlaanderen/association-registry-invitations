@@ -123,12 +123,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-docker-layers-
 
-      - name: Try to restore from cache
-        id: cache-paket-packages
-        uses: actions/cache@v3
+      - name: Restore paket packages
+        id: cache-paket-restore
+        uses: actions/cache/restore@v3
         with:
-          path: packages
-          key: paket-${{ runner.os }}-${{ hashFiles('paket.lock') }}
+          path: |
+            packages
+          key: ${{ runner.os }}-paket
 
       - name: Create testresults directory
         run: mkdir -p testresults
@@ -147,12 +148,14 @@ jobs:
             docker save -o /tmp/.docker-layers/image.tar invitation-api-tests
           fi
           
-      - name: Save to cache if cache miss
-        if: steps.cache-paket-packages.outputs.cache-hit != 'true'
-        uses: actions/cache@v3
+      - name: Save packages
+        id: cache-paket-save
+        uses: actions/cache/save@v3
         with:
-          path: packages
-          key: paket-${{ runner.os }}-${{ hashFiles('paket.lock') }}
+          path: |
+            packages
+          key: ${{ steps.cache-paket-restore.outputs.cache-primary-key }}
+
           
       - name: Run dependencies
         shell: bash
