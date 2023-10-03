@@ -1,7 +1,7 @@
 source https://api.nuget.org/v3/index.json
 framework: net6.0
 
-nuget Be.Vlaanderen.Basisregisters.Build.Pipeline 6.0.4
+nuget Be.Vlaanderen.Basisregisters.Build.Pipeline 6.0.4 content: true
 
 nuget coverlet.collector 3.1.2
 nuget Microsoft.AspNetCore.OpenApi 7.0.1
