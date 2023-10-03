@@ -1,7 +1,9 @@
 source https://api.nuget.org/v3/index.json
 framework: net6.0
 
-nuget Be.Vlaanderen.Basisregisters.Build.Pipeline 6.0.4 content: true
+nuget Be.Vlaanderen.Basisregisters.Build.Pipeline 6.0.3 content: true
+nuget Be.Vlaanderen.Basisregisters.Testing.Infrastructure.Events 3.0.0 content: true, copy_content_to_output_dir: always, copy_local: true
+
 nuget Microsoft.Build 17.2
 nuget Microsoft.Build.Framework 17.2
 nuget FSharp.Core 6.0.0
