@@ -133,8 +133,15 @@ jobs:
 
       - name: Create testresults directory
         run: mkdir -p testresults
+        
 
-      - name: Run tests
+      - name: Run tests via docker run
+        shell: bash
+        run: |
+          docker run --network host --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 /bin/sh run-tests-docker.sh
+      
+      
+      - name: Run tests via docker build
         shell: bash
         run: |
           if [ -d "/tmp/.docker-layers/" ]; then
@@ -161,12 +168,6 @@ jobs:
         shell: bash
         run: |
           docker compose up -d
-
-      - name: Run tests again
-        shell: bash
-        run: |
-          docker run --network host --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 /bin/sh run-tests-docker.sh
-      
 
       - name: Archive code coverage results
         if: ${{ always() }}
