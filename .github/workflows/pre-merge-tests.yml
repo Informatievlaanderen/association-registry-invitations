@@ -123,22 +123,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-docker-layers-
 
-      - name: Restore tools
-        run: dotnet tool restore
-
-      - name: Cache Paket packages
-        uses: actions/cache@v3
-        id: cache-paket-packages
-        with:
-          path: .paket/packages
-          key: paket-${{ runner.os }}-${{ hashFiles('.paket/paket.lock') }}
-          restore-keys: |
-            paket-${{ runner.os }}-
-
-      - name: Install Paket
-        if: steps.cache-paket-packages.outputs.cache-hit != 'true'
-        run: dotnet paket install
-
       - name: Create testresults directory
         run: mkdir -p testresults
 
