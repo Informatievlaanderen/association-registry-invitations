@@ -116,22 +116,28 @@ jobs:
         uses: docker/setup-buildx-action@v1
         
       - name: Cache Docker layers
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: /tmp/.docker-layers
           key: ${{ runner.os }}-docker-layers-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-docker-layers-
 
-      - name: Cache Paket
+      - name: Restore tools
+        run: dotnet tool restore
+
+      - name: Cache Paket packages
         uses: actions/cache@v3
-        env:
-          cache-name: cache-paket
+        id: cache-paket-packages
         with:
-          path: packages
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('paket.lock') }}
+          path: .paket/packages
+          key: paket-${{ runner.os }}-${{ hashFiles('.paket/paket.lock') }}
           restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
+            paket-${{ runner.os }}-
+
+      - name: Install Paket
+        if: steps.cache-paket-packages.outputs.cache-hit != 'true'
+        run: dotnet paket install
 
       - name: Create testresults directory
         run: mkdir -p testresults
