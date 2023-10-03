@@ -114,6 +114,14 @@ jobs:
         
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
+        
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.docker-layers
+          key: ${{ runner.os }}-docker-layers-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-docker-layers-
 
       - name: Cache Paket
         uses: actions/cache@v3
@@ -137,7 +145,7 @@ jobs:
             docker compose --profile run-tests up --build --exit-code-from tests
             
             mkdir -p /tmp/.docker-layers/
-            docker save -o /tmp/.docker-layers/image.tar my-image-name
+            docker save -o /tmp/.docker-layers/image.tar invitation-api-tests
           fi
 
       - name: Archive code coverage results
