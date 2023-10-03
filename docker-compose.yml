@@ -1,0 +1,32 @@
+version: '3'
+services:
+  acm:
+    image: ghcr.io/informatievlaanderen/identity-server-fake:1284967
+    volumes:
+      - ./identityserver:/home/identityserver
+    ports:
+      - "15051:80"
+
+  db:
+    container_name: pg_uitnodigingen
+    image: postgres:15.0
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: verenigingsregister-uitnogigingen
+    ports:
+      - "15432:5432"
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib
+    command: [ "--config=/etc/otel-collector-config.yaml" ]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - "14317:4317"   # OTLP gRPC receiver
+
+volumes:
+  pg-data:
