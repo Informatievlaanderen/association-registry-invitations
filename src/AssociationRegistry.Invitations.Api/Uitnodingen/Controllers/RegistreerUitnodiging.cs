@@ -19,7 +19,6 @@ public class RegistreerUitnodiging : ControllerBase
     [HttpPost("/uitnodigingen")]
     public async Task<IActionResult> Post([FromBody] UitnodigingsRequest request,
         CancellationToken cancellationToken)
-
     {
         var result = new UitnodigingsValidator().Validate(request);
         if (!result.IsValid)
@@ -32,7 +31,7 @@ public class RegistreerUitnodiging : ControllerBase
             return ValidationProblem(ModelState);
         }
 
-        var lightweightSession = _store.LightweightSession();
+        await using var lightweightSession = _store.LightweightSession();
         var uitnodiging = request.ToModel();
         lightweightSession.Store(uitnodiging);
         await lightweightSession.SaveChangesAsync(cancellationToken);

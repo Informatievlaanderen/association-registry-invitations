@@ -12,11 +12,11 @@ public class GetUitnodigingen
         _vCode = vCode;
     }
 
-    public static GetUitnodigingen MetVCode(string vCode) => new GetUitnodigingen(vCode);
+    public static GetUitnodigingen MetVCode(string vCode) => new(vCode);
 
     public async Task<IEnumerable<Uitnodiging>> ExecuteAsync(IDocumentStore store, CancellationToken cancellationToken)
     {
-        var querySession = store.QuerySession();
+        await using var querySession = store.QuerySession();
         return await querySession.Query<Uitnodiging>()
             .Where(u => u.VCode == _vCode).ToListAsync(cancellationToken);
     }

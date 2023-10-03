@@ -2,13 +2,13 @@
 
 namespace AssociationRegistry.Invitations.Api.Tests.Autofixture;
 
-public class UitnodigingenFixture:AutoFixture.Fixture
+public class UitnodigingenFixture : AutoFixture.Fixture
 {
     public UitnodigingenFixture()
     {
         Customize<UitnodigingsRequest>(
             composer => composer
-                .With(u => u.VCode, "V0000001")
+                .With(u => u.VCode, $"V{composer.Create<int>():0000000}")
                 .With(u => u.Boodschap)
                 .With(u => u.Uitgenodigde)
                 .With(u => u.Uitnodiger)
