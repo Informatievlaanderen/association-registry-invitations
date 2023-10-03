@@ -26,7 +26,25 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "identityserver", "identitys
 		identityserver\vr.json = identityserver\vr.json
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{39123255-1A6F-4F7E-9E07-92E321BF81E7}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{39123255-1A6F-4F7E-9E07-92E321BF81E7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{45409A2E-9E70-43AA-AE08-9A0A94D0ECA7}"
+	ProjectSection(SolutionItems) = preProject
+		build.fsx = build.fsx
+		build.sh = build.sh
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{08B212A4-3C12-4C55-834D-9AACD709979F}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\awscli.yml = .github\workflows\awscli.yml
+		.github\workflows\build-image.yml = .github\workflows\build-image.yml
+		.github\workflows\main.yml = .github\workflows\main.yml
+		.github\workflows\otel.yml = .github\workflows\otel.yml
+		.github\workflows\pre-merge-tests.yml = .github\workflows\pre-merge-tests.yml
+		.github\workflows\staging-manual.yml = .github\workflows\staging-manual.yml
+		.github\workflows\test-manual-ik4.yml = .github\workflows\test-manual-ik4.yml
+		.github\workflows\test-manual.yml = .github\workflows\test-manual.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,5 +66,7 @@ Global
 		{4495D116-C60B-4ABC-8150-1D5C886D58D2} = {EEDE61AC-4B92-4865-BD3D-EA2B13A7CF57}
 		{580B24EC-9E76-455D-B55A-26E2B1E12F81} = {31048724-CEBD-49F5-B488-0A4C3D397F9D}
 		{39123255-1A6F-4F7E-9E07-92E321BF81E7} = {31048724-CEBD-49F5-B488-0A4C3D397F9D}
+		{45409A2E-9E70-43AA-AE08-9A0A94D0ECA7} = {31048724-CEBD-49F5-B488-0A4C3D397F9D}
+		{08B212A4-3C12-4C55-834D-9AACD709979F} = {39123255-1A6F-4F7E-9E07-92E321BF81E7}
 	EndGlobalSection
 EndGlobal
