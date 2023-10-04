@@ -1,5 +1,5 @@
 dotnet tool restore; 
-dotnet paket restore;
+dotnet paket restore -v;
 
 dotnet restore test/AssociationRegistry.Invitations.Api.Tests --runtime linux-x64
 
