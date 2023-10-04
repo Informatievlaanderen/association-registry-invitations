@@ -27,6 +27,7 @@ public class UitnodigingenApiFixture
         var config = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.testrunner.json").Build();
+        
         var postgreSqlOptionsSection = config.GetPostgreSqlOptionsSection();
         
         WaitFor.Postgres.ToBecomeAvailable(new NullLogger<UitnodigingenApiFixture>(),

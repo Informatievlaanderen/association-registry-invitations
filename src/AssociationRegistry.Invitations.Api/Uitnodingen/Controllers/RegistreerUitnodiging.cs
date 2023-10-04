@@ -27,7 +27,7 @@ public class RegistreerUitnodiging : ControllerBase
             {
                 ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
             }
-            
+
             return ValidationProblem(ModelState);
         }
 

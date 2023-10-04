@@ -6,19 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-  <ItemGroup>
-    <InternalsVisibleTo Include="AssociationRegistry.Invitations.Api.Tests" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Dockerfile" />
-    <Content Include="Dockerfile">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <None Remove="init.sh" />
-    <Content Include="init.sh">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+  <ItemGroup Condition="@(InternalsVisibleToSuffix->Count()) == 0 AND @(InternalsVisibleTo->Count()) == 0">
+    <InternalsVisibleToSuffix Include=".Tests" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
