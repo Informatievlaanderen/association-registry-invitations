@@ -50,6 +50,6 @@ public class GegevenEenUitnodigingZonderInsz : IDisposable
 
     public void Dispose()
     {
-        _fixture.RestDatabase();
+        _fixture.ResetDatabase();
     }
 }

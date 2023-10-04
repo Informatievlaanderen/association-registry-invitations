@@ -60,6 +60,6 @@ public class GegevenEenUitnodigingMetEenOngeldigeVCode : IDisposable
 
     public void Dispose()
     {
-        _fixture.RestDatabase();
+        _fixture.ResetDatabase();
     }
 }

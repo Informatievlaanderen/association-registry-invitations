@@ -21,5 +21,11 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\AssociationRegistry.Invitations.Api\AssociationRegistry.Invitations.Api.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="appsettings.testrunner.json" />
+    <Content Include="appsettings.testrunner.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

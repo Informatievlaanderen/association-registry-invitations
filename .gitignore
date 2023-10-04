@@ -5,6 +5,7 @@
 
 appsettings.*.json
 !appsettings.development.json
+!appsettings.testrunner.json
 *.Importer-*.config
 wwwroot/
 
@@ -408,7 +409,6 @@ FodyWeavers.xsd
 .fake/
 .idea/
 .ionide/
-.paket/
 dotCover.Output/
 dotCover.Output.html
 

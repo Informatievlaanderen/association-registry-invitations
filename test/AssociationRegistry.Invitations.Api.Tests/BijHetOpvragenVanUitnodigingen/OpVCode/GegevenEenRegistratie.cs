@@ -60,7 +60,7 @@ public class GegevenEenRegistratie : IClassFixture<GegevenEenRegistratie.Setup>
 
         public void Dispose()
         {
-            _fixture.RestDatabase();
+            _fixture.ResetDatabase();
         }
 
         public async Task InitializeAsync()
