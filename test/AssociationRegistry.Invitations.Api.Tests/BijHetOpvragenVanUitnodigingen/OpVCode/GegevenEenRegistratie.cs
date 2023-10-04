@@ -40,6 +40,7 @@ public class GegevenEenRegistratie : IClassFixture<GegevenEenRegistratie.Setup>
         uitnodiging["uitgenodigde"]["insz"].Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Insz);
         uitnodiging["uitgenodigde"]["naam"].Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Naam);
         uitnodiging["uitgenodigde"]["voornaam"].Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Voornaam);
+        uitnodiging["uitgenodigde"]["email"].Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Email);
     }
 
     public class Setup : IDisposable, IAsyncLifetime

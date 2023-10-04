@@ -41,6 +41,7 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
         uitnodiging1["uitgenodigde"]["insz"].Value<string>().Should().Be(_setup.Uitnodiging1.Uitgenodigde.Insz);
         uitnodiging1["uitgenodigde"]["naam"].Value<string>().Should().Be(_setup.Uitnodiging1.Uitgenodigde.Naam);
         uitnodiging1["uitgenodigde"]["voornaam"].Value<string>().Should().Be(_setup.Uitnodiging1.Uitgenodigde.Voornaam);
+        uitnodiging1["uitgenodigde"]["email"].Value<string>().Should().Be(_setup.Uitnodiging1.Uitgenodigde.Email);
 
         var uitnodiging2 = token["uitnodigingen"].Should()
             .ContainSingle(u => u["id"].Value<string>() == _setup.UitnodigingsId2.ToString()).Subject;
@@ -51,7 +52,7 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
         uitnodiging2["uitgenodigde"]["insz"].Value<string>().Should().Be(_setup.Uitnodiging2.Uitgenodigde.Insz);
         uitnodiging2["uitgenodigde"]["naam"].Value<string>().Should().Be(_setup.Uitnodiging2.Uitgenodigde.Naam);
         uitnodiging2["uitgenodigde"]["voornaam"].Value<string>().Should().Be(_setup.Uitnodiging2.Uitgenodigde.Voornaam);
-
+        uitnodiging2["uitgenodigde"]["email"].Value<string>().Should().Be(_setup.Uitnodiging2.Uitgenodigde.Email);
     }
 
     public class Setup : IDisposable, IAsyncLifetime
