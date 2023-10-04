@@ -15,4 +15,5 @@ RUN apt-get update && \
 EXPOSE 11007/tcp \
 
 ENV ASPNETCORE_URLS http://*:11007
+
 ENTRYPOINT ["./init.sh"]
