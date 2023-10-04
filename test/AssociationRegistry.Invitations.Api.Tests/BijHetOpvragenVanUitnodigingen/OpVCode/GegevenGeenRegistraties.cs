@@ -22,7 +22,7 @@ public class GegevenGeenRegistraties
     }
 
     [Fact]
-    public async Task DanBevatDeBodyDeGeenUitnodigingen()
+    public async Task DanBevatDeBodyGeenUitnodigingen()
     {
         var response = await _client.GetUitnodigingenOpVcode("V0000001");
         var content = await response.Content.ReadAsStringAsync();
