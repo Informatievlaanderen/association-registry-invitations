@@ -7,6 +7,12 @@
       "commands": [
         "paket"
       ]
+    },
+    "dotnet-script": {
+      "version": "1.4.0",
+      "commands": [
+        "dotnet-script"
+      ]
     }
   }
 }
