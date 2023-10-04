@@ -23,13 +23,12 @@ public class RegistreerUitnodiging : ControllerBase
         var result = await new UitnodigingsValidator().ValidateAsync(request, cancellationToken);
         if (!result.IsValid)
         {
-            return BadRequest();
-            // foreach (var error in result.Errors)
-            // {
-            //     ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-            // }
-            //
-            // return ValidationProblem(ModelState);
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+            }
+            
+            return ValidationProblem(ModelState);
         }
 
         await using var lightweightSession = _store.LightweightSession();
