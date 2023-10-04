@@ -135,7 +135,7 @@ jobs:
       - name: Run tests via docker run
         shell: bash
         run: |
-          docker run --network host --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 /bin/sh run-tests-docker.sh
+          docker run --network host --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 /bin/sh .github/build-scripts/run-tests-docker.sh
       
       - name: Save packages
         id: cache-paket-save
