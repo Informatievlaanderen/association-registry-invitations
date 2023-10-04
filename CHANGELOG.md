@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.0.0...v1.1.0) (2023-10-04)
+
+
+### Features
+
+* or-1663 return uitnodigingen lijst ([a757e0f](https://github.com/informatievlaanderen/association-registry-invitations/commit/a757e0f61b938e9938a50aa5d4b46d3dda0a981e))
+
 # 1.0.0 (2023-10-04)
 
 
