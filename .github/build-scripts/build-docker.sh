@@ -1,7 +1,7 @@
 # Set up the docker build command
 dockerRegistry="${BUILD_DOCKER_REGISTRY:-dev.local}"
 dockerRepository="association-registry"
-containerName="invitations-api"
+containerName="web-api"
 buildNumber="${CI_BUILD_NUMBER:-0.0.0}"
 project="AssociationRegistry.Invitations.Api"
 

@@ -431,7 +431,7 @@ jobs:
         shell: bash
         run: |
           echo $SEMVER
-          docker push $BUILD_DOCKER_REGISTRY/association-registry/invitations-api:$SEMVER
+          docker push $BUILD_DOCKER_REGISTRY/association-registry/web-api:$SEMVER
         env:
           BUILD_DOCKER_REGISTRY: ${{ secrets.VBR_BUILD_DOCKER_REGISTRY_TST }}
           SEMVER: ${{ needs.release.outputs.version }}
@@ -446,7 +446,7 @@ jobs:
       matrix:
         services:
           [
-            'association-registry-invitations-api',
+            'association-registry-web-api',
           ]
     steps:
       - name: debug_output
