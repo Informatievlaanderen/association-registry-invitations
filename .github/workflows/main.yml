@@ -217,7 +217,7 @@ jobs:
       - name: Save Image
         if: needs.set-release-version.outputs.version != 'none'
         shell: bash
-        run: docker image save $BUILD_DOCKER_REGISTRY/association-registry/invitations-api:$SEMVER -o ~/invitations-api.tar
+        run: docker image save $BUILD_DOCKER_REGISTRY/association-registry/web-api:$SEMVER -o ~/invitations-api.tar
         env:
           BUILD_DOCKER_REGISTRY: ${{ secrets.VBR_BUILD_DOCKER_REGISTRY_TST }}
           SEMVER: ${{ needs.set-release-version.outputs.version }}
