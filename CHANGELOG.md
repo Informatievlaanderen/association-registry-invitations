@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.2.0...v1.2.1) (2023-10-04)
+
+
+### Bug Fixes
+
+* update paket.lock ([1c57fe9](https://github.com/informatievlaanderen/association-registry-invitations/commit/1c57fe946b39bb8c45dda36f440083420fd8e698))
+
 # [1.2.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.1.0...v1.2.0) (2023-10-04)
 
 
