@@ -400,7 +400,7 @@ jobs:
 
   push_images_to_test:
     if: needs.release.outputs.version != 'none'
-    needs: [ release ]
+#    needs: [ release ]
     name: Push images to Test
     runs-on: ubuntu-latest
     steps:
