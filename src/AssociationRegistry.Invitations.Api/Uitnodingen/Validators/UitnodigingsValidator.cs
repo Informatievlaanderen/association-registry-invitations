@@ -1,15 +1,10 @@
-﻿using System.Text.RegularExpressions;
-using AssociationRegistry.Invitations.Api.Uitnodingen.Requests;
+﻿using AssociationRegistry.Invitations.Api.Uitnodingen.Requests;
 using FluentValidation;
 
 namespace AssociationRegistry.Invitations.Api.Uitnodingen.Validators;
 
 public class UitnodigingsValidator : AbstractValidator<UitnodigingsRequest>
 {
-    private static readonly Regex EmailRegex = new(
-        @"^(([a-z0-9]+[\.!#$%&'*+/=?^_`{|}~-]*)*[a-z0-9]+)@(([a-z0-9]+[\.-]?)*[a-z0-9]\.)+[a-z]{2,}$",
-        RegexOptions.IgnoreCase);
-
     public UitnodigingsValidator()
     {
         RuleFor(u => u.VCode)
@@ -42,7 +37,7 @@ public class UitnodigingsValidator : AbstractValidator<UitnodigingsRequest>
             .Must(BeValidInsz)
             .WithName(u => $"{nameof(u.Uitgenodigde)}.{nameof(u.Uitgenodigde.Insz)}")
             .WithMessage("Insz is ongeldig. (##.##.##-###.## of ###########)")
-            .When(u => u.Uitgenodigde != null && u.Uitgenodigde.Insz != null);
+            .When(u => u.Uitgenodigde?.Insz != null);
         RuleFor(u => u.Uitgenodigde.Naam)
             .NotNull()
             .WithName(u => $"{nameof(u.Uitgenodigde)}.{nameof(u.Uitgenodigde.Naam)}")
@@ -59,13 +54,12 @@ public class UitnodigingsValidator : AbstractValidator<UitnodigingsRequest>
             .WithMessage("Email is verplicht.")
             .When(u => u.Uitgenodigde != null);
         RuleFor(u => u.Uitgenodigde.Email)
-            .Must(BeValidEmail)
+            .EmailAddress()
             .WithName(u => $"{nameof(u.Uitgenodigde)}.{nameof(u.Uitgenodigde.Email)}")
             .WithMessage("Email is ongeldig.")
-            .When(u => u.Uitgenodigde != null && u.Uitgenodigde.Email != null);
+            .When(u => u.Uitgenodigde?.Email != null);
     }
 
-    private static bool BeValidEmail(string email) => EmailRegex.IsMatch(email);
 
     private static bool BeValidInsz(string insz)
     {

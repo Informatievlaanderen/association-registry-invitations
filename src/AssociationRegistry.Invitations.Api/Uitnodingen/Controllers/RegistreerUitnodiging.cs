@@ -20,7 +20,7 @@ public class RegistreerUitnodiging : ControllerBase
     public async Task<IActionResult> Post([FromBody] UitnodigingsRequest request,
         CancellationToken cancellationToken)
     {
-        var result = new UitnodigingsValidator().Validate(request);
+        var result = await new UitnodigingsValidator().ValidateAsync(request, cancellationToken);
         if (!result.IsValid)
         {
             foreach (var error in result.Errors)
