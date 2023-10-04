@@ -1,3 +1,15 @@
+# [1.2.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.1.0...v1.2.0) (2023-10-04)
+
+
+### Bug Fixes
+
+* add build pipeline for ci tasks ([05e1ea5](https://github.com/informatievlaanderen/association-registry-invitations/commit/05e1ea5f124a3925f8f3e5b7d7f6eff05d8471e2))
+
+
+### Features
+
+* rename docker image more ([2395fdc](https://github.com/informatievlaanderen/association-registry-invitations/commit/2395fdc801ea05557c00dc777a7b36d5b84ac48c))
+
 # [1.1.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.0.0...v1.1.0) (2023-10-04)
 
 
