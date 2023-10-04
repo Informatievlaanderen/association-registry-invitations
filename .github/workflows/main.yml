@@ -159,7 +159,7 @@ jobs:
         shell: bash
         run: echo $SEMVER
         env:
-          SEMVER: ${{ inputs.semver }}
+          SEMVER: ${{ needs.set-release-version.outputs.version }}
 
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -195,7 +195,7 @@ jobs:
         run: |
           docker run --network host -e CI_BUILD_NUMBER -e GIT_HASH --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 /bin/sh .github/build-scripts/set-solution-info.sh
         env:
-          CI_BUILD_NUMBER: ${{ inputs.semver }}
+          CI_BUILD_NUMBER: ${{ needs.set-release-version.outputs.version }}
 
       - name: Publish via docker run
         shell: bash
@@ -208,22 +208,22 @@ jobs:
           .github/build-scripts/build-docker.sh
         env:
           BUILD_DOCKER_REGISTRY: ${{ secrets.VBR_BUILD_DOCKER_REGISTRY_TST }}
-          CI_BUILD_NUMBER: ${{ inputs.semver }}
+          CI_BUILD_NUMBER: ${{ needs.set-release-version.outputs.version }}
       
       - name: Show images
         shell: bash
         run: docker images
 
       - name: Save Image
-        if: inputs.semver != 'none'
+        if: needs.set-release-version.outputs.version != 'none'
         shell: bash
         run: docker image save $BUILD_DOCKER_REGISTRY/association-registry/invitations-api:$SEMVER -o ~/invitations-api.tar
         env:
           BUILD_DOCKER_REGISTRY: ${{ secrets.VBR_BUILD_DOCKER_REGISTRY_TST }}
-          SEMVER: ${{ inputs.semver }}
+          SEMVER: ${{ needs.set-release-version.outputs.version }}
 
       - name: Upload Api artifact
-        if: inputs.semver != 'none'
+        if: needs.set-release-version.outputs.version != 'none'
         uses: actions/upload-artifact@v3
         with:
           name: invitations-api
