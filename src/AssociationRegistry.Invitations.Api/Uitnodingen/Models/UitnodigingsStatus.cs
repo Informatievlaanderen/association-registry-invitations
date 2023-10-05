@@ -1,6 +1,6 @@
 ﻿namespace AssociationRegistry.Invitations.Api.Uitnodingen.Models;
 
-public class UitnodigingsStatus : IEquatable<UitnodigingsStatus>
+public record UitnodigingsStatus
 {
     public static UitnodigingsStatus WachtenOpAntwoord = new("Wachten op antwoord.");
     public static UitnodigingsStatus Aanvaard = new("Aanvaard.");
@@ -22,12 +22,6 @@ public class UitnodigingsStatus : IEquatable<UitnodigingsStatus>
     }
 
     public static bool CanParse(string status) => All.Any(s => s.Status == status);
-
-    public bool Equals(UitnodigingsStatus? other) => Status == other?.Status;
-
-    public static bool operator ==(UitnodigingsStatus status1, UitnodigingsStatus status2) => status1.Equals(status2);
-
-    public static bool operator !=(UitnodigingsStatus status1, UitnodigingsStatus status2) => !(status1 == status2);
 
     public static implicit operator string(UitnodigingsStatus status) => status.Status;
 }
