@@ -1,3 +1,19 @@
+# [1.3.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.2.1...v1.3.0) (2023-10-05)
+
+
+### Bug Fixes
+
+* update image name in script ([c177a4d](https://github.com/informatievlaanderen/association-registry-invitations/commit/c177a4d6955fcffec4c797532a72c380bb1c1769))
+* use old endpoint for now ([4ec36a2](https://github.com/informatievlaanderen/association-registry-invitations/commit/4ec36a2df8b7419bf0bbe8e673a1fd5af2b460ac))
+
+
+### Features
+
+* or-1664 aanvaard uitnodiging en rework ([c0c0d44](https://github.com/informatievlaanderen/association-registry-invitations/commit/c0c0d447036b3675f2ff99c2baccb466361cdce5))
+* or-1664 return 400 when unknown uitnodiging ([ea727a5](https://github.com/informatievlaanderen/association-registry-invitations/commit/ea727a5b713ac70050284b8de0b7ca8b9a4ff60a))
+* rename image again ([247b9d8](https://github.com/informatievlaanderen/association-registry-invitations/commit/247b9d812aae9db3308c80666e878d32ea7085be))
+* rename image to invitations-api ([95d65a8](https://github.com/informatievlaanderen/association-registry-invitations/commit/95d65a8429fa37f3c8d9a8aa83414b3866c152a1))
+
 ## [1.2.1](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.2.0...v1.2.1) (2023-10-04)
 
 
