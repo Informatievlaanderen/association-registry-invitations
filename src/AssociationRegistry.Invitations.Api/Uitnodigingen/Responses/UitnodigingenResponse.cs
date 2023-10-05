@@ -1,9 +1,17 @@
-namespace AssociationRegistry.Invitations.Api.Uitnodingen.Requests;
+﻿namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Responses;
 
-public class UitnodigingsRequest
+public class UitnodigingenResponse
 {
+    public Uitnodiging[] Uitnodigingen { get; set; }
+}
+
+public class Uitnodiging
+{
+    public Guid Id { get; set; }
     public string VCode { get; set; }
     public string Boodschap { get; set; }
+    public string Status { get; set; }
+    public string DatumLaatsteAanpassing { get; set; }
     public Uitnodiger Uitnodiger { get; set; }
     public Uitgenodigde Uitgenodigde { get; set; }
 }

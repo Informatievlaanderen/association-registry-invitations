@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using AssociationRegistry.Invitations.Api.Tests.Autofixture;
 using AssociationRegistry.Invitations.Api.Tests.Fixture;
-using AssociationRegistry.Invitations.Api.Uitnodingen.Requests;
+using AssociationRegistry.Invitations.Api.Uitnodigingen.Requests;
 using Newtonsoft.Json.Linq;
 
 namespace AssociationRegistry.Invitations.Api.Tests.BijHetAanvaardenVanEenUitnodiging;

@@ -1,4 +1,4 @@
-﻿namespace AssociationRegistry.Invitations.Api.Uitnodingen.Mapping;
+﻿namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Mapping;
 
 public static class UitnodigingsMapper
 {

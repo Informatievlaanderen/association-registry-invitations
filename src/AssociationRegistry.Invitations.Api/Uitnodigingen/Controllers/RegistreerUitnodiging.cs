@@ -1,15 +1,15 @@
 ﻿using System.Globalization;
-using AssociationRegistry.Invitations.Api.Uitnodingen.Mapping;
-using AssociationRegistry.Invitations.Api.Uitnodingen.Models;
-using AssociationRegistry.Invitations.Api.Uitnodingen.Queries;
-using AssociationRegistry.Invitations.Api.Uitnodingen.Requests;
-using AssociationRegistry.Invitations.Api.Uitnodingen.Responses;
-using AssociationRegistry.Invitations.Api.Uitnodingen.Validators;
+using AssociationRegistry.Invitations.Api.Uitnodigingen.Mapping;
+using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
+using AssociationRegistry.Invitations.Api.Uitnodigingen.Queries;
+using AssociationRegistry.Invitations.Api.Uitnodigingen.Requests;
+using AssociationRegistry.Invitations.Api.Uitnodigingen.Responses;
+using AssociationRegistry.Invitations.Api.Uitnodigingen.Validators;
 using Marten;
 using Microsoft.AspNetCore.Mvc;
 using NodaTime;
 
-namespace AssociationRegistry.Invitations.Api.Uitnodingen.Controllers;
+namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Controllers;
 
 public class RegistreerUitnodiging : ControllerBase
 {

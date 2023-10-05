@@ -1,6 +1,6 @@
 ﻿using AssociationRegistry.Invitations.Api.Infrastructure.ConfigurationBindings;
 using AssociationRegistry.Invitations.Api.Infrastructure.Json;
-using AssociationRegistry.Invitations.Api.Uitnodingen.Models;
+using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
 using JasperFx.CodeGeneration;
 using Marten;
 using Marten.Services;

@@ -1,4 +1,4 @@
-﻿using AssociationRegistry.Invitations.Api.Uitnodingen.Models;
+﻿using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
 using Newtonsoft.Json;
 
 namespace AssociationRegistry.Invitations.Api.Infrastructure.Json;

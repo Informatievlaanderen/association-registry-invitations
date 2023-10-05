@@ -1,5 +1,6 @@
 using AssociationRegistry.Invitations.Api.Constants;
 using AssociationRegistry.Invitations.Api.Infrastructure.Extentions;
+using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
 using IdentityModel.AspNetCore.OAuth2Introspection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -11,11 +12,14 @@ var postgreSqlOptions = builder.Configuration.GetPostgreSqlOptionsSection();
 
 
 // Add services to the container.
-builder.Services.AddSingleton<IClock>(SystemClock.Instance);
+builder.Services
+    .AddSingleton<IClock>(SystemClock.Instance)
+    .AddTransient<UitnodigingsStatusHandler>();
+
 builder.Services.AddMarten(postgreSqlOptions);
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -64,6 +68,9 @@ app.MapControllers();
 
 app.Run();
 
-public partial class Program
+namespace AssociationRegistry.Invitations.Api
 {
+    public partial class Program
+    {
+    }
 }
