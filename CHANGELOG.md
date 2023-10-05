@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.4.0...v1.4.1) (2023-10-05)
+
+
+### Bug Fixes
+
+* update README.md ([bce1eb7](https://github.com/informatievlaanderen/association-registry-invitations/commit/bce1eb70e549ea5defd628745df819649cc4b092))
+
 # [1.4.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.3.0...v1.4.0) (2023-10-05)
 
 
