@@ -26,6 +26,8 @@ public static class UitnodigingsMapper
             Id = model.Id,
             VCode = model.VCode,
             Boodschap = model.Boodschap,
+            Status = model.Status,
+            DatumLaatsteAanpassing = model.DatumLaatsteAanpassing,
             Uitnodiger = new Responses.Uitnodiger
             {
                 VertegenwoordigerId = model.Uitnodiger.VertegenwoordigerId,

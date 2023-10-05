@@ -11,12 +11,12 @@ using NodaTime;
 namespace AssociationRegistry.Invitations.Api.Tests.BijHetOpvragenVanUitnodigingen.OpVCode;
 
 [Collection(UitnodigingenApiCollection.Name)]
-public class GegevenEenRegistratie : IClassFixture<GegevenEenRegistratie.Setup>
+public class GegevenEenAanvaarding : IClassFixture<GegevenEenAanvaarding.Setup>
 {
     private readonly UitnodigingenApiClient _client;
     private readonly Setup _setup;
 
-    public GegevenEenRegistratie(UitnodigingenApiFixture fixture, Setup setup)
+    public GegevenEenAanvaarding(UitnodigingenApiFixture fixture, Setup setup)
     {
         _setup = setup;
         _client = fixture.Clients.Authenticated;
@@ -41,9 +41,9 @@ public class GegevenEenRegistratie : IClassFixture<GegevenEenRegistratie.Setup>
         uitnodiging["id"].Value<string>().Should().Be(_setup.UitnodigingsId.ToString());
         uitnodiging["vCode"].Value<string>().Should().Be(_setup.Uitnodiging.VCode);
         uitnodiging["boodschap"].Value<string>().Should().Be(_setup.Uitnodiging.Boodschap);
-        uitnodiging["status"].Value<string>().Should().Be(UitnodigingsStatus.WachtenOpAntwoord.Status);
+        uitnodiging["status"].Value<string>().Should().Be(UitnodigingsStatus.Aanvaard.Status);
         uitnodiging["datumLaatsteAanpassing"].Value<string>().Should()
-            .Be(_setup.UitnodigingAangemaaktOp.ToString("g", CultureInfo.InvariantCulture));
+            .Be(_setup.UitnodigingAanvaardOp.ToString("g", CultureInfo.InvariantCulture));
         uitnodiging["uitnodiger"]["vertegenwoordigerId"].Value<int>().Should()
             .Be(_setup.Uitnodiging.Uitnodiger.VertegenwoordigerId);
         uitnodiging["uitgenodigde"]["insz"].Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Insz);
@@ -56,7 +56,7 @@ public class GegevenEenRegistratie : IClassFixture<GegevenEenRegistratie.Setup>
     {
         public UitnodigingsRequest Uitnodiging { get; set; }
         public Guid UitnodigingsId { get; set; }
-        public Instant UitnodigingAangemaaktOp { get; set; }
+        public Instant UitnodigingAanvaardOp { get; set; }
 
         private readonly UitnodigingenApiClient _client;
         private UitnodigingenApiFixture _fixture;
@@ -81,7 +81,8 @@ public class GegevenEenRegistratie : IClassFixture<GegevenEenRegistratie.Setup>
             var response = await _client.RegistreerUitnodiging(Uitnodiging);
             var content = await response.Content.ReadAsStringAsync();
             UitnodigingsId = Guid.Parse(JToken.Parse(content)["id"]!.Value<string>()!);
-            UitnodigingAangemaaktOp = _fixture.Clock.PreviousInstant;
+            await _client.AanvaardUitnodiging(UitnodigingsId);
+            UitnodigingAanvaardOp = _fixture.Clock.PreviousInstant;
         }
 
         public Task DisposeAsync() => Task.CompletedTask;

@@ -17,10 +17,10 @@ public class GegevenEenUitnodigingZonderVCode : IDisposable
     {
         _fixture = fixture;
         _client = fixture.Clients.Authenticated;
-        _request = new UitnodigingenFixture()
-            .Build<UitnodigingsRequest>()
-            .Without(u => u.VCode)
-            .Create();
+        _request = new AutoFixture.Fixture()
+            .Customize(new GeldigeUitnodigingen())
+            .Create<UitnodigingsRequest>();
+        _request.VCode = null!;
     }
 
     [Fact]

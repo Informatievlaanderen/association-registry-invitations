@@ -17,10 +17,10 @@ public class GegevenEenUitnodigerZonderVertegenwoordigersId : IDisposable
     {
         _fixture = fixture;
         _client = fixture.Clients.Authenticated;
-        _request = new UitnodigingenFixture()
-            .Build<UitnodigingsRequest>()
-            .With(u => u.Uitnodiger, new Uitnodiger())
-            .Create();
+        _request = new AutoFixture.Fixture()
+            .Customize(new GeldigeUitnodigingen())
+            .Create<UitnodigingsRequest>();
+        _request.Uitnodiger.VertegenwoordigerId = default;
     }
 
     [Fact]

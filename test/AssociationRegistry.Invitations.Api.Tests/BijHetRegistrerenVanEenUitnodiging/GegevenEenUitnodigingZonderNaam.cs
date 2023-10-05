@@ -17,14 +17,10 @@ public class GegevenEenUitnodigingZonderNaam : IDisposable
     {
         _fixture = fixture;
         _client = fixture.Clients.Authenticated;
-        _request = new UitnodigingenFixture()
-            .Build<UitnodigingsRequest>()
-            .With(u => u.Uitgenodigde,
-                new UitnodigingenFixture()
-                    .Build<Uitgenodigde>()
-                    .Without(u2=>u2.Naam)
-                    .Create())
-            .Create();
+        _request = new AutoFixture.Fixture()
+            .Customize(new GeldigeUitnodigingen())
+            .Create<UitnodigingsRequest>();
+        _request.Uitgenodigde.Naam = null!;
     }
 
     [Fact]

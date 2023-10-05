@@ -59,7 +59,9 @@ public class GegevenEenOnbekendeVCode : IClassFixture<GegevenEenOnbekendeVCode.S
             _client = fixture.Clients.Authenticated;
 
 
-            _uitnodigingen = new UitnodigingenFixture().CreateMany<UitnodigingsRequest>();
+            _uitnodigingen = new AutoFixture.Fixture()
+                .Customize(new GeldigeUitnodigingen())
+                .CreateMany<UitnodigingsRequest>();
         }
 
         public void Dispose()

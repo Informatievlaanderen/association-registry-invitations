@@ -11,10 +11,12 @@ public class UitnodigingenApiClient : IDisposable
     {
         _httpClient = httpClient;
     }
+
     public void Dispose()
     {
         _httpClient.Dispose();
     }
+
     public async Task<HttpResponseMessage> GetRoot() => await _httpClient.GetAsync("/");
 
     public async Task<HttpResponseMessage> GetUitnodigingenOpVcode(string vCode)
@@ -22,4 +24,7 @@ public class UitnodigingenApiClient : IDisposable
 
     public async Task<HttpResponseMessage> RegistreerUitnodiging(UitnodigingsRequest uitnodigingsRequest)
         => await _httpClient.PostAsJsonAsync($"/uitnodigingen", uitnodigingsRequest);
+
+    public async Task<HttpResponseMessage> AanvaardUitnodiging(Guid uitnodigingsId)
+        => await _httpClient.PostAsync($"/uitnodigingen/{uitnodigingsId}/aanvaard", null);
 }

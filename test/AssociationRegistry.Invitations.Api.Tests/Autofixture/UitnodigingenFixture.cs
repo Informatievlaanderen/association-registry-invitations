@@ -2,27 +2,47 @@
 
 namespace AssociationRegistry.Invitations.Api.Tests.Autofixture;
 
-public class UitnodigingenFixture : AutoFixture.Fixture
+public class UitnodigingMetVCode : ICustomization
 {
-    public UitnodigingenFixture()
+    private readonly string? _vCode;
+
+    public UitnodigingMetVCode(string? vCode = null)
     {
-        Customize<UitnodigingsRequest>(
+        _vCode = vCode;
+    }
+
+    public void Customize(IFixture fixture)
+    {
+        fixture.Customize<UitnodigingsRequest>(
             composer => composer
-                .With(u => u.VCode, $"V{this.Create<int>():0000000}")
-                .With(u => u.Boodschap)
-                .With(u => u.Uitgenodigde)
-                .With(u => u.Uitnodiger)
-                .OmitAutoProperties());
-        Customize<Uitgenodigde>(
+                .With(u => u.VCode, _vCode ?? $"V{fixture.Create<int>():0000000}"));
+    }
+}
+
+public class UitgenodigdeMetInszEnEmail : ICustomization
+{
+    private readonly string? _insz;
+
+    public UitgenodigdeMetInszEnEmail(string? insz = null)
+    {
+        _insz = insz;
+    }
+
+    public void Customize(IFixture fixture)
+    {
+        fixture.Customize<Uitgenodigde>(
             composer => composer
-                .With(u => u.Insz, "01020312316")
-                .With(u => u.Naam)
-                .With(u => u.Voornaam)
-                .With(u => u.Email, "test@example.org")
-                .OmitAutoProperties());
-        Customize<Uitnodiger>(
-            composer => composer
-                .With(u => u.VertegenwoordigerId)
-                .OmitAutoProperties());
+                .With(u => u.Insz, _insz ?? "01020312316")
+                .With(u => u.Email, "test@example.org"));
+    }
+}
+
+public class GeldigeUitnodigingen : CompositeCustomization
+{
+    public GeldigeUitnodigingen(string? vCode = null, string? insz = null)
+        : base(
+            new UitnodigingMetVCode(vCode),
+            new UitgenodigdeMetInszEnEmail(insz))
+    {
     }
 }

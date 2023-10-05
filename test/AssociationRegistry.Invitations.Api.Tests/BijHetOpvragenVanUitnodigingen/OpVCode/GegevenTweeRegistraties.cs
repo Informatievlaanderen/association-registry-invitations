@@ -1,8 +1,12 @@
-﻿using System.Net;
+﻿using System.Globalization;
+using System.Net;
 using AssociationRegistry.Invitations.Api.Tests.Autofixture;
 using AssociationRegistry.Invitations.Api.Tests.Fixture;
+using AssociationRegistry.Invitations.Api.Uitnodingen.Models;
 using AssociationRegistry.Invitations.Api.Uitnodingen.Requests;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NodaTime;
 
 namespace AssociationRegistry.Invitations.Api.Tests.BijHetOpvragenVanUitnodigingen.OpVCode;
 
@@ -31,11 +35,15 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
         var response = await _client.GetUitnodigingenOpVcode(_setup.VCode);
         var content = await response.Content.ReadAsStringAsync();
 
-        var token = JToken.Parse(content);
+        var token = JsonConvert.DeserializeObject<JObject>(content,
+            new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
         var uitnodiging1 = token["uitnodigingen"].Should()
             .ContainSingle(u => u["id"].Value<string>() == _setup.UitnodigingsId1.ToString()).Subject;
         uitnodiging1["vCode"].Value<string>().Should().Be(_setup.VCode);
         uitnodiging1["boodschap"].Value<string>().Should().Be(_setup.Uitnodiging1.Boodschap);
+        uitnodiging1["status"].Value<string>().Should().Be(UitnodigingsStatus.WachtenOpAntwoord.Status);
+        uitnodiging1["datumLaatsteAanpassing"].Value<string>().Should()
+            .Be(_setup.Uitnodiging1AangemaaktOp.ToString("g", CultureInfo.InvariantCulture));
         uitnodiging1["uitnodiger"]["vertegenwoordigerId"].Value<int>().Should()
             .Be(_setup.Uitnodiging1.Uitnodiger.VertegenwoordigerId);
         uitnodiging1["uitgenodigde"]["insz"].Value<string>().Should().Be(_setup.Uitnodiging1.Uitgenodigde.Insz);
@@ -47,6 +55,9 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
             .ContainSingle(u => u["id"].Value<string>() == _setup.UitnodigingsId2.ToString()).Subject;
         uitnodiging2["vCode"].Value<string>().Should().Be(_setup.VCode);
         uitnodiging2["boodschap"].Value<string>().Should().Be(_setup.Uitnodiging2.Boodschap);
+        uitnodiging2["status"].Value<string>().Should().Be(UitnodigingsStatus.WachtenOpAntwoord.Status);
+        uitnodiging2["datumLaatsteAanpassing"].Value<string>().Should()
+            .Be(_setup.Uitnodiging2AangemaaktOp.ToString("g", CultureInfo.InvariantCulture));
         uitnodiging2["uitnodiger"]["vertegenwoordigerId"].Value<int>().Should()
             .Be(_setup.Uitnodiging2.Uitnodiger.VertegenwoordigerId);
         uitnodiging2["uitgenodigde"]["insz"].Value<string>().Should().Be(_setup.Uitnodiging2.Uitgenodigde.Insz);
@@ -62,6 +73,8 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
         public UitnodigingsRequest Uitnodiging2 { get; set; }
         public Guid UitnodigingsId1 { get; set; }
         public Guid UitnodigingsId2 { get; set; }
+        public Instant Uitnodiging1AangemaaktOp { get; set; }
+        public Instant Uitnodiging2AangemaaktOp { get; set; }
 
         private readonly UitnodigingenApiClient _client;
         private UitnodigingenApiFixture _fixture;
@@ -73,12 +86,12 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
 
             VCode = "V0102030";
 
-            Uitnodiging1 = new UitnodigingenFixture().Build<UitnodigingsRequest>()
-                .With(u => u.VCode, VCode)
-                .Create();
-            Uitnodiging2 = new UitnodigingenFixture().Build<UitnodigingsRequest>()
-                .With(u => u.VCode, VCode)
-                .Create();
+            Uitnodiging1 = new AutoFixture.Fixture()
+                .Customize(new GeldigeUitnodigingen(vCode: VCode, insz: "01020312316"))
+                .Create<UitnodigingsRequest>();
+            Uitnodiging2 = new AutoFixture.Fixture()
+                .Customize(new GeldigeUitnodigingen(vCode: VCode, insz: "01020312415"))
+                .Create<UitnodigingsRequest>();
         }
 
         public void Dispose()
@@ -89,7 +102,9 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
         public async Task InitializeAsync()
         {
             UitnodigingsId1 = await RegistreerUitnodiging(Uitnodiging1);
+            Uitnodiging1AangemaaktOp = _fixture.Clock.PreviousInstant;
             UitnodigingsId2 = await RegistreerUitnodiging(Uitnodiging2);
+            Uitnodiging2AangemaaktOp = _fixture.Clock.PreviousInstant;
         }
 
         private async Task<Guid> RegistreerUitnodiging(UitnodigingsRequest uitnodigingsRequest)
