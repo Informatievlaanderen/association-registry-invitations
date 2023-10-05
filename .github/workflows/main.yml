@@ -446,7 +446,7 @@ jobs:
       matrix:
         services:
           [
-            'association-registry-invitations-api',
+            'association-registry-web-api',
           ]
     steps:
       - name: debug_output
