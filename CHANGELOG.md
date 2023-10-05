@@ -1,3 +1,11 @@
+# [1.4.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.3.0...v1.4.0) (2023-10-05)
+
+
+### Features
+
+* or-1666 get uitnodiging by Id en inszÃ ([a369a10](https://github.com/informatievlaanderen/association-registry-invitations/commit/a369a10f06504837c1d328a4e25b048d34274d87))
+* or-1667 allow refusing an invitation ([90825ad](https://github.com/informatievlaanderen/association-registry-invitations/commit/90825ad82860a7e2b75e416f6ec1a12a93c5b38e))
+
 # [1.3.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.2.1...v1.3.0) (2023-10-05)
 
 
