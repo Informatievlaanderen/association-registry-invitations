@@ -17,3 +17,4 @@ nuget FluentAssertions
 nuget Marten
 nuget FluentValidation
 nuget AutoFixture
+nuget NodaTime

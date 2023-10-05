@@ -386,6 +386,8 @@ NUGET
     NETStandard.Library (2.0.3)
       Microsoft.NETCore.Platforms (>= 1.1)
     Newtonsoft.Json (13.0.3)
+    NodaTime (3.1.9)
+      System.Runtime.CompilerServices.Unsafe (>= 4.7.1)
     Npgsql (7.0.6)
       Microsoft.Extensions.Logging.Abstractions (>= 6.0)
       System.Runtime.CompilerServices.Unsafe (>= 6.0)

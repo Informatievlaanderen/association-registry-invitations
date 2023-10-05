@@ -3,6 +3,7 @@ using AssociationRegistry.Invitations.Api.Infrastructure.Extentions;
 using IdentityModel.AspNetCore.OAuth2Introspection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using NodaTime;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +11,7 @@ var postgreSqlOptions = builder.Configuration.GetPostgreSqlOptionsSection();
 
 
 // Add services to the container.
-
+builder.Services.AddSingleton<IClock>(SystemClock.Instance);
 builder.Services.AddMarten(postgreSqlOptions);
 
 builder.Services.AddControllers();

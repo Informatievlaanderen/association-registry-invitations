@@ -1,16 +1,17 @@
-﻿
-
-using AssociationRegistry.Invitations.Api.Infrastructure.ConfigurationBindings;
+﻿using AssociationRegistry.Invitations.Api.Infrastructure.ConfigurationBindings;
 using AssociationRegistry.Invitations.Api.Infrastructure.Extentions;
 using AssociationRegistry.Invitations.Api.Tests.Fixture.Helpers;
+using AssociationRegistry.Invitations.Api.Tests.Fixture.Stubs;
 using AssociationRegistry.Invitations.Api.Uitnodingen.Models;
 using IdentityModel.AspNetCore.OAuth2Introspection;
 using Marten;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
+using NodaTime;
 using Npgsql;
 
 namespace AssociationRegistry.Invitations.Api.Tests.Fixture;
@@ -21,24 +22,31 @@ public class UitnodigingenApiFixture
 
     private readonly WebApplicationFactory<Program> _application;
     public Clients Clients { get; }
+    public ClockWithHistory Clock { get; }
 
     public UitnodigingenApiFixture()
     {
         var config = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.testrunner.json").Build();
-        
+
         var postgreSqlOptionsSection = config.GetPostgreSqlOptionsSection();
-        
+
         WaitFor.Postgres.ToBecomeAvailable(new NullLogger<UitnodigingenApiFixture>(),
             GetConnectionString(postgreSqlOptionsSection, RootDatabase));
 
         DropCreateDatabase(postgreSqlOptionsSection);
 
+        Clock = new ClockWithHistory();
+
         _application = new WebApplicationFactory<Program>()
             .WithWebHostBuilder(
-                builder => { builder.UseContentRoot(Directory.GetCurrentDirectory()); });
-        
+                builder =>
+                {
+                    builder.UseContentRoot(Directory.GetCurrentDirectory());
+                    builder.ConfigureTestServices(services => services.AddSingleton<IClock>(Clock));
+                });
+
         Clients = new Clients(
             config.GetSection(nameof(OAuth2IntrospectionOptions))
                 .Get<OAuth2IntrospectionOptions>()!,

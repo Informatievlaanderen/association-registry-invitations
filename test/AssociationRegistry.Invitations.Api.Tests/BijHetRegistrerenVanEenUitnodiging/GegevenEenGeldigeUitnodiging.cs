@@ -17,7 +17,8 @@ public class GegevenEenGeldigeUitnodiging : IDisposable
     {
         _fixture = fixture;
         _client = fixture.Clients.Authenticated;
-        _request = new UitnodigingenFixture()
+        _request = new AutoFixture.Fixture()
+            .Customize(new GeldigeUitnodigingen())
             .Create<UitnodigingsRequest>();
     }
 

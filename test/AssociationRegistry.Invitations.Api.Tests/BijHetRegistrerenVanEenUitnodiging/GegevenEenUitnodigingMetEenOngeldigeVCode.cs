@@ -17,10 +17,9 @@ public class GegevenEenUitnodigingMetEenOngeldigeVCode : IDisposable
     {
         _fixture = fixture;
         _client = fixture.Clients.Authenticated;
-        _request = s => new UitnodigingenFixture()
-            .Build<UitnodigingsRequest>()
-            .With(u => u.VCode, s)
-            .Create();
+        _request = s => new AutoFixture.Fixture()
+            .Customize(new GeldigeUitnodigingen(vCode: s))
+            .Create<UitnodigingsRequest>();
     }
 
     [Theory]
@@ -54,7 +53,6 @@ public class GegevenEenUitnodigingMetEenOngeldigeVCode : IDisposable
             yield return new object[] { "V012345" }; // Te wijnig character
             yield return new object[] { "V01234567" }; // Te veel nummers
             yield return new object[] { "W0123456" }; // Geen V als eerste char
-
         }
     }
 

@@ -1,4 +1,5 @@
 ﻿using AssociationRegistry.Invitations.Api.Infrastructure.ConfigurationBindings;
+using AssociationRegistry.Invitations.Api.Infrastructure.Json;
 using AssociationRegistry.Invitations.Api.Uitnodingen.Models;
 using JasperFx.CodeGeneration;
 using Marten;
@@ -55,7 +56,12 @@ public static class Marten
         var jsonNetSerializer = new JsonNetSerializer();
 
         jsonNetSerializer.Customize(
-            s => { s.DateParseHandling = DateParseHandling.None; });
+            s =>
+            {
+                s.DateParseHandling = DateParseHandling.None;
+                s.Converters.Add(new UitnodigingsStatusJsonConverter());
+            });
+
 
         return jsonNetSerializer;
     }
