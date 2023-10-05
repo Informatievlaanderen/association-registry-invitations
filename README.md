@@ -1,1 +1,1 @@
-# association-registry-invitations
+# Association Registry Invitations
