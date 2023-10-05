@@ -1,8 +1,8 @@
-﻿using AssociationRegistry.Invitations.Api.Uitnodingen.Models;
+﻿using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
 using Marten;
 using Marten.Linq;
 
-namespace AssociationRegistry.Invitations.Api.Uitnodingen.Queries;
+namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Queries;
 
 public class GetUitnodigingen
 {

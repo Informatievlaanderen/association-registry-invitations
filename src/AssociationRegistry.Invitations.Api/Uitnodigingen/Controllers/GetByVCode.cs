@@ -1,10 +1,11 @@
-﻿using AssociationRegistry.Invitations.Api.Uitnodingen.Mapping;
-using AssociationRegistry.Invitations.Api.Uitnodingen.Queries;
-using AssociationRegistry.Invitations.Api.Uitnodingen.Responses;
+﻿using AssociationRegistry.Invitations.Api.Uitnodigingen.Mapping;
+using AssociationRegistry.Invitations.Api.Uitnodigingen.Queries;
+using AssociationRegistry.Invitations.Api.Uitnodigingen.Responses;
 using Marten;
 using Microsoft.AspNetCore.Mvc;
+using Uitnodiging = AssociationRegistry.Invitations.Api.Uitnodigingen.Models.Uitnodiging;
 
-namespace AssociationRegistry.Invitations.Api.Uitnodingen.Controllers;
+namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Controllers;
 
 public class GetByVCode : ControllerBase
 {
@@ -19,7 +20,7 @@ public class GetByVCode : ControllerBase
     public async Task<IActionResult> Get([FromQuery] string vCode, CancellationToken cancellationToken)
     {
         var uitnodigingen = await _session
-            .Query<AssociationRegistry.Invitations.Api.Uitnodingen.Models.Uitnodiging>()
+            .Query<Uitnodiging>()
             .MetVCode(vCode)
             .ToListAsync(token: cancellationToken);
 

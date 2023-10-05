@@ -1,4 +1,4 @@
-﻿namespace AssociationRegistry.Invitations.Api.Uitnodingen.Models;
+﻿namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
 
 public record UitnodigingsStatus
 {

@@ -1,4 +1,4 @@
-﻿using AssociationRegistry.Invitations.Api.Uitnodingen.Requests;
+﻿using AssociationRegistry.Invitations.Api.Uitnodigingen.Requests;
 
 namespace AssociationRegistry.Invitations.Api.Tests.Autofixture;
 

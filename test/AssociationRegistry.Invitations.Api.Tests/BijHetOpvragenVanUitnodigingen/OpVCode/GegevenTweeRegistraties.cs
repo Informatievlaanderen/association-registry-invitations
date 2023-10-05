@@ -2,8 +2,8 @@
 using System.Net;
 using AssociationRegistry.Invitations.Api.Tests.Autofixture;
 using AssociationRegistry.Invitations.Api.Tests.Fixture;
-using AssociationRegistry.Invitations.Api.Uitnodingen.Models;
-using AssociationRegistry.Invitations.Api.Uitnodingen.Requests;
+using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
+using AssociationRegistry.Invitations.Api.Uitnodigingen.Requests;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NodaTime;

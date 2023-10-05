@@ -1,7 +1,7 @@
-﻿using AssociationRegistry.Invitations.Api.Uitnodingen.Requests;
+﻿using AssociationRegistry.Invitations.Api.Uitnodigingen.Requests;
 using FluentValidation;
 
-namespace AssociationRegistry.Invitations.Api.Uitnodingen.Validators;
+namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Validators;
 
 public class UitnodigingsValidator : AbstractValidator<UitnodigingsRequest>
 {
