@@ -1,3 +1,13 @@
+## [1.4.2](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.4.1...v1.4.2) (2023-10-05)
+
+
+### Bug Fixes
+
+* add status badge (force build) ([35e1e2a](https://github.com/informatievlaanderen/association-registry-invitations/commit/35e1e2a43e070e1c774eaf7fa1e563aa38234a82))
+* check out code with token ([f565f4e](https://github.com/informatievlaanderen/association-registry-invitations/commit/f565f4e4797053e393b8108324f33ee92aff7473))
+* install deps ([a5d7613](https://github.com/informatievlaanderen/association-registry-invitations/commit/a5d76134a928e80b43247ae87237adf99c1db9b5))
+* use token again ([a7de0b7](https://github.com/informatievlaanderen/association-registry-invitations/commit/a7de0b782ec9d98f6f33af1e733841e27cd498b7))
+
 ## [1.4.1](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.4.0...v1.4.1) (2023-10-05)
 
 
