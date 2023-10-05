@@ -22,7 +22,7 @@ public class AanvaardUitnodiging : ControllerBase
         var uitnodiging = await _session.LoadAsync<Uitnodiging>(uitnodigingsId, cancellationToken);
         
         return await uitnodiging
-            .NotFoundIfNull()
+            .BadRequestIfNietBestaand()
             .BadRequestIfReedsAanvaard()
             .Handle(async () =>
             {

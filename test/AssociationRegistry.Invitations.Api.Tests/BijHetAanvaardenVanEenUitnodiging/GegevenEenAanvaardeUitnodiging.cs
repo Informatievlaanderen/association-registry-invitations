@@ -35,7 +35,7 @@ public class GegevenEenAanvaardeUitnodiging : IClassFixture<GegevenEenAanvaardeU
         token["errors"]!.ToObject<Dictionary<string, string[]>>()
             .Should().ContainKey("Uitnodiging")
             .WhoseValue
-            .Should().ContainEquivalentOf("Deze uitnodiging is verwerkt.");
+            .Should().ContainEquivalentOf("Deze uitnodiging is reeds verwerkt.");
     }
 
     public class Setup : IDisposable, IAsyncLifetime
