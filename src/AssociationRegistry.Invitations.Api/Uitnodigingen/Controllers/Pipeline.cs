@@ -5,10 +5,14 @@ namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Controllers;
 
 public static class Pipeline
 {
-    public static Either NotFoundIfNull(this Uitnodiging? source)
+    public static Either BadRequestIfNietBestaand(this Uitnodiging? source)
     {
         if (source is null)
-            return new Either { Failure = controller => controller.NotFound() };
+            return new Either { Failure = controller =>
+            {
+                controller.ModelState.AddModelError("Uitnodiging", "Deze uitnodiging is niet gekend.");
+                return controller.ValidationProblem(controller.ModelState);
+            } };
 
         return new Either { Uitnodiging = source };
     }
@@ -25,7 +29,7 @@ public static class Pipeline
             {
                 Failure = controller =>
                 {
-                    controller.ModelState.AddModelError("Uitnodiging", "Deze uitnodiging is verwerkt.");
+                    controller.ModelState.AddModelError("Uitnodiging", "Deze uitnodiging is reeds verwerkt.");
                     return controller.ValidationProblem(controller.ModelState);
                 }
             };
