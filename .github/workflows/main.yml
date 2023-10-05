@@ -311,13 +311,20 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests markdown argparse
 
+      - name: Generate Token
+        id: generate_token   # Add an ID to this step for reference
+        run: node .github/build-scripts/generate-token.js
+        env:
+          APP_ID: ${{ secrets.MYBOT_APP_ID }}
+          PRIVATE_KEY: ${{ secrets.MYBOT_PRIVATE_KEY }}
+
       - name: Run Semantic Release
         shell: bash
         run: npx semantic-release
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           BUILD_DOCKER_REGISTRY: ${{ secrets.VBR_BUILD_DOCKER_REGISTRY_TST }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.installationToken  }}
           GIT_COMMIT: ${{ github.sha }}
           GIT_USERNAME: ${{ secrets.GITHUB_TOKEN }}
           GIT_AUTHOR_NAME: ${{ secrets.VBR_GIT_USER }}
