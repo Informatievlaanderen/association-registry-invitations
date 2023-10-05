@@ -18,12 +18,12 @@ public static class Pipeline
     }
     
     
-    public static Either BadRequestIfReedsAanvaard(this Either source)
+    public static Either BadRequestIfReedsVerwerkt(this Either source)
     {
         if (source.Failure is not null)
             return source;
         
-        if (source.Uitnodiging.Status == UitnodigingsStatus.Aanvaard)
+        if (source.Uitnodiging.Status != UitnodigingsStatus.WachtenOpAntwoord)
         {
             return new Either
             {

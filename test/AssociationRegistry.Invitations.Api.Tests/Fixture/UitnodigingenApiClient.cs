@@ -27,4 +27,7 @@ public class UitnodigingenApiClient : IDisposable
 
     public async Task<HttpResponseMessage> AanvaardUitnodiging(Guid uitnodigingsId)
         => await _httpClient.PostAsync($"/uitnodigingen/{uitnodigingsId}/aanvaard", null);
+    
+    public async Task<HttpResponseMessage> WeigerUitnodiging(Guid uitnodigingsId)
+        => await _httpClient.PostAsync($"/uitnodigingen/{uitnodigingsId}/weiger", null);
 }

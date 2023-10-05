@@ -4,18 +4,18 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Controllers;
 
-public class AanvaardUitnodiging : ControllerBase
+public class WeigerUitnodiging : ControllerBase
 {
     private readonly IQuerySession _session;
     private readonly UitnodigingsStatusHandler _handler;
 
-    public AanvaardUitnodiging(IQuerySession session, UitnodigingsStatusHandler handler)
+    public WeigerUitnodiging(IQuerySession session, UitnodigingsStatusHandler handler)
     {
         _session = session;
         _handler = handler;
     }
 
-    [HttpPost("/uitnodigingen/{uitnodigingsId:guid}/aanvaard")]
+    [HttpPost("/uitnodigingen/{uitnodigingsId:guid}/weiger")]
     public async Task<IActionResult> Post([FromRoute] Guid uitnodigingsId,
         CancellationToken cancellationToken)
     {
@@ -26,7 +26,7 @@ public class AanvaardUitnodiging : ControllerBase
             .BadRequestIfReedsVerwerkt()
             .Handle(async () =>
             {
-                await _handler.SetStatus(uitnodiging, UitnodigingsStatus.Aanvaard, cancellationToken);
+                await _handler.SetStatus(uitnodiging, UitnodigingsStatus.Geweigerd, cancellationToken);
 
                 return Accepted();
 

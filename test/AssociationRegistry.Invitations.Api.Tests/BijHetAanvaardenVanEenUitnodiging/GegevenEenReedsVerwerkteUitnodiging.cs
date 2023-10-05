@@ -7,12 +7,12 @@ using Newtonsoft.Json.Linq;
 namespace AssociationRegistry.Invitations.Api.Tests.BijHetAanvaardenVanEenUitnodiging;
 
 [Collection(UitnodigingenApiCollection.Name)]
-public class GegevenEenAanvaardeUitnodiging : IClassFixture<GegevenEenAanvaardeUitnodiging.Setup>
+public class GegevenEenReedsVerwerkteUitnodiging : IClassFixture<GegevenEenReedsVerwerkteUitnodiging.Setup>
 {
     private readonly Setup _setup;
     private readonly UitnodigingenApiClient _client;
 
-    public GegevenEenAanvaardeUitnodiging(UitnodigingenApiFixture fixture, Setup setup)
+    public GegevenEenReedsVerwerkteUitnodiging(UitnodigingenApiFixture fixture, Setup setup)
     {
         _setup = setup;
         _client = fixture.Clients.Authenticated;
