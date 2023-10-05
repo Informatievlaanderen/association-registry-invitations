@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using AssociationRegistry.Invitations.Api.Uitnodingen.Mapping;
 using AssociationRegistry.Invitations.Api.Uitnodingen.Models;
+using AssociationRegistry.Invitations.Api.Uitnodingen.Queries;
 using AssociationRegistry.Invitations.Api.Uitnodingen.Requests;
 using AssociationRegistry.Invitations.Api.Uitnodingen.Responses;
 using AssociationRegistry.Invitations.Api.Uitnodingen.Validators;
@@ -38,7 +39,7 @@ public class RegistreerUitnodiging : ControllerBase
 
         await using var lightweightSession = _store.LightweightSession();
         var hasDuplicate = await lightweightSession.Query<Models.Uitnodiging>()
-            .Where(u => u.VCode == request.VCode && u.Uitgenodigde.Insz == request.Uitgenodigde.Insz).AnyAsync(cancellationToken);
+            .HeeftBestaandeUitnodigingVoor(request.VCode, request.Uitgenodigde.Insz, cancellationToken);
 
         if (hasDuplicate)
         {
