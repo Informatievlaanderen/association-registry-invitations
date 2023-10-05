@@ -326,7 +326,7 @@ jobs:
           BUILD_DOCKER_REGISTRY: ${{ secrets.VBR_BUILD_DOCKER_REGISTRY_TST }}
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.installationToken  }}
           GIT_COMMIT: ${{ github.sha }}
-          GIT_USERNAME: ${{ secrets.GITHUB_TOKEN }}
+          GIT_USERNAME: ${{ steps.generate_token.outputs.installationToken }}
           GIT_AUTHOR_NAME: ${{ secrets.VBR_GIT_USER }}
           GIT_COMMITTER_NAME: ${{ secrets.VBR_GIT_USER }}
           GIT_EMAIL: ${{ secrets.VBR_GIT_EMAIL }}
