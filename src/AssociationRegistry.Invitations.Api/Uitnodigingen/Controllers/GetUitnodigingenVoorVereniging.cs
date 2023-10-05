@@ -7,17 +7,17 @@ using Uitnodiging = AssociationRegistry.Invitations.Api.Uitnodigingen.Models.Uit
 
 namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Controllers;
 
-public class GetByVCode : ControllerBase
+public class GetUitnodigingenVoorVereniging : ControllerBase
 {
     private readonly IQuerySession _session;
 
-    public GetByVCode(IQuerySession session)
+    public GetUitnodigingenVoorVereniging(IQuerySession session)
     {
         _session = session;
     }
 
-    [HttpGet("/uitnodigingen")]
-    public async Task<IActionResult> Get([FromQuery] string vCode, CancellationToken cancellationToken)
+    [HttpGet("/verenigingen/{vcode}/uitnodigingen")]
+    public async Task<IActionResult> Get([FromRoute] string vCode, CancellationToken cancellationToken)
     {
         var uitnodigingen = await _session
             .Query<Uitnodiging>()

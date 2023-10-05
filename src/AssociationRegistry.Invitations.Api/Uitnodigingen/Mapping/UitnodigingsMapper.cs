@@ -40,4 +40,25 @@ public static class UitnodigingsMapper
                 Email = model.Uitgenodigde.Email,
             },
         };
+
+    public static Responses.UitnodigingsDetail ToDetail(this Models.Uitnodiging model) =>
+        new()
+        {
+            Id = model.Id,
+            VCode = model.VCode,
+            Boodschap = model.Boodschap,
+            Status = model.Status,
+            DatumLaatsteAanpassing = model.DatumLaatsteAanpassing,
+            Uitnodiger = new Responses.UitnodigingsDetail.UitnodigerDetail
+            {
+                VertegenwoordigerId = model.Uitnodiger.VertegenwoordigerId,
+            },
+            Uitgenodigde = new Responses.UitnodigingsDetail.UitgenodigdeDetail
+            {
+                Insz = model.Uitgenodigde.Insz,
+                Voornaam = model.Uitgenodigde.Voornaam,
+                Naam = model.Uitgenodigde.Naam,
+                Email = model.Uitgenodigde.Email,
+            },
+        };
 }

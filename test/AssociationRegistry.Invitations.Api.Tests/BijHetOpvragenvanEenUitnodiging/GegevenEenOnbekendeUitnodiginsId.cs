@@ -4,45 +4,36 @@ using AssociationRegistry.Invitations.Api.Tests.Fixture;
 using AssociationRegistry.Invitations.Api.Uitnodigingen.Requests;
 using Newtonsoft.Json.Linq;
 
-namespace AssociationRegistry.Invitations.Api.Tests.BijHetOpvragenVanUitnodigingen.OpVCode;
+namespace AssociationRegistry.Invitations.Api.Tests.BijHetOpvragenvanEenUitnodiging;
 
 [Collection(UitnodigingenApiCollection.Name)]
-public class GegevenEenOnbekendeVCode : IClassFixture<GegevenEenOnbekendeVCode.Setup>
+public class GegevenEenOnbekendeUitnodiginsId : IClassFixture<GegevenEenOnbekendeUitnodiginsId.Setup>
 {
     private readonly UitnodigingenApiClient _client;
 
-    public GegevenEenOnbekendeVCode(UitnodigingenApiFixture fixture, Setup setup)
+    public GegevenEenOnbekendeUitnodiginsId(UitnodigingenApiFixture fixture, Setup setup)
     {
         _client = fixture.Clients.Authenticated;
     }
 
-    [Theory]
-    [MemberData(nameof(Data))]
-    public async Task DanIsDeResponse200(string onbekendeVcode)
+    [Fact]
+    public async Task DanIsDeResponse400()
     {
-        var response = await _client.GetUitnodigingenOpVcode(onbekendeVcode);
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var response = await _client.GetUitnodigingsDetail(new AutoFixture.Fixture().Create<string>(), Guid.NewGuid());
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
-    [Theory]
-    [MemberData(nameof(Data))]
-    public async Task DanBevatDeBodyDeGeenUitnodigingen(string onbekendeVcode)
+    [Fact]
+
+    public async Task DanBevatDeBodyEenError()
     {
-        var response = await _client.GetUitnodigingenOpVcode(onbekendeVcode);
+        var response = await _client.GetUitnodigingsDetail(new AutoFixture.Fixture().Create<string>(), Guid.NewGuid());
         var content = await response.Content.ReadAsStringAsync();
-
         var token = JToken.Parse(content);
-        token["uitnodigingen"].Should()
-            .BeEmpty();
-    }
-
-    public static IEnumerable<object[]> Data
-    {
-        get
-        {
-            yield return new object[] { "blablabla" };
-            yield return new object[] { "OVO000001" };
-        }
+        token["errors"]!.ToObject<Dictionary<string, string[]>>()
+            .Should().ContainKey("uitnodigingsId")
+            .WhoseValue
+            .Should().ContainEquivalentOf("Deze uitnodiging is niet gekend.");
     }
 
     public class Setup : IDisposable, IAsyncLifetime
