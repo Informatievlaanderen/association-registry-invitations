@@ -318,6 +318,11 @@ jobs:
           APP_ID: ${{ secrets.MYBOT_APP_ID }}
           PRIVATE_KEY: ${{ secrets.MYBOT_PRIVATE_KEY }}
 
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          token: ${{ steps.generate_token.outputs.installationToken  }}
+
       - name: Run Semantic Release
         shell: bash
         run: npx semantic-release
