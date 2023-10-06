@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.6.0...v1.6.1) (2023-10-06)
+
+
+### Bug Fixes
+
+* OR-1662 correct the Jira prefix for creating specific releases for this repo ([17b6406](https://github.com/informatievlaanderen/association-registry-invitations/commit/17b640600694b23517b2ccd67b2f80e67618fab4))
+
 # [1.6.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.5.0...v1.6.0) (2023-10-06)
 
 
