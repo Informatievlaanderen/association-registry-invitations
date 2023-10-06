@@ -1,3 +1,11 @@
+# [1.6.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.5.0...v1.6.0) (2023-10-06)
+
+
+### Features
+
+* OR-1662 add DatumRegistratie and refactors ([49b77d4](https://github.com/informatievlaanderen/association-registry-invitations/commit/49b77d4e7933f204feeaad15110ed08715ad8b75))
+* OR-1662 add RegistreerPipeline and test for UitnodigingZonderBoodschap ([2971e2d](https://github.com/informatievlaanderen/association-registry-invitations/commit/2971e2d84f20efdd7e8fa69820545da67aec42f0))
+
 # [1.5.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.4.2...v1.5.0) (2023-10-06)
 
 
