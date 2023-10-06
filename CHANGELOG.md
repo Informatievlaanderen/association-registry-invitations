@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.4.2...v1.5.0) (2023-10-06)
+
+
+### Features
+
+* or-1662 use correct port ([dd8ddef](https://github.com/informatievlaanderen/association-registry-invitations/commit/dd8ddef3c0ca1416e4c9d59d3eba0cb8eb10212d))
+
 ## [1.4.2](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.4.1...v1.4.2) (2023-10-05)
 
 
