@@ -4,23 +4,23 @@ using AssociationRegistry.Invitations.Api.Tests.Fixture;
 using AssociationRegistry.Invitations.Api.Uitnodigingen.Requests;
 using Newtonsoft.Json.Linq;
 
-namespace AssociationRegistry.Invitations.Api.Tests.BijHetRegistrerenVanEenUitnodiging;
+namespace AssociationRegistry.Invitations.Api.Tests.BijHetRegistrerenVanEenUitnodiging.MetOntbrekendeData;
 
 [Collection(UitnodigingenApiCollection.Name)]
-public class GegevenEenUitnodigingZonderVoornaam : IDisposable
+public class GegevenEenUitnodigingZonderNaam : IDisposable
 {
     private readonly UitnodigingenApiClient _client;
     private readonly UitnodigingenApiFixture _fixture;
     private readonly UitnodigingsRequest _request;
 
-    public GegevenEenUitnodigingZonderVoornaam(UitnodigingenApiFixture fixture)
+    public GegevenEenUitnodigingZonderNaam(UitnodigingenApiFixture fixture)
     {
         _fixture = fixture;
         _client = fixture.Clients.Authenticated;
         _request = new AutoFixture.Fixture()
             .Customize(new GeldigeUitnodigingen())
             .Create<UitnodigingsRequest>();
-        _request.Uitgenodigde.Voornaam = null!;
+        _request.Uitgenodigde.Naam = null!;
     }
 
     [Fact]
@@ -39,9 +39,9 @@ public class GegevenEenUitnodigingZonderVoornaam : IDisposable
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);
         token["errors"]!.ToObject<Dictionary<string, string[]>>()
-            .Should().ContainKey("Uitgenodigde.Voornaam")
+            .Should().ContainKey("Uitgenodigde.Naam")
             .WhoseValue
-            .Should().ContainEquivalentOf("Voornaam is verplicht.");
+            .Should().ContainEquivalentOf("Naam is verplicht.");
     }
 
     public void Dispose()

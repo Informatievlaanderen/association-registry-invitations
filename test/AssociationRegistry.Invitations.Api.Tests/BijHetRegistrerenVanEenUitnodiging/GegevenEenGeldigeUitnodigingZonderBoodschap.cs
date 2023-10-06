@@ -1,47 +1,45 @@
-﻿using System.Net;
+using System.Net;
 using AssociationRegistry.Invitations.Api.Tests.Autofixture;
 using AssociationRegistry.Invitations.Api.Tests.Fixture;
 using AssociationRegistry.Invitations.Api.Uitnodigingen.Requests;
 using Newtonsoft.Json.Linq;
+using static System.String;
 
 namespace AssociationRegistry.Invitations.Api.Tests.BijHetRegistrerenVanEenUitnodiging;
 
 [Collection(UitnodigingenApiCollection.Name)]
-public class GegevenEenUitnodigingZonderInsz : IDisposable
+public class GegevenEenGeldigeUitnodigingZonderBoodschap : IDisposable
 {
     private readonly UitnodigingenApiClient _client;
     private readonly UitnodigingenApiFixture _fixture;
     private readonly UitnodigingsRequest _request;
 
-    public GegevenEenUitnodigingZonderInsz(UitnodigingenApiFixture fixture)
+    public GegevenEenGeldigeUitnodigingZonderBoodschap(UitnodigingenApiFixture fixture)
     {
         _fixture = fixture;
         _client = fixture.Clients.Authenticated;
         _request = new AutoFixture.Fixture()
             .Customize(new GeldigeUitnodigingen())
             .Create<UitnodigingsRequest>();
-        _request.Uitgenodigde.Insz = null!;
+        _request.Boodschap = string.Empty;
     }
 
     [Fact]
-    public async Task DanIsDeResponse400()
+    public async Task DanIsDeResponse201()
     {
         var response = await _client.RegistreerUitnodiging(_request);
 
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        response.StatusCode.Should().Be(HttpStatusCode.Created);
     }
 
     [Fact]
-    public async Task DanBevatDeBodyEenErrorMessage()
+    public async Task DanHeeftDeBodyEenIdDatEenGuidIs()
     {
         var response = await _client.RegistreerUitnodiging(_request);
 
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);
-        token["errors"]!.ToObject<Dictionary<string, string[]>>()
-            .Should().ContainKey("Uitgenodigde.Insz")
-            .WhoseValue
-            .Should().ContainEquivalentOf("Insz is verplicht.");
+        Guid.TryParse(token["id"]!.Value<string>(), out _).Should().BeTrue();
     }
 
     public void Dispose()

@@ -4,7 +4,7 @@ using AssociationRegistry.Invitations.Api.Tests.Fixture;
 using AssociationRegistry.Invitations.Api.Uitnodigingen.Requests;
 using Newtonsoft.Json.Linq;
 
-namespace AssociationRegistry.Invitations.Api.Tests.BijHetRegistrerenVanEenUitnodiging;
+namespace AssociationRegistry.Invitations.Api.Tests.BijHetRegistrerenVanEenUitnodiging.MetOngeldigeData;
 
 [Collection(UitnodigingenApiCollection.Name)]
 public class GegevenEenUitgenodigdeMetEenOngeldigInsz : IDisposable
