@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.7.0...v1.7.1) (2023-10-06)
+
+
+### Bug Fixes
+
+* or-1662 make startup more uniform with registries ([0d66e55](https://github.com/informatievlaanderen/association-registry-invitations/commit/0d66e55aaeb9d559ee766692a1f811d0d942edb1))
+
 # [1.7.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.6.1...v1.7.0) (2023-10-06)
 
 
