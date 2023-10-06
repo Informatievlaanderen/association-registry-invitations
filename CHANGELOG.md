@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.6.1...v1.7.0) (2023-10-06)
+
+
+### Features
+
+* or-1662 don't use https redirection ([3e293f1](https://github.com/informatievlaanderen/association-registry-invitations/commit/3e293f1d0cd03031eeef7797d88d3e529efd48cd))
+
 ## [1.6.1](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.6.0...v1.6.1) (2023-10-06)
 
 
