@@ -42,10 +42,8 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
         uitnodiging["vCode"].Value<string>().Should().Be(_setup.Uitnodiging.VCode);
         uitnodiging["boodschap"].Value<string>().Should().Be(_setup.Uitnodiging.Boodschap);
         uitnodiging["status"].Value<string>().Should().Be(UitnodigingsStatus.Geweigerd.Status);
-        uitnodiging["datumLaatsteAanpassing"].Value<string>().Should()
-            .Be(_setup.UitnodigingAanvaardOp.ToString("g", CultureInfo.InvariantCulture));
-        uitnodiging["uitnodiger"]["vertegenwoordigerId"].Value<int>().Should()
-            .Be(_setup.Uitnodiging.Uitnodiger.VertegenwoordigerId);
+        uitnodiging["datumLaatsteAanpassing"].Value<string>().Should().Be(_setup.UitnodigingAanvaardOp.ToString("g", CultureInfo.InvariantCulture));
+        uitnodiging["uitnodiger"]["vertegenwoordigerId"].Value<int>().Should().Be(_setup.Uitnodiging.Uitnodiger.VertegenwoordigerId);
         uitnodiging["uitgenodigde"]["insz"].Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Insz);
         uitnodiging["uitgenodigde"]["naam"].Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Naam);
         uitnodiging["uitgenodigde"]["voornaam"].Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Voornaam);

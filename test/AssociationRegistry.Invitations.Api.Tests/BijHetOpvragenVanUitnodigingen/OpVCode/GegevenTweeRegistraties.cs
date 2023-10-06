@@ -37,33 +37,34 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
 
         var token = JsonConvert.DeserializeObject<JObject>(content,
             new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
-        var uitnodiging1 = token["uitnodigingen"].Should()
-            .ContainSingle(u => u["id"].Value<string>() == _setup.UitnodigingsId1.ToString()).Subject;
-        uitnodiging1["vCode"].Value<string>().Should().Be(_setup.VCode);
-        uitnodiging1["boodschap"].Value<string>().Should().Be(_setup.Uitnodiging1.Boodschap);
-        uitnodiging1["status"].Value<string>().Should().Be(UitnodigingsStatus.WachtenOpAntwoord.Status);
-        uitnodiging1["datumLaatsteAanpassing"].Value<string>().Should()
+        
+        var uitnodiging1 = token!["uitnodigingen"].Should()
+            .ContainSingle(u => u["id"]!.Value<string>() == _setup.UitnodigingsId1.ToString()).Subject;
+        uitnodiging1["vCode"]!.Value<string>().Should().Be(_setup.VCode);
+        uitnodiging1["boodschap"]!.Value<string>().Should().Be(_setup.Uitnodiging1.Boodschap);
+        uitnodiging1["status"]!.Value<string>().Should().Be(UitnodigingsStatus.WachtOpAntwoord.Status);
+        uitnodiging1["datumRegistratie"]!.Value<string>().Should()
             .Be(_setup.Uitnodiging1AangemaaktOp.ToString("g", CultureInfo.InvariantCulture));
-        uitnodiging1["uitnodiger"]["vertegenwoordigerId"].Value<int>().Should()
+        uitnodiging1["uitnodiger"]!["vertegenwoordigerId"]!.Value<int>().Should()
             .Be(_setup.Uitnodiging1.Uitnodiger.VertegenwoordigerId);
-        uitnodiging1["uitgenodigde"]["insz"].Value<string>().Should().Be(_setup.Uitnodiging1.Uitgenodigde.Insz);
-        uitnodiging1["uitgenodigde"]["naam"].Value<string>().Should().Be(_setup.Uitnodiging1.Uitgenodigde.Naam);
-        uitnodiging1["uitgenodigde"]["voornaam"].Value<string>().Should().Be(_setup.Uitnodiging1.Uitgenodigde.Voornaam);
-        uitnodiging1["uitgenodigde"]["email"].Value<string>().Should().Be(_setup.Uitnodiging1.Uitgenodigde.Email);
+        uitnodiging1["uitgenodigde"]!["insz"]!.Value<string>().Should().Be(_setup.Uitnodiging1.Uitgenodigde.Insz);
+        uitnodiging1["uitgenodigde"]!["naam"]!.Value<string>().Should().Be(_setup.Uitnodiging1.Uitgenodigde.Naam);
+        uitnodiging1["uitgenodigde"]!["voornaam"]!.Value<string>().Should().Be(_setup.Uitnodiging1.Uitgenodigde.Voornaam);
+        uitnodiging1["uitgenodigde"]!["email"]!.Value<string>().Should().Be(_setup.Uitnodiging1.Uitgenodigde.Email);
 
         var uitnodiging2 = token["uitnodigingen"].Should()
-            .ContainSingle(u => u["id"].Value<string>() == _setup.UitnodigingsId2.ToString()).Subject;
-        uitnodiging2["vCode"].Value<string>().Should().Be(_setup.VCode);
-        uitnodiging2["boodschap"].Value<string>().Should().Be(_setup.Uitnodiging2.Boodschap);
-        uitnodiging2["status"].Value<string>().Should().Be(UitnodigingsStatus.WachtenOpAntwoord.Status);
-        uitnodiging2["datumLaatsteAanpassing"].Value<string>().Should()
+            .ContainSingle(u => u["id"]!.Value<string>() == _setup.UitnodigingsId2.ToString()).Subject;
+        uitnodiging2["vCode"]!.Value<string>().Should().Be(_setup.VCode);
+        uitnodiging2["boodschap"]!.Value<string>().Should().Be(_setup.Uitnodiging2.Boodschap);
+        uitnodiging2["status"]!.Value<string>().Should().Be(UitnodigingsStatus.WachtOpAntwoord.Status);
+        uitnodiging2["datumRegistratie"]!.Value<string>().Should()
             .Be(_setup.Uitnodiging2AangemaaktOp.ToString("g", CultureInfo.InvariantCulture));
-        uitnodiging2["uitnodiger"]["vertegenwoordigerId"].Value<int>().Should()
+        uitnodiging2["uitnodiger"]!["vertegenwoordigerId"]!.Value<int>().Should()
             .Be(_setup.Uitnodiging2.Uitnodiger.VertegenwoordigerId);
-        uitnodiging2["uitgenodigde"]["insz"].Value<string>().Should().Be(_setup.Uitnodiging2.Uitgenodigde.Insz);
-        uitnodiging2["uitgenodigde"]["naam"].Value<string>().Should().Be(_setup.Uitnodiging2.Uitgenodigde.Naam);
-        uitnodiging2["uitgenodigde"]["voornaam"].Value<string>().Should().Be(_setup.Uitnodiging2.Uitgenodigde.Voornaam);
-        uitnodiging2["uitgenodigde"]["email"].Value<string>().Should().Be(_setup.Uitnodiging2.Uitgenodigde.Email);
+        uitnodiging2["uitgenodigde"]!["insz"]!.Value<string>().Should().Be(_setup.Uitnodiging2.Uitgenodigde.Insz);
+        uitnodiging2["uitgenodigde"]!["naam"]!.Value<string>().Should().Be(_setup.Uitnodiging2.Uitgenodigde.Naam);
+        uitnodiging2["uitgenodigde"]!["voornaam"]!.Value<string>().Should().Be(_setup.Uitnodiging2.Uitgenodigde.Voornaam);
+        uitnodiging2["uitgenodigde"]!["email"]!.Value<string>().Should().Be(_setup.Uitnodiging2.Uitgenodigde.Email);
     }
 
     public class Setup : IDisposable, IAsyncLifetime

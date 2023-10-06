@@ -27,6 +27,7 @@ public static class UitnodigingsMapper
             VCode = model.VCode,
             Boodschap = model.Boodschap,
             Status = model.Status,
+            DatumRegistratie = model.DatumRegistratie,
             DatumLaatsteAanpassing = model.DatumLaatsteAanpassing,
             Uitnodiger = new Responses.Uitnodiger
             {
@@ -48,6 +49,7 @@ public static class UitnodigingsMapper
             VCode = model.VCode,
             Boodschap = model.Boodschap,
             Status = model.Status,
+            DatumRegistratie = model.DatumRegistratie,
             DatumLaatsteAanpassing = model.DatumLaatsteAanpassing,
             Uitnodiger = new Responses.UitnodigingsDetail.UitnodigerDetail
             {

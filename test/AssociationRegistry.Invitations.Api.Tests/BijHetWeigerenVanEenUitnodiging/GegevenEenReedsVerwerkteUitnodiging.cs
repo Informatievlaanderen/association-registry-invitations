@@ -21,40 +21,45 @@ public class GegevenEenReedsVerwerkteUitnodiging : IClassFixture<GegevenEenReeds
     [Fact]
     public async Task DanIsDeResponse400()
     {
-        var response = await _client.WeigerUitnodiging(_setup.UitnodigingsId);
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        foreach (var id in _setup.VerwerkteUitnodigingIds)
+        {
+            var response = await _client.WeigerUitnodiging(id);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);            
+        }
     }
 
 
     [Fact]
     public async Task DanBevatDeBodyEenErrorMessage()
     {
-        var response = await _client.WeigerUitnodiging(_setup.UitnodigingsId);
+        foreach (var id in _setup.VerwerkteUitnodigingIds)
+        {
+            var response = await _client.WeigerUitnodiging(id);
 
-        var content = await response.Content.ReadAsStringAsync();
-        var token = JToken.Parse(content);
-        token["errors"]!.ToObject<Dictionary<string, string[]>>()
-            .Should().ContainKey("Uitnodiging")
-            .WhoseValue
-            .Should().ContainEquivalentOf("Deze uitnodiging is reeds verwerkt.");
+            var content = await response.Content.ReadAsStringAsync();
+            var token = JToken.Parse(content);
+            token["errors"]!.ToObject<Dictionary<string, string[]>>()
+                .Should().ContainKey("Uitnodiging")
+                .WhoseValue
+                .Should().ContainEquivalentOf("Deze uitnodiging is reeds verwerkt.");
+        }
     }
 
     public class Setup : IDisposable, IAsyncLifetime
     {
-        public UitnodigingsRequest Uitnodiging { get; set; }
-        public Guid UitnodigingsId { get; set; }
+        public List<Guid> VerwerkteUitnodigingIds { get; } = new();
 
         private readonly UitnodigingenApiClient _client;
         private readonly UitnodigingenApiFixture _fixture;
+        private readonly IFixture? _autoFixture;
 
         public Setup(UitnodigingenApiFixture fixture)
         {
             _fixture = fixture;
             _client = fixture.Clients.Authenticated;
 
-            Uitnodiging = new AutoFixture.Fixture()
-                .Customize(new GeldigeUitnodigingen())
-                .Create<UitnodigingsRequest>();
+            _autoFixture = new AutoFixture.Fixture()
+                .Customize(new GeldigeUitnodigingen());
         }
 
         public void Dispose()
@@ -64,11 +69,20 @@ public class GegevenEenReedsVerwerkteUitnodiging : IClassFixture<GegevenEenReeds
 
         public async Task InitializeAsync()
         {
-            var response = await _client.RegistreerUitnodiging(Uitnodiging);
+            var response = await _client.RegistreerUitnodiging(_autoFixture.Create<UitnodigingsRequest>());
             var content = await response.Content.ReadAsStringAsync();
-            UitnodigingsId = Guid.Parse(JToken.Parse(content)["id"]!.Value<string>()!);
+            var aanvaardeUitnodigingId = Guid.Parse(JToken.Parse(content)["id"]!.Value<string>()!);
+            VerwerkteUitnodigingIds.Add(aanvaardeUitnodigingId);
+
+            var tweedeUitnodiding = _autoFixture.Create<UitnodigingsRequest>();
+            tweedeUitnodiding.Uitgenodigde.Insz = "02030400139";
+            response = await _client.RegistreerUitnodiging(tweedeUitnodiding);
+            content = await response.Content.ReadAsStringAsync();
+            var geweigerdeUitnodigingId = Guid.Parse(JToken.Parse(content)["id"]!.Value<string>()!);
+            VerwerkteUitnodigingIds.Add(geweigerdeUitnodigingId);
             
-            await _client.AanvaardUitnodiging(UitnodigingsId);
+            await _client.AanvaardUitnodiging(aanvaardeUitnodigingId);
+            await _client.WeigerUitnodiging(geweigerdeUitnodigingId);
         }
 
         public Task DisposeAsync() => Task.CompletedTask;

@@ -10,5 +10,7 @@ public class Uitnodiging
     public UitnodigingsStatus Status { get; set; }
     public Uitnodiger Uitnodiger { get; set; }
     public Uitgenodigde Uitgenodigde { get; set; }
+    public string DatumRegistratie { get; set; }
+    
     public string DatumLaatsteAanpassing { get; set; }
 }

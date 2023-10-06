@@ -2,10 +2,10 @@
 
 public record UitnodigingsStatus
 {
-    public static UitnodigingsStatus WachtenOpAntwoord = new("Wachten op antwoord");
+    public static UitnodigingsStatus WachtOpAntwoord = new("Wacht op antwoord");
     public static UitnodigingsStatus Aanvaard = new("Aanvaard");
     public static UitnodigingsStatus Geweigerd = new("Geweigerd");
-    public static UitnodigingsStatus[] All = { WachtenOpAntwoord, Aanvaard, Geweigerd };
+    public static UitnodigingsStatus[] All = { WachtOpAntwoord, Aanvaard, Geweigerd };
 
     private UitnodigingsStatus(string status)
     {

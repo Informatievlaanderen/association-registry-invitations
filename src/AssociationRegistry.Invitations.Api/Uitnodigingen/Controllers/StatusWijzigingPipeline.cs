@@ -23,7 +23,7 @@ public static class StatusWijzigingPipeline
         if (source.Failure is not null)
             return source;
         
-        if (source.Input.Status != UitnodigingsStatus.WachtenOpAntwoord)
+        if (source.Input.Status != UitnodigingsStatus.WachtOpAntwoord)
         {
             return new Either<Uitnodiging>
             {

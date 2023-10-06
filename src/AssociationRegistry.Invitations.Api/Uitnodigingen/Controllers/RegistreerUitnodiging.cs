@@ -34,8 +34,8 @@ public class RegistreerUitnodiging : ControllerBase
             .Handle(async () =>
             {
                 var uitnodiging = request.ToModel();
-                uitnodiging.Status = UitnodigingsStatus.WachtenOpAntwoord;
-                uitnodiging.DatumLaatsteAanpassing = _clock.GetCurrentInstant().ToString("g", CultureInfo.InvariantCulture);
+                uitnodiging.Status = UitnodigingsStatus.WachtOpAntwoord;
+                uitnodiging.DatumRegistratie = _clock.GetCurrentInstant().ToString("g", CultureInfo.InvariantCulture);
                 lightweightSession.Store(uitnodiging);
                 await lightweightSession.SaveChangesAsync(cancellationToken);
 

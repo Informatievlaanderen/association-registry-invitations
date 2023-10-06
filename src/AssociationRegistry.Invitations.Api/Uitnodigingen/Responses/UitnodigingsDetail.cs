@@ -6,6 +6,8 @@ public class UitnodigingsDetail
     public string VCode { get; set; }
     public string Boodschap { get; set; }
     public string Status { get; set; }
+    public string DatumRegistratie { get; set; }
+    
     public string DatumLaatsteAanpassing { get; set; }
     public UitnodigerDetail Uitnodiger { get; set; }
     public UitgenodigdeDetail Uitgenodigde { get; set; }

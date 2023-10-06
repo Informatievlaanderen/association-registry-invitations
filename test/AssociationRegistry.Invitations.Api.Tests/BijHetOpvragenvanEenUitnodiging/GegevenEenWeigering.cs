@@ -36,25 +36,29 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
         var content = await response.Content.ReadAsStringAsync();
 
         var uitnodiging = JsonConvert.DeserializeObject<JObject>(content,
-            new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
-        uitnodiging["id"].Value<string>().Should().Be(_setup.UitnodigingsId.ToString());
-        uitnodiging["vCode"].Value<string>().Should().Be(_setup.Uitnodiging.VCode);
-        uitnodiging["boodschap"].Value<string>().Should().Be(_setup.Uitnodiging.Boodschap);
-        uitnodiging["status"].Value<string>().Should().Be(UitnodigingsStatus.Geweigerd.Status);
-        uitnodiging["datumLaatsteAanpassing"].Value<string>().Should()
+            new JsonSerializerSettings { DateParseHandling = DateParseHandling.None })!;
+        uitnodiging["id"]!.Value<string>().Should().Be(_setup.UitnodigingsId.ToString());
+        uitnodiging["vCode"]!.Value<string>().Should().Be(_setup.Uitnodiging.VCode);
+        uitnodiging["boodschap"]!.Value<string>().Should().Be(_setup.Uitnodiging.Boodschap);
+        uitnodiging["status"]!.Value<string>().Should().Be(UitnodigingsStatus.Geweigerd.Status);
+        uitnodiging["datumRegistratie"]!.Value<string>().Should()
+            .Be(_setup.UitnodigingAangemaaktOp.ToString("g", CultureInfo.InvariantCulture));
+        uitnodiging["datumLaatsteAanpassing"]!.Value<string>().Should()
             .Be(_setup.UitnodigingAanvaardOp.ToString("g", CultureInfo.InvariantCulture));
-        uitnodiging["uitnodiger"]["vertegenwoordigerId"].Value<int>().Should()
+        uitnodiging["uitnodiger"]!["vertegenwoordigerId"]!.Value<int>().Should()
             .Be(_setup.Uitnodiging.Uitnodiger.VertegenwoordigerId);
-        uitnodiging["uitgenodigde"]["insz"].Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Insz);
-        uitnodiging["uitgenodigde"]["naam"].Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Naam);
-        uitnodiging["uitgenodigde"]["voornaam"].Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Voornaam);
-        uitnodiging["uitgenodigde"]["email"].Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Email);
+        uitnodiging["uitgenodigde"]!["insz"]!.Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Insz);
+        uitnodiging["uitgenodigde"]!["naam"]!.Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Naam);
+        uitnodiging["uitgenodigde"]!["voornaam"]!.Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Voornaam);
+        uitnodiging["uitgenodigde"]!["email"]!.Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Email);
     }
 
     public class Setup : IDisposable, IAsyncLifetime
     {
         public UitnodigingsRequest Uitnodiging { get; set; }
         public Guid UitnodigingsId { get; set; }
+        
+        public Instant UitnodigingAangemaaktOp { get; set; }
         public Instant UitnodigingAanvaardOp { get; set; }
 
         private readonly UitnodigingenApiClient _client;
@@ -78,6 +82,7 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
         public async Task InitializeAsync()
         {
             var response = await _client.RegistreerUitnodiging(Uitnodiging);
+            UitnodigingAangemaaktOp = _fixture.Clock.PreviousInstant;
             var content = await response.Content.ReadAsStringAsync();
             UitnodigingsId = Guid.Parse(JToken.Parse(content)["id"]!.Value<string>()!);
 

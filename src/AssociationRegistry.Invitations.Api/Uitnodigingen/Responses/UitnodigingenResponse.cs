@@ -11,6 +11,7 @@ public class Uitnodiging
     public string VCode { get; set; }
     public string Boodschap { get; set; }
     public string Status { get; set; }
+    public string DatumRegistratie { get; set; }
     public string DatumLaatsteAanpassing { get; set; }
     public Uitnodiger Uitnodiger { get; set; }
     public Uitgenodigde Uitgenodigde { get; set; }
