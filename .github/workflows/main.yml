@@ -430,7 +430,7 @@ jobs:
 
       - name: Login to Amazon ECR (Test)
         if: needs.release.outputs.version != 'none'
-        uses: aws-actions/amazon-ecr-login@v1.7.1
+        uses: aws-actions/amazon-ecr-login@v2.0.1
 
       - name: Download artifact
         uses: actions/download-artifact@v3
