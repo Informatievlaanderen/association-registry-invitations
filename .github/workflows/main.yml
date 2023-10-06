@@ -410,7 +410,7 @@ jobs:
           CONFLUENCE_TITLE: ${{ env.REPOSITORY_NAME }}
           CONFLUENCE_USERNAME: ${{ secrets.VBR_CONFLUENCE_USER }}
           CONFLUENCE_PASSWORD: ${{ secrets.VBR_CONFLUENCE_PASSWORD }}
-          JIRA_PREFIX: Association
+          JIRA_PREFIX: Association-Invitations
           JIRA_PROJECT: OR
           JIRA_VERSION: ${{ needs.release.outputs.version }}
 
