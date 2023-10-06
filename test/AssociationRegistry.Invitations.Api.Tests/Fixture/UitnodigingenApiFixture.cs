@@ -1,5 +1,5 @@
 ﻿using AssociationRegistry.Invitations.Api.Infrastructure.ConfigurationBindings;
-using AssociationRegistry.Invitations.Api.Infrastructure.Extentions;
+using AssociationRegistry.Invitations.Api.Infrastructure.Extensions;
 using AssociationRegistry.Invitations.Api.Tests.Fixture.Helpers;
 using AssociationRegistry.Invitations.Api.Tests.Fixture.Stubs;
 using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;

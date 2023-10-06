@@ -7,7 +7,7 @@ using Marten.Services;
 using Newtonsoft.Json;
 using Weasel.Core;
 
-namespace AssociationRegistry.Invitations.Api.Infrastructure.Extentions;
+namespace AssociationRegistry.Invitations.Api.Infrastructure.Extensions;
 
 public static class Marten
 {

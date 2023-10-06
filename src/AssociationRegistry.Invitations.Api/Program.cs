@@ -1,31 +1,39 @@
+using System.IO.Compression;
 using System.Net;
-using AssociationRegistry.Invitations.Api.Constants;
-using AssociationRegistry.Invitations.Api.Infrastructure.Extentions;
+using AssociationRegistry.Invitations.Api.Infrastructure.Extensions;
 using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
+using Destructurama;
 using IdentityModel.AspNetCore.OAuth2Introspection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using NodaTime;
+using Serilog;
+using Serilog.Debugging;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(
+    new WebApplicationOptions
+    {
+        Args = args,
+        ContentRootPath = Directory.GetCurrentDirectory(),
+        WebRootPath = "wwwroot",
+    });
 
-var postgreSqlOptions = builder.Configuration.GetPostgreSqlOptionsSection();
+LoadConfiguration(builder, args);
 
+SelfLog.Enable(Console.WriteLine);
 
-// Add services to the container.
-builder.Services
-    .AddSingleton<IClock>(SystemClock.Instance)
-    .AddTransient<UitnodigingsStatusHandler>();
+ConfigureJsonSerializerSettings();
+ConfigureAppDomainExceptions();
 
 ConfigureKestrel(builder);
+ConfigureLogger(builder);
+ConfigureWebHost(builder);
 
-builder.Services.AddMarten(postgreSqlOptions);
-
-builder.Services.AddControllers();
-
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+ConfigureServices(builder);
 
 builder.Services.AddAuthentication(options =>
     {
@@ -46,14 +54,6 @@ builder.Services.AddAuthentication(options =>
             options.IntrospectionEndpoint = configOptions.IntrospectionEndpoint;
         }
     );
-
-// builder.Services.AddAuthorization(
-//     options =>
-//         options.FallbackPolicy = new AuthorizationPolicyBuilder()
-//             .RequireClaim(Security.ClaimTypes.Scope, Security.Scopes.Uitnodigingen)
-//             .Build());
-
-builder.Services.AddControllers();
 
 var app = builder.Build();
 
@@ -88,6 +88,128 @@ static void ConfigureKestrel(WebApplicationBuilder builder)
                     listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
                 });
         });
+}
+
+static void ConfigureLogger(WebApplicationBuilder builder)
+{
+    var loggerConfig =
+        new LoggerConfiguration()
+            .ReadFrom.Configuration(builder.Configuration)
+            .Enrich.FromLogContext()
+            .Enrich.WithMachineName()
+            .Enrich.WithThreadId()
+            .Enrich.WithEnvironmentUserName()
+            .Destructure.JsonNetTypes();
+
+    var logger = loggerConfig.CreateLogger();
+
+    Log.Logger = logger;
+
+    builder.Logging
+        .AddOpenTelemetry();
+}
+
+static void LoadConfiguration(WebApplicationBuilder builder, params string[] args)
+{
+    builder.Configuration
+        .AddJsonFile("appsettings.json")
+        .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName.ToLowerInvariant()}.json", optional: true,
+            reloadOnChange: false)
+        .AddJsonFile($"appsettings.{Environment.MachineName.ToLowerInvariant()}.json", optional: true, reloadOnChange: false)
+        .AddEnvironmentVariables()
+        .AddCommandLine(args)
+        .AddInMemoryCollection();
+}
+
+static void ConfigureJsonSerializerSettings()
+{
+    var jsonSerializerSettings = JsonSerializerSettingsProvider.CreateSerializerSettings().ConfigureDefaultForApi();
+    jsonSerializerSettings.NullValueHandling = NullValueHandling.Include;
+    jsonSerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+
+    JsonConvert.DefaultSettings = () => jsonSerializerSettings;
+}
+
+static void ConfigureAppDomainExceptions()
+{
+    AppDomain.CurrentDomain.FirstChanceException += (_, eventArgs) =>
+        Log.Debug(
+            eventArgs.Exception,
+            messageTemplate: "FirstChanceException event raised in {AppDomain}",
+            AppDomain.CurrentDomain.FriendlyName);
+
+    AppDomain.CurrentDomain.UnhandledException += (_, eventArgs) =>
+        Log.Fatal(
+            (Exception)eventArgs.ExceptionObject,
+            messageTemplate: "Encountered a fatal exception, exiting program");
+}
+
+static void ConfigureWebHost(WebApplicationBuilder builder)
+    => builder.WebHost.CaptureStartupErrors(captureStartupErrors: true);
+
+void ConfigureServices(WebApplicationBuilder webApplicationBuilder)
+{
+    var postgreSqlOptions = webApplicationBuilder.Configuration.GetPostgreSqlOptionsSection();
+
+    webApplicationBuilder.Services
+        .AddSingleton<IClock>(SystemClock.Instance)
+        .AddTransient<UitnodigingsStatusHandler>()
+        .AddMarten(postgreSqlOptions)
+        .AddEndpointsApiExplorer()
+        .AddSwaggerGen()
+        
+        .AddOpenTelemetryServices()
+        
+        .AddControllers();
+
+    webApplicationBuilder
+        .Services
+        .AddMvcCore(
+            cfg =>
+            {
+                cfg.RespectBrowserAcceptHeader = false;
+                cfg.ReturnHttpNotAcceptable = true;
+
+                cfg.EnableEndpointRouting = false;
+            })
+        .Services
+        .AddResponseCompression(
+            cfg =>
+            {
+                cfg.EnableForHttps = true;
+
+                cfg.Providers.Add<BrotliCompressionProvider>();
+                cfg.Providers.Add<GzipCompressionProvider>();
+
+                cfg.MimeTypes = new[]
+                {
+                    // General  
+                    "text/plain",
+                    "text/csv",
+
+                    // Static files
+                    "text/css",
+                    "application/javascript",
+
+                    // MVC
+                    "text/html",
+                    "application/xml",
+                    "text/xml",
+                    "application/json",
+                    "text/json",
+                    "application/ld+json",
+                    "application/atom+xml",
+
+                    // Fonts
+                    "application/font-woff",
+                    "font/otf",
+                    "application/vnd.ms-fontobject",
+                };
+            })
+        .Configure<GzipCompressionProviderOptions>(cfg => cfg.Level = CompressionLevel.Fastest)
+        .Configure<BrotliCompressionProviderOptions>(cfg => cfg.Level = CompressionLevel.Fastest)
+        .Configure<KestrelServerOptions>(serverOptions => serverOptions.AllowSynchronousIO = true);
+
 }
 
 

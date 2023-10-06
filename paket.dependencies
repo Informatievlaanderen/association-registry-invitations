@@ -13,8 +13,33 @@ nuget IdentityModel.AspnetCore.OAuth2Introspection
 nuget Microsoft.AspNetCore.Authentication.JwtBearer 6.0.3
 nuget Microsoft.AspNetCore.Mvc.Testing 6.0.3
 nuget Microsoft.AspNetCore.TestHost 6.0.3
+nuget Microsoft.AspNetCore.Mvc.NewtonsoftJson < 7.0
+nuget Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer
+
 nuget FluentAssertions
 nuget Marten
 nuget FluentValidation
 nuget AutoFixture
 nuget NodaTime
+
+nuget Serilog
+nuget Serilog.Enrichers.Environment
+nuget Serilog.Enrichers.Thread
+nuget Serilog.Extensions.Logging
+nuget Serilog.Formatting.Compact
+nuget Serilog.Settings.Configuration
+nuget Serilog.Sinks.File
+nuget Serilog.Sinks.Console
+
+nuget OpenTelemetry 
+nuget OpenTelemetry.Api
+nuget OpenTelemetry.Exporter.Console
+nuget OpenTelemetry.Exporter.OpenTelemetryProtocol 
+nuget OpenTelemetry.Exporter.OpenTelemetryProtocol.Logs 
+nuget OpenTelemetry.Extensions.Hosting 
+nuget OpenTelemetry.Instrumentation.AspNetCore 
+nuget OpenTelemetry.Instrumentation.Http
+nuget OpenTelemetry.Instrumentation.Runtime
+nuget NpgSql.OpenTelemetry
+
+nuget Destructurama.JsonNet
