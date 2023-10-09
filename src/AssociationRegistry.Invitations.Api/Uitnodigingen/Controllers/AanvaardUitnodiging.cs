@@ -1,4 +1,6 @@
-﻿using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
+﻿using AssociationRegistry.Invitations.Api.Infrastructure;
+using AssociationRegistry.Invitations.Api.Infrastructure.Swagger;
+using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
 using Marten;
 using Microsoft.AspNetCore.Mvc;
 

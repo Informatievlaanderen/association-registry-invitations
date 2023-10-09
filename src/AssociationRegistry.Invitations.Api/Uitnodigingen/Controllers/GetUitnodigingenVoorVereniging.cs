@@ -1,4 +1,6 @@
-﻿using AssociationRegistry.Invitations.Api.Uitnodigingen.Mapping;
+﻿using AssociationRegistry.Invitations.Api.Infrastructure;
+using AssociationRegistry.Invitations.Api.Infrastructure.Swagger;
+using AssociationRegistry.Invitations.Api.Uitnodigingen.Mapping;
 using AssociationRegistry.Invitations.Api.Uitnodigingen.Queries;
 using AssociationRegistry.Invitations.Api.Uitnodigingen.Responses;
 using Marten;

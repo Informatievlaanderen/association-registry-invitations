@@ -1,4 +1,4 @@
-namespace AssociationRegistry.Invitations.Api;
+namespace AssociationRegistry.Invitations.Api.Infrastructure.Swagger;
 
 public static class Documentation
 {

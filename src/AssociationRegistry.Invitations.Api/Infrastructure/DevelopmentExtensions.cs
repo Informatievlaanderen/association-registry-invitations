@@ -1,4 +1,4 @@
-namespace AssociationRegistry.Invitations.Api;
+namespace AssociationRegistry.Invitations.Api.Infrastructure;
 
 public static class DevelopmentExtensions
 {
