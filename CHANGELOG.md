@@ -1,3 +1,12 @@
+# [1.10.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.9.0...v1.10.0) (2023-10-09)
+
+
+### Features
+
+* add constants ([a916b56](https://github.com/informatievlaanderen/association-registry-invitations/commit/a916b56119d5def03f2935080c4238d39a78c4ab))
+* add cors ([e3a718c](https://github.com/informatievlaanderen/association-registry-invitations/commit/e3a718c39dbf1cc1955a27af8d61b9b6ca7e86f1))
+* unify health checks with registries ([0421dbf](https://github.com/informatievlaanderen/association-registry-invitations/commit/0421dbfa20d3be8ba032f2093fbd260e38032692))
+
 # [1.9.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.8.0...v1.9.0) (2023-10-09)
 
 
