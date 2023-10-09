@@ -20,4 +20,11 @@ public class GivenAnUnauthorizedClient
         var response = await _client.GetRoot();
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }
+    
+    [Fact]
+    public async Task Then_It_Returns_200_For_Health()
+    {
+        var response = await _client.GetHealth();
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+    }
 }

@@ -19,4 +19,11 @@ public class GegevenEenUnauthenticatedClient
         var response = await _client.GetRoot();
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
+    
+    [Fact]
+    public async Task Then_It_Returns_200_For_Health()
+    {
+        var response = await _client.GetHealth();
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+    }
 }

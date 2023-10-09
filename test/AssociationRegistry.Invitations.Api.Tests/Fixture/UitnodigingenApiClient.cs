@@ -33,4 +33,7 @@ public class UitnodigingenApiClient : IDisposable
 
     public async Task<HttpResponseMessage> WeigerUitnodiging(Guid uitnodigingsId)
         => await _httpClient.PostAsync($"/uitnodigingen/{uitnodigingsId}/weiger", null);
+
+    public async Task<HttpResponseMessage> GetHealth()
+        => await _httpClient.GetAsync("/health");
 }

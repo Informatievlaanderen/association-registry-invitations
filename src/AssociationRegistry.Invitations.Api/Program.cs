@@ -55,6 +55,8 @@ builder.Services.AddAuthentication(options =>
         }
     );
 
+builder.Services.AddHealthChecks();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -66,6 +68,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseHealthChecks("/health");
 
 app.MapControllers();
 
