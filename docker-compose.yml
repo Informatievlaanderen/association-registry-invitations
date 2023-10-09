@@ -27,6 +27,7 @@ services:
       - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
     ports:
       - "14317:4317"   # OTLP gRPC receiver
+      - "13133:13133"
 
 volumes:
   pg-data:

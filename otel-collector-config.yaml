@@ -9,7 +9,14 @@ exporters:
 processors:
   batch:
 
+extensions:
+  health_check:
+    path: "/health"
+
 service:
+  extensions:
+    - health_check
+
   pipelines:
     traces:
       receivers: [ otlp ]
