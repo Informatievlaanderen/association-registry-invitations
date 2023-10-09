@@ -31,7 +31,7 @@ public class GegevenEenOnbekendeUitnodiging
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);
         token["errors"]!.ToObject<Dictionary<string, string[]>>()
-            .Should().ContainKey("Uitnodiging")
+            .Should().ContainKey("uitnodiging")
             .WhoseValue
             .Should().ContainEquivalentOf("Deze uitnodiging is niet gekend.");
     }

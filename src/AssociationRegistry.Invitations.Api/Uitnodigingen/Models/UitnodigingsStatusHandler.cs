@@ -7,20 +7,21 @@ namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
 public class UitnodigingsStatusHandler
 {
     private readonly IClock _clock;
-    private readonly IDocumentSession _session;
+    private readonly IDocumentStore _store;
 
-    public UitnodigingsStatusHandler(IClock clock, IDocumentSession session)
+    public UitnodigingsStatusHandler(IClock clock, IDocumentStore store)
     {
         _clock = clock;
-        _session = session;
+        _store = store;
     }
     
     public async Task SetStatus(Uitnodiging uitnodiging, UitnodigingsStatus status, CancellationToken cancellationToken)
     {
+        await using var session = _store.LightweightSession();
         uitnodiging.Status = status;
         uitnodiging.DatumLaatsteAanpassing = _clock.GetCurrentInstant().ToString("g", CultureInfo.InvariantCulture);
         
-        _session.Store(uitnodiging);
-        await _session.SaveChangesAsync(cancellationToken);
+        session.Store(uitnodiging);
+        await session.SaveChangesAsync(cancellationToken);
     }
 }

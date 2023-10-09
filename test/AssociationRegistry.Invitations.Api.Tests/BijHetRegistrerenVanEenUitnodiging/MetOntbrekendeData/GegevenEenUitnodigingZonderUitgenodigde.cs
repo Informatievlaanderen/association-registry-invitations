@@ -39,7 +39,7 @@ public class GegevenEenUitnodigingZonderUitgenodigde : IDisposable
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);
         token["errors"]!.ToObject<Dictionary<string, string[]>>()
-            .Should().ContainKey("Uitgenodigde")
+            .Should().ContainKey("uitgenodigde")
             .WhoseValue
             .Should().ContainEquivalentOf("Uitgenodigde is verplicht.");
     }

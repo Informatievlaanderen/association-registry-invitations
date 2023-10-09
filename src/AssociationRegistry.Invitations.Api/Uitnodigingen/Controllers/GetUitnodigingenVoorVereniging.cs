@@ -7,7 +7,11 @@ using Uitnodiging = AssociationRegistry.Invitations.Api.Uitnodigingen.Models.Uit
 
 namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Controllers;
 
-public class GetUitnodigingenVoorVereniging : ControllerBase
+[ApiVersion("1.0")]
+[AdvertiseApiVersions("1.0")]
+[ApiRoute("")]
+[SwaggerGroup.Verenigingen]
+public class GetUitnodigingenVoorVereniging : ApiController
 {
     private readonly IQuerySession _session;
 
@@ -16,7 +20,15 @@ public class GetUitnodigingenVoorVereniging : ControllerBase
         _session = session;
     }
 
-    [HttpGet("/verenigingen/{vcode}/uitnodigingen")]
+    /// <summary>
+    /// Uitnodigingen ophalen voor vereniging 
+    /// </summary>
+    /// <param name="vCode">De vCode van de vereniging waarvoor je de uitnodigingen wil ophalen</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpGet("verenigingen/{vcode}/uitnodigingen")]
+    [ProducesJson]
+    [ConsumesJson]
     public async Task<IActionResult> Get([FromRoute] string vCode, CancellationToken cancellationToken)
     {
         var uitnodigingen = await _session

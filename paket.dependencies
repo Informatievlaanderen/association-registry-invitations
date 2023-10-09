@@ -15,6 +15,7 @@ nuget Microsoft.AspNetCore.Mvc.Testing 6.0.3
 nuget Microsoft.AspNetCore.TestHost 6.0.3
 nuget Microsoft.AspNetCore.Mvc.NewtonsoftJson < 7.0
 nuget Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer
+nuget Microsoft.Extensions.DependencyInjection
 
 nuget FluentAssertions
 nuget Marten
@@ -43,3 +44,6 @@ nuget OpenTelemetry.Instrumentation.Runtime
 nuget NpgSql.OpenTelemetry
 
 nuget Destructurama.JsonNet
+
+nuget Be.Vlaanderen.Basisregisters.AspNetCore.Swagger
+nuget Be.Vlaanderen.Basisregisters.AspNetCore.Swagger.ReDoc

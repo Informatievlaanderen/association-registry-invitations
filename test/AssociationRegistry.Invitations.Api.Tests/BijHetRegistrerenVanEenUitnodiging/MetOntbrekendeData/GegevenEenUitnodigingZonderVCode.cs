@@ -39,7 +39,7 @@ public class GegevenEenUitnodigingZonderVCode : IDisposable
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);
         token["errors"]!.ToObject<Dictionary<string, string[]>>()
-            .Should().ContainKey("VCode")
+            .Should().ContainKey("vCode")
             .WhoseValue
             .Should().ContainEquivalentOf("VCode is verplicht.");
     }

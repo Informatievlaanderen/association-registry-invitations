@@ -4,6 +4,8 @@ IdentityModel.AspnetCore.OAuth2Introspection
 Microsoft.AspNetCore.Authentication.JwtBearer
 Microsoft.AspNetCore.Mvc.NewtonsoftJson
 Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer
+Microsoft.Extensions.DependencyInjection
+
 Marten
 FluentValidation
 NodaTime
@@ -29,3 +31,6 @@ OpenTelemetry.Instrumentation.Runtime
 NpgSql.OpenTelemetry
 
 Destructurama.JsonNet
+
+Be.Vlaanderen.Basisregisters.AspNetCore.Swagger
+Be.Vlaanderen.Basisregisters.AspNetCore.Swagger.ReDoc
