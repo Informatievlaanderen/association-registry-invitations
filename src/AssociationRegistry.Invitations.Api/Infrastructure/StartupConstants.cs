@@ -1,7 +1,7 @@
 using System.Reflection;
 using Microsoft.Net.Http.Headers;
 
-namespace AssociationRegistry.Invitations.Api;
+namespace AssociationRegistry.Invitations.Api.Infrastructure;
 
 public static class StartupConstants
 {

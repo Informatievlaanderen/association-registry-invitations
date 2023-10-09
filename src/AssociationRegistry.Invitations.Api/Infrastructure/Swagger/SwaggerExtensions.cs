@@ -6,7 +6,7 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace AssociationRegistry.Invitations.Api;
+namespace AssociationRegistry.Invitations.Api.Infrastructure.Swagger;
 
 public static class SwaggerExtensions
 {

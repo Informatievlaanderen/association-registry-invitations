@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace AssociationRegistry.Invitations.Api;
+namespace AssociationRegistry.Invitations.Api.Infrastructure.Filters;
 
 public class OperationCancelledExceptionFilter : ExceptionFilterAttribute
 {

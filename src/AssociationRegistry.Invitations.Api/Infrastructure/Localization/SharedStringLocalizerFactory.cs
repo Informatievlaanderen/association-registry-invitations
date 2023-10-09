@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Localization;
 
-namespace AssociationRegistry.Invitations.Api;
+namespace AssociationRegistry.Invitations.Api.Infrastructure.Localization;
 
 public class SharedStringLocalizerFactory<T> : IStringLocalizerFactory
 {
