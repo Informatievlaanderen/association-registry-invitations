@@ -38,25 +38,25 @@ ConfigureWebHost(builder);
 
 ConfigureServices(builder);
 
-builder.Services.AddAuthentication(options =>
-    {
-        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
-    .AddOAuth2Introspection(
-        JwtBearerDefaults.AuthenticationScheme,
-        configureOptions: options =>
-        {
-            var configOptions = builder.Configuration.GetSection(nameof(OAuth2IntrospectionOptions))
-                .Get<OAuth2IntrospectionOptions>()!;
-
-            options.ClientId = configOptions.ClientId;
-            options.ClientSecret = configOptions.ClientSecret;
-            options.Authority = configOptions.Authority;
-            options.IntrospectionEndpoint = configOptions.IntrospectionEndpoint;
-        }
-    );
+// builder.Services.AddAuthentication(options =>
+//     {
+//         options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+//         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+//         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+//     })
+//     .AddOAuth2Introspection(
+//         JwtBearerDefaults.AuthenticationScheme,
+//         configureOptions: options =>
+//         {
+//             var configOptions = builder.Configuration.GetSection(nameof(OAuth2IntrospectionOptions))
+//                 .Get<OAuth2IntrospectionOptions>()!;
+//
+//             options.ClientId = configOptions.ClientId;
+//             options.ClientSecret = configOptions.ClientSecret;
+//             options.Authority = configOptions.Authority;
+//             options.IntrospectionEndpoint = configOptions.IntrospectionEndpoint;
+//         }
+//     );
 
 
 builder.Services.AddHealthChecks();
@@ -72,8 +72,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseAuthentication();
-app.UseAuthorization();
+// app.UseAuthentication();
+// app.UseAuthorization();
 ConfigureHealtChecks(app);
 app.MapControllers();
 
