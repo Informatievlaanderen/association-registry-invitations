@@ -1,3 +1,11 @@
+# [1.11.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.10.0...v1.11.0) (2023-10-09)
+
+
+### Features
+
+* disable auth for now ([619d0f6](https://github.com/informatievlaanderen/association-registry-invitations/commit/619d0f61bf2b96f81f04847da5a001f2dde5cc9e))
+* push images to staging ([bc14792](https://github.com/informatievlaanderen/association-registry-invitations/commit/bc1479244bea2c1df20263fc7ddf38d5218c6b56))
+
 # [1.10.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.9.0...v1.10.0) (2023-10-09)
 
 
