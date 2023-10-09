@@ -5,10 +5,13 @@ using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
 using Destructurama;
 using IdentityModel.AspNetCore.OAuth2Introspection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using NodaTime;
 using Serilog;
@@ -55,6 +58,7 @@ builder.Services.AddAuthentication(options =>
         }
     );
 
+
 builder.Services.AddHealthChecks();
 
 var app = builder.Build();
@@ -68,8 +72,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseHealthChecks("/health");
-
+ConfigureHealtChecks(app);
 app.MapControllers();
 
 app.Run();
@@ -175,6 +178,30 @@ void ConfigureServices(WebApplicationBuilder webApplicationBuilder)
 
                 cfg.EnableEndpointRouting = false;
             })
+        .AddCors(
+            cfg =>
+            {
+                cfg.AddPolicy(
+                    StartupConstants.AllowAnyOrigin,
+                    configurePolicy: corsPolicy => corsPolicy
+                        .AllowAnyOrigin()
+                        .WithMethods(StartupConstants.HttpMethodsAsString)
+                        .WithHeaders(StartupConstants.Headers)
+                        .WithExposedHeaders(StartupConstants.ExposedHeaders)
+                        .SetPreflightMaxAge(TimeSpan.FromSeconds(60 * 15)));
+
+                cfg.AddPolicy(
+                    StartupConstants.AllowSpecificOrigin,
+                    configurePolicy: corsPolicy => corsPolicy
+                        .WithOrigins(builder.Configuration.GetValue<string[]>("Cors") ??
+                                     Array.Empty<string>())
+                        .WithMethods(StartupConstants.HttpMethodsAsString)
+                        .WithHeaders(StartupConstants.Headers)
+                        .WithExposedHeaders(StartupConstants.ExposedHeaders)
+                        .SetPreflightMaxAge(TimeSpan.FromSeconds(60 * 15))
+                        .AllowCredentials());
+            })
+
         .Services
         .AddResponseCompression(
             cfg =>
@@ -214,6 +241,52 @@ void ConfigureServices(WebApplicationBuilder webApplicationBuilder)
         .Configure<KestrelServerOptions>(serverOptions => serverOptions.AllowSynchronousIO = true);
 
 }
+
+    static void ConfigureHealtChecks(WebApplication app)
+    {
+        var healthCheckOptions = new HealthCheckOptions
+        {
+            AllowCachingResponses = false,
+
+            ResultStatusCodes =
+            {
+                [HealthStatus.Healthy] = StatusCodes.Status200OK,
+                [HealthStatus.Degraded] = StatusCodes.Status200OK,
+                [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable,
+            },
+
+            ResponseWriter = (httpContext, healthReport) =>
+            {
+                httpContext.Response.ContentType = "application/json";
+
+                var json = new JObject(
+                    new JProperty(name: "status", healthReport.Status.ToString()),
+                    new JProperty(name: "totalDuration", healthReport.TotalDuration.ToString()),
+                    new JProperty(
+                        name: "results",
+                        new JObject(
+                            healthReport.Entries.Select(
+                                pair =>
+                                    new JProperty(
+                                        pair.Key,
+                                        new JObject(
+                                            new JProperty(name: "status", pair.Value.Status.ToString()),
+                                            new JProperty(name: "duration", pair.Value.Duration),
+                                            new JProperty(name: "description", pair.Value.Description),
+                                            new JProperty(name: "exception", pair.Value.Exception?.Message),
+                                            new JProperty(
+                                                name: "data",
+                                                new JObject(
+                                                    pair.Value.Data.Select(
+                                                        p => new JProperty(p.Key, p.Value))))))))));
+
+                return httpContext.Response.WriteAsync(json.ToString(Formatting.Indented));
+            },
+        };
+
+        app.UseHealthChecks(path: "/health", healthCheckOptions);
+    }
+
 
 
 namespace AssociationRegistry.Invitations.Api
