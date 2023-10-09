@@ -39,7 +39,7 @@ public class GegevenEenUitnodigerZonderVertegenwoordigersId : IDisposable
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);
         token["errors"]!.ToObject<Dictionary<string, string[]>>()
-            .Should().ContainKey("Uitnodiger.VertegenwoordigerId")
+            .Should().ContainKey("uitnodiger.VertegenwoordigerId")
             .WhoseValue
             .Should().ContainEquivalentOf("VertegenwoordigerId is ongeldig.");
     }

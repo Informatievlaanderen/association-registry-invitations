@@ -4,7 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Controllers;
 
-public class WeigerUitnodiging : ControllerBase
+[ApiVersion("1.0")]
+[AdvertiseApiVersions("1.0")]
+[ApiRoute("")]
+[SwaggerGroup.Beheer]
+public class WeigerUitnodiging : ApiController
 {
     private readonly IQuerySession _session;
     private readonly UitnodigingsStatusHandler _handler;
@@ -15,7 +19,13 @@ public class WeigerUitnodiging : ControllerBase
         _handler = handler;
     }
 
-    [HttpPost("/uitnodigingen/{uitnodigingsId:guid}/weiger")]
+    /// <summary>
+    /// Weiger een uitnodiging
+    /// </summary>
+    /// <param name="uitnodigingsId">Het id van de te weigeren uitnodiging</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpPost("uitnodigingen/{uitnodigingsId:guid}/weiger")]
     public async Task<IActionResult> Post([FromRoute] Guid uitnodigingsId,
         CancellationToken cancellationToken)
     {

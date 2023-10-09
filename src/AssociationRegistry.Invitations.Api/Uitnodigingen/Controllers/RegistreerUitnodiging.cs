@@ -9,7 +9,11 @@ using NodaTime;
 
 namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Controllers;
 
-public class RegistreerUitnodiging : ControllerBase
+[ApiVersion("1.0")]
+[AdvertiseApiVersions("1.0")]
+[ApiRoute("")]
+[SwaggerGroup.Beheer]
+public class RegistreerUitnodiging : ApiController
 {
     private readonly IDocumentStore _store;
     private readonly IClock _clock;
@@ -20,7 +24,13 @@ public class RegistreerUitnodiging : ControllerBase
         _clock = clock;
     }
 
-    [HttpPost("/uitnodigingen")]
+    /// <summary>
+    /// Registreer een uitnodiging
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpPost("uitnodigingen")]
     public async Task<IActionResult> Post([FromBody] UitnodigingsRequest request,
         CancellationToken cancellationToken)
     {

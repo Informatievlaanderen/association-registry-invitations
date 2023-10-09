@@ -39,7 +39,7 @@ public class GegevenEenUitnodigingZonderUitnodiger : IDisposable
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);
         token["errors"]!.ToObject<Dictionary<string, string[]>>()
-            .Should().ContainKey("Uitnodiger")
+            .Should().ContainKey("uitnodiger")
             .WhoseValue
             .Should().ContainEquivalentOf("Uitnodiger is verplicht.");
     }

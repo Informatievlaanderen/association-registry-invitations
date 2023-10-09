@@ -39,7 +39,7 @@ public class GegevenEenUitnodigingZonderVoornaam : IDisposable
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);
         token["errors"]!.ToObject<Dictionary<string, string[]>>()
-            .Should().ContainKey("Uitgenodigde.Voornaam")
+            .Should().ContainKey("uitgenodigde.Voornaam")
             .WhoseValue
             .Should().ContainEquivalentOf("Voornaam is verplicht.");
     }
