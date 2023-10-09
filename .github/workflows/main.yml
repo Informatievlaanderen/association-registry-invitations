@@ -453,6 +453,47 @@ jobs:
           SEMVER: ${{ needs.release.outputs.version }}
           WORKSPACE: ${{ github.workspace }}
 
+  push_images_to_staging:
+    if: needs.release.outputs.version != 'none'
+    needs: [ release ]
+    name: Push images to Staging
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS credentials (Staging)
+        if: needs.release.outputs.version != 'none'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.VBR_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.VBR_AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.VBR_AWS_REGION_PRD }}
+
+      - name: Login to Amazon ECR (Staging)
+        if: needs.release.outputs.version != 'none'
+        uses: aws-actions/amazon-ecr-login@v2.0.1
+
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: invitations-api
+          path: ~/
+
+      - name: Load image
+        shell: bash
+        run: docker image load -i ~/invitations-api.tar
+
+      - name: Push docker images to ECR Staging
+        if: needs.release.outputs.version != 'none'
+        shell: bash
+        run: |
+          echo $SEMVER
+          docker tag $BUILD_DOCKER_REGISTRY_TST/association-registry/invitations-api:$SEMVER $BUILD_DOCKER_REGISTRY/association-registry/invitations-api:$SEMVER
+          docker push $BUILD_DOCKER_REGISTRY/association-registry/invitations-api:$SEMVER
+        env:
+          BUILD_DOCKER_REGISTRY_TST: ${{ secrets.VBR_BUILD_DOCKER_REGISTRY_TST }}
+          BUILD_DOCKER_REGISTRY: ${{ secrets.VBR_BUILD_DOCKER_REGISTRY }}
+          SEMVER: ${{ needs.release.outputs.version }}
+          WORKSPACE: ${{ github.workspace }}
+
   deploy_test:
     if: needs.release.outputs.version != 'none'
     needs: [ set-release-version, push_images_to_test, release ]
