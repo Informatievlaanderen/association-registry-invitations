@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.8.0...v1.9.0) (2023-10-09)
+
+
+### Features
+
+* add health endpoint ([aa2ca95](https://github.com/informatievlaanderen/association-registry-invitations/commit/aa2ca959cf089a93203ec9a645353275ac0d95e6))
+
 # [1.8.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.7.1...v1.8.0) (2023-10-09)
 
 
