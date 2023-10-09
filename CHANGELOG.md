@@ -1,3 +1,10 @@
+# [1.12.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.11.0...v1.12.0) (2023-10-09)
+
+
+### Features
+
+* or-1669 make swagger work ([38a2a2a](https://github.com/informatievlaanderen/association-registry-invitations/commit/38a2a2ab46d53b43a773800e9114212db0d6d1cb))
+
 # [1.11.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.10.0...v1.11.0) (2023-10-09)
 
 
