@@ -5,7 +5,8 @@ public record UitnodigingsStatus
     public static UitnodigingsStatus WachtOpAntwoord = new("Wacht op antwoord");
     public static UitnodigingsStatus Aanvaard = new("Aanvaard");
     public static UitnodigingsStatus Geweigerd = new("Geweigerd");
-    public static UitnodigingsStatus[] All = { WachtOpAntwoord, Aanvaard, Geweigerd };
+    public static UitnodigingsStatus Ingetrokken = new("Ingetrokken");
+    public static UitnodigingsStatus[] All = { WachtOpAntwoord, Aanvaard, Geweigerd, Ingetrokken };
 
     private UitnodigingsStatus(string status)
     {

@@ -36,4 +36,7 @@ public class UitnodigingenApiClient : IDisposable
 
     public async Task<HttpResponseMessage> GetHealth()
         => await _httpClient.GetAsync("/health");
+
+    public async Task<HttpResponseMessage> TrekUitnodigingIn(Guid uitnodigingsId)
+        => await _httpClient.PostAsync($"/v1/uitnodigingen/{uitnodigingsId}/trekin", null);
 }

@@ -2,10 +2,10 @@
 using AssociationRegistry.Invitations.Api.Tests.Fixture;
 using Newtonsoft.Json.Linq;
 
-namespace AssociationRegistry.Invitations.Api.Tests.BijHetAanvaardenVanEenUitnodiging;
+namespace AssociationRegistry.Invitations.Api.Tests.BijHetIntrekkenVanEenUitnodiging;
 
 [Collection(UitnodigingenApiCollection.Name)]
-public class GegevenEenOnbekendeUitnodiging
+public class GegevenEenOnbekendeUitnodiging : IDisposable
 {
     private readonly UitnodigingenApiFixture _fixture;
     private readonly UitnodigingenApiClient _client;
@@ -19,14 +19,14 @@ public class GegevenEenOnbekendeUitnodiging
     [Fact]
     public async Task DanIsDeResponse400()
     {
-        var response = await _client.AanvaardUitnodiging(Guid.NewGuid());
+        var response = await _client.TrekUitnodigingIn(Guid.NewGuid());
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
     
     [Fact]
     public async Task DanBevatDeBodyEenErrorMessage()
     {
-        var response = await _client.AanvaardUitnodiging(Guid.NewGuid());
+        var response = await _client.TrekUitnodigingIn(Guid.NewGuid());
 
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);
