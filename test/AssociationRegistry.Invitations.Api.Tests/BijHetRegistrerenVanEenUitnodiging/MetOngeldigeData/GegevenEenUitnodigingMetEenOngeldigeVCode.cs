@@ -17,9 +17,14 @@ public class GegevenEenUitnodigingMetEenOngeldigeVCode : IDisposable
     {
         _fixture = fixture;
         _client = fixture.Clients.Authenticated;
-        _request = s => new AutoFixture.Fixture()
-            .Customize(new GeldigeUitnodigingen(vCode: s))
-            .Create<UitnodigingsRequest>();
+        _request = s =>
+        {
+            var uitnodigingsRequest = new AutoFixture.Fixture()
+                .CustomizeAll()
+                .Create<UitnodigingsRequest>();
+            uitnodigingsRequest.VCode = s;
+            return uitnodigingsRequest;
+        };
     }
 
     [Theory]

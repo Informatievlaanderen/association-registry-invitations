@@ -64,8 +64,7 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
             _fixture = fixture;
             _client = fixture.Clients.Authenticated;
 
-            Uitnodiging = new AutoFixture.Fixture()
-                .Customize(new GeldigeUitnodigingen())
+            Uitnodiging = new AutoFixture.Fixture().CustomizeAll()
                 .Create<UitnodigingsRequest>();
         }
 

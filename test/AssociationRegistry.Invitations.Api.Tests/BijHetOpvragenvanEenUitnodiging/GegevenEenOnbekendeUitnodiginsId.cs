@@ -48,8 +48,7 @@ public class GegevenEenOnbekendeUitnodiginsId : IClassFixture<GegevenEenOnbekend
             _client = fixture.Clients.Authenticated;
 
 
-            _uitnodigingen = new AutoFixture.Fixture()
-                .Customize(new GeldigeUitnodigingen())
+            _uitnodigingen = new AutoFixture.Fixture().CustomizeAll()
                 .CreateMany<UitnodigingsRequest>();
         }
 

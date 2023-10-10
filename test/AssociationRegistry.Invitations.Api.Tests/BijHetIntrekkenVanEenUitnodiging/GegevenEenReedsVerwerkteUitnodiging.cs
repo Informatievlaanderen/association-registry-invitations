@@ -1,8 +1,10 @@
 ﻿using System.Net;
+using AssociationRegistry.Invitations.Api.Tests.Autofixture;
 using AssociationRegistry.Invitations.Api.Tests.Fixture;
+using AssociationRegistry.Invitations.Api.Uitnodigingen.Requests;
 using Newtonsoft.Json.Linq;
 
-namespace AssociationRegistry.Invitations.Api.Tests.BijHetWeigerenVanEenUitnodiging;
+namespace AssociationRegistry.Invitations.Api.Tests.BijHetIntrekkenVanEenUitnodiging;
 
 [Collection(UitnodigingenApiCollection.Name)]
 public class GegevenEenReedsVerwerkteUitnodiging
@@ -19,27 +21,26 @@ public class GegevenEenReedsVerwerkteUitnodiging
     [Fact]
     public async Task DanIsDeResponse400()
     {
-        foreach (var id in _fixture.VerwerkteUitnodigingIds)
+        foreach (var uitnodigingsId in _fixture.VerwerkteUitnodigingIds)
         {
-            var response = await _client.WeigerUitnodiging(id);
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);            
+            var response = await _client.TrekUitnodigingIn(uitnodigingsId);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
     }
-
 
     [Fact]
     public async Task DanBevatDeBodyEenErrorMessage()
     {
-        foreach (var id in _fixture.VerwerkteUitnodigingIds)
+        foreach (var uitnodigingsId in _fixture.VerwerkteUitnodigingIds)
         {
-            var response = await _client.WeigerUitnodiging(id);
+            var response = await _client.TrekUitnodigingIn(uitnodigingsId);
 
             var content = await response.Content.ReadAsStringAsync();
             var token = JToken.Parse(content);
             token["errors"]!.ToObject<Dictionary<string, string[]>>()
                 .Should().ContainKey("uitnodiging")
                 .WhoseValue
-                .Should().ContainEquivalentOf(Resources.WeigerenOnmogelijk);
+                .Should().ContainEquivalentOf(Resources.IntrekkenOnmogelijk);
         }
     }
 }

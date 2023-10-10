@@ -2,17 +2,18 @@
 using AssociationRegistry.Invitations.Api.Tests.Autofixture;
 using AssociationRegistry.Invitations.Api.Tests.Fixture;
 using AssociationRegistry.Invitations.Api.Uitnodigingen.Requests;
+using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.Resources;
 using Newtonsoft.Json.Linq;
 
-namespace AssociationRegistry.Invitations.Api.Tests.BijHetAanvaardenVanEenUitnodiging;
+namespace AssociationRegistry.Invitations.Api.Tests.BijHetIntrekkenVanEenUitnodiging;
 
 [Collection(UitnodigingenApiCollection.Name)]
-public class GegevenEenReedsVerwerkteUitnodiging : IClassFixture<GegevenEenReedsVerwerkteUitnodiging.Setup>
+public class GegevenEenReedsIngetrokkenUitnodiging : IClassFixture<GegevenEenReedsIngetrokkenUitnodiging.Setup>
 {
     private readonly Setup _setup;
     private readonly UitnodigingenApiClient _client;
 
-    public GegevenEenReedsVerwerkteUitnodiging(UitnodigingenApiFixture fixture, Setup setup)
+    public GegevenEenReedsIngetrokkenUitnodiging(UitnodigingenApiFixture fixture, Setup setup)
     {
         _setup = setup;
         _client = fixture.Clients.Authenticated;
@@ -20,7 +21,7 @@ public class GegevenEenReedsVerwerkteUitnodiging : IClassFixture<GegevenEenReeds
     [Fact]
     public async Task DanIsDeResponse400()
     {
-        var response = await _client.AanvaardUitnodiging(_setup.UitnodigingsId);
+        var response = await _client.TrekUitnodigingIn(_setup.UitnodigingsId);
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
@@ -28,14 +29,14 @@ public class GegevenEenReedsVerwerkteUitnodiging : IClassFixture<GegevenEenReeds
     [Fact]
     public async Task DanBevatDeBodyEenErrorMessage()
     {
-        var response = await _client.AanvaardUitnodiging(_setup.UitnodigingsId);
+        var response = await _client.TrekUitnodigingIn(_setup.UitnodigingsId);
 
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);
         token["errors"]!.ToObject<Dictionary<string, string[]>>()
             .Should().ContainKey("uitnodiging")
             .WhoseValue
-            .Should().ContainEquivalentOf(Resources.AanvaardenOnmogelijk);
+            .Should().ContainEquivalentOf(Resources.IntrekkenOnmogelijk);
     }
 
     public class Setup : IDisposable, IAsyncLifetime
@@ -65,7 +66,7 @@ public class GegevenEenReedsVerwerkteUitnodiging : IClassFixture<GegevenEenReeds
             var response = await _client.RegistreerUitnodiging(Uitnodiging);
             var content = await response.Content.ReadAsStringAsync();
             UitnodigingsId = Guid.Parse(JToken.Parse(content)["id"]!.Value<string>()!);
-            await _client.AanvaardUitnodiging(UitnodigingsId);
+            await _client.TrekUitnodigingIn(UitnodigingsId);
         }
 
         public Task DisposeAsync() => Task.CompletedTask;
