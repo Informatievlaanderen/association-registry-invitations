@@ -18,7 +18,7 @@ public class GegevenEenUitnodigingZonderVCode : IDisposable
         _fixture = fixture;
         _client = fixture.Clients.Authenticated;
         _request = new AutoFixture.Fixture()
-            .Customize(new GeldigeUitnodigingen())
+            .CustomizeAll()
             .Create<UitnodigingsRequest>();
         _request.VCode = null!;
     }

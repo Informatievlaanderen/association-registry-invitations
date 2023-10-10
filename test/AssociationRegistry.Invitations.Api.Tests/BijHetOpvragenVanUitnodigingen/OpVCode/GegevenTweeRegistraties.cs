@@ -85,14 +85,15 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
             _fixture = fixture;
             _client = fixture.Clients.Authenticated;
 
-            VCode = "V0102030";
 
-            Uitnodiging1 = new AutoFixture.Fixture()
-                .Customize(new GeldigeUitnodigingen(vCode: VCode, insz: "01020312316"))
+            var autoFixture = new AutoFixture.Fixture()
+                .CustomizeAll();
+            Uitnodiging1 = autoFixture
                 .Create<UitnodigingsRequest>();
-            Uitnodiging2 = new AutoFixture.Fixture()
-                .Customize(new GeldigeUitnodigingen(vCode: VCode, insz: "01020312415"))
+            Uitnodiging2 = autoFixture
                 .Create<UitnodigingsRequest>();
+            
+            VCode = Uitnodiging2.VCode = Uitnodiging1.VCode;
         }
 
         public void Dispose()
@@ -104,6 +105,7 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
         {
             UitnodigingsId1 = await RegistreerUitnodiging(Uitnodiging1);
             Uitnodiging1AangemaaktOp = _fixture.Clock.PreviousInstant;
+            
             UitnodigingsId2 = await RegistreerUitnodiging(Uitnodiging2);
             Uitnodiging2AangemaaktOp = _fixture.Clock.PreviousInstant;
         }

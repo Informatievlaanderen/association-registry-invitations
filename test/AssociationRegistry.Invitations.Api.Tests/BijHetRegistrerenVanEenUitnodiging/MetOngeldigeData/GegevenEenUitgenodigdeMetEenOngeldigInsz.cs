@@ -17,9 +17,14 @@ public class GegevenEenUitgenodigdeMetEenOngeldigInsz : IDisposable
     {
         _fixture = fixture;
         _client = fixture.Clients.Authenticated;
-        _request = s => new AutoFixture.Fixture()
-            .Customize(new GeldigeUitnodigingen(insz:s))
-            .Create<UitnodigingsRequest>();
+        _request = s =>
+        {
+            var uitnodigingsRequest = new AutoFixture.Fixture()
+                .CustomizeAll()
+                .Create<UitnodigingsRequest>();
+            uitnodigingsRequest.Uitgenodigde.Insz = s;
+            return uitnodigingsRequest;
+        };
     }
 
     [Theory]

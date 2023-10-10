@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 namespace AssociationRegistry.Invitations.Api.Tests.BijHetWeigerenVanEenUitnodiging;
 
 [Collection(UitnodigingenApiCollection.Name)]
-public class GegevenEenOnbekendeUitnodiging
+public class GegevenEenOnbekendeUitnodiging : IDisposable
 {
     private readonly UitnodigingenApiFixture _fixture;
     private readonly UitnodigingenApiClient _client;

@@ -18,7 +18,7 @@ public static class StatusWijzigingPipeline
     }
     
     
-    public static Either<Uitnodiging> BadRequestIfReedsVerwerkt(this Either<Uitnodiging> source)
+    public static Either<Uitnodiging> BadRequestIfReedsVerwerkt(this Either<Uitnodiging> source, string foutboodschap)
     {
         if (source.Failure is not null)
             return source;
@@ -29,7 +29,7 @@ public static class StatusWijzigingPipeline
             {
                 Failure = controller =>
                 {
-                    controller.ModelState.AddModelError("Uitnodiging", "Deze uitnodiging is reeds verwerkt.");
+                    controller.ModelState.AddModelError("Uitnodiging", foutboodschap);
                     return Task.FromResult(controller.ValidationProblem(controller.ModelState));
                 }
             };

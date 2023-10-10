@@ -1,3 +1,5 @@
+using AssociationRegistry.Invitations.Api.Infrastructure.Utilities;
+
 namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
 
 public class Uitgenodigde
@@ -7,3 +9,4 @@ public class Uitgenodigde
     public string Naam { get; set; }
     public string Email { get; set; }
 }
+
