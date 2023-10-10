@@ -1,3 +1,11 @@
+# [1.13.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.12.0...v1.13.0) (2023-10-10)
+
+
+### Features
+
+* OR-1668 allow intrekken uitnodiging ([9cfdfbd](https://github.com/informatievlaanderen/association-registry-invitations/commit/9cfdfbda39eb9f3e420bc32a761cdcdf2c0529f2))
+* or-1668 fix error messages ([40b6747](https://github.com/informatievlaanderen/association-registry-invitations/commit/40b67476793f0c3aea2ab6ce2177c80ea7f14367))
+
 # [1.12.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.11.0...v1.12.0) (2023-10-09)
 
 
