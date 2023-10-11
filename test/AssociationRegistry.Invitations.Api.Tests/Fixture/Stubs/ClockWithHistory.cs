@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Internal;
-using NodaTime;
+﻿using NodaTime;
 using SystemClock = NodaTime.SystemClock;
 
 namespace AssociationRegistry.Invitations.Api.Tests.Fixture.Stubs;
