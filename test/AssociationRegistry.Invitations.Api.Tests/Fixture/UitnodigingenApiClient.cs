@@ -29,14 +29,14 @@ public class UitnodigingenApiClient : IDisposable
         => await _httpClient.PostAsJsonAsync($"/v1/uitnodigingen", uitnodigingsRequest);
 
     public async Task<HttpResponseMessage> AanvaardUitnodiging(Guid uitnodigingsId)
-        => await _httpClient.PostAsync($"/v1/uitnodigingen/{uitnodigingsId}/aanvaard", null);
+        => await _httpClient.PostAsync($"/v1/uitnodigingen/{uitnodigingsId}/aanvaardingen", null);
 
     public async Task<HttpResponseMessage> WeigerUitnodiging(Guid uitnodigingsId)
-        => await _httpClient.PostAsync($"/v1/uitnodigingen/{uitnodigingsId}/weiger", null);
+        => await _httpClient.PostAsync($"/v1/uitnodigingen/{uitnodigingsId}/weigeringen", null);
 
     public async Task<HttpResponseMessage> GetHealth()
         => await _httpClient.GetAsync("/health");
 
     public async Task<HttpResponseMessage> TrekUitnodigingIn(Guid uitnodigingsId)
-        => await _httpClient.PostAsync($"/v1/uitnodigingen/{uitnodigingsId}/trekin", null);
+        => await _httpClient.PostAsync($"/v1/uitnodigingen/{uitnodigingsId}/intrekkingen", null);
 }

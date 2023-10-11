@@ -27,7 +27,7 @@ public class WeigerUitnodiging : ApiController
     /// <param name="uitnodigingsId">Het id van de te weigeren uitnodiging</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    [HttpPost("uitnodigingen/{uitnodigingsId:guid}/weiger")]
+    [HttpPost("uitnodigingen/{uitnodigingsId:guid}/weigeringen")]
     public async Task<IActionResult> Post([FromRoute] Guid uitnodigingsId,
         CancellationToken cancellationToken)
     {

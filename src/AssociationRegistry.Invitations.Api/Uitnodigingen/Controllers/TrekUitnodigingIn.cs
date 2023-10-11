@@ -28,7 +28,7 @@ public class TrekUitnodigingInController : ApiController
     /// <param name="uitnodigingsId">Het id van de in te trekken uitnodiging</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    [HttpPost("uitnodigingen/{uitnodigingsId:guid}/trekin")]
+    [HttpPost("uitnodigingen/{uitnodigingsId:guid}/intrekkingen")]
     [ConsumesJson]
     [ProducesJson]
     [ProducesResponseType(StatusCodes.Status202Accepted)]

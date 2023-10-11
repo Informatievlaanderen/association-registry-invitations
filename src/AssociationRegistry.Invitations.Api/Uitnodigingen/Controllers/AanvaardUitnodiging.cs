@@ -28,7 +28,7 @@ public class AanvaardUitnodigingsController : ApiController
     /// <param name="uitnodigingsId">Het id van de te aanvaarden uitnodiging</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    [HttpPost("uitnodigingen/{uitnodigingsId:guid}/aanvaard")]
+    [HttpPost("uitnodigingen/{uitnodigingsId:guid}/aanvaardingen")]
     [ConsumesJson]
     [ProducesJson]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
