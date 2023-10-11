@@ -36,7 +36,7 @@ public static class AutofixtureCustomizations
                     {
                         Email = "test@example.com",
                         Insz = fixture.Create<TestInsz>(),
-                        Naam = fixture.Create<string>(),
+                        Achternaam = fixture.Create<string>(),
                         Voornaam = fixture.Create<string>()
                     })
                 .OmitAutoProperties()

@@ -48,7 +48,7 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
         uitnodiging1["uitnodiger"]!["vertegenwoordigerId"]!.Value<int>().Should()
             .Be(_setup.Uitnodiging1.Uitnodiger.VertegenwoordigerId);
         uitnodiging1["uitgenodigde"]!["insz"]!.Value<string>().Should().Be(_setup.Uitnodiging1.Uitgenodigde.Insz);
-        uitnodiging1["uitgenodigde"]!["naam"]!.Value<string>().Should().Be(_setup.Uitnodiging1.Uitgenodigde.Naam);
+        uitnodiging1["uitgenodigde"]!["naam"]!.Value<string>().Should().Be(_setup.Uitnodiging1.Uitgenodigde.Achternaam);
         uitnodiging1["uitgenodigde"]!["voornaam"]!.Value<string>().Should().Be(_setup.Uitnodiging1.Uitgenodigde.Voornaam);
         uitnodiging1["uitgenodigde"]!["email"]!.Value<string>().Should().Be(_setup.Uitnodiging1.Uitgenodigde.Email);
 
@@ -62,7 +62,7 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
         uitnodiging2["uitnodiger"]!["vertegenwoordigerId"]!.Value<int>().Should()
             .Be(_setup.Uitnodiging2.Uitnodiger.VertegenwoordigerId);
         uitnodiging2["uitgenodigde"]!["insz"]!.Value<string>().Should().Be(_setup.Uitnodiging2.Uitgenodigde.Insz);
-        uitnodiging2["uitgenodigde"]!["naam"]!.Value<string>().Should().Be(_setup.Uitnodiging2.Uitgenodigde.Naam);
+        uitnodiging2["uitgenodigde"]!["naam"]!.Value<string>().Should().Be(_setup.Uitnodiging2.Uitgenodigde.Achternaam);
         uitnodiging2["uitgenodigde"]!["voornaam"]!.Value<string>().Should().Be(_setup.Uitnodiging2.Uitgenodigde.Voornaam);
         uitnodiging2["uitgenodigde"]!["email"]!.Value<string>().Should().Be(_setup.Uitnodiging2.Uitgenodigde.Email);
     }
@@ -114,7 +114,7 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
         {
             var response = await _client.RegistreerUitnodiging(uitnodigingsRequest);
             var content = await response.Content.ReadAsStringAsync();
-            return Guid.Parse(JToken.Parse(content)["id"]!.Value<string>()!);
+            return Guid.Parse(JToken.Parse(content)["uitnodigingId"]!.Value<string>()!);
         }
 
         public Task DisposeAsync() => Task.CompletedTask;

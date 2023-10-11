@@ -9,54 +9,54 @@ public class UitnodigingsValidator : AbstractValidator<UitnodigingsRequest>
     {
         RuleFor(u => u.VCode)
             .NotNull()
-            .WithMessage("VCode is verplicht.");
+            .WithMessage(u=> $"{nameof(u.VCode)} is verplicht.");
         RuleFor(u => u.VCode)
             .Must(BeValidFormat)
-            .WithMessage("VCode heeft een ongeldig formaat. (V#######)")
+            .WithMessage(u=> $"{nameof(u.VCode)} heeft een ongeldig formaat. (V#######)")
             .When(u => !string.IsNullOrEmpty(u.VCode));
 
         RuleFor(u => u.Uitnodiger)
             .NotNull()
-            .WithMessage("Uitnodiger is verplicht.");
+            .WithMessage(u=> $"{nameof(u.Uitnodiger)} is verplicht.");
         RuleFor(u => u.Uitnodiger.VertegenwoordigerId)
             .Must(BeValidVertegenwoordigerid)
             .WithName(u => $"{nameof(u.Uitnodiger)}.{nameof(u.Uitnodiger.VertegenwoordigerId)}")
-            .WithMessage("VertegenwoordigerId is ongeldig.")
+            .WithMessage(u=> $"{nameof(u.Uitnodiger.VertegenwoordigerId)} is ongeldig.")
             .When(u => u.Uitnodiger != null);
 
         RuleFor(u => u.Uitgenodigde)
             .NotNull()
-            .WithMessage("Uitgenodigde is verplicht.");
+            .WithMessage(u=> $"{nameof(u.Uitgenodigde)} is verplicht.");
 
         RuleFor(u => u.Uitgenodigde.Insz)
             .NotNull()
             .WithName(u => $"{nameof(u.Uitgenodigde)}.{nameof(u.Uitgenodigde.Insz)}")
-            .WithMessage("Insz is verplicht.")
+            .WithMessage(u=> $"{nameof(u.Uitgenodigde.Insz)} is verplicht.")
             .When(u => u.Uitgenodigde != null);
         RuleFor(u => u.Uitgenodigde.Insz)
             .Must(BeValidInsz)
             .WithName(u => $"{nameof(u.Uitgenodigde)}.{nameof(u.Uitgenodigde.Insz)}")
-            .WithMessage("Insz is ongeldig. (##.##.##-###.## of ###########)")
+            .WithMessage(u=> $"{nameof(u.Uitgenodigde.Insz)} is ongeldig. (##.##.##-###.## of ###########)")
             .When(u => u.Uitgenodigde?.Insz != null);
-        RuleFor(u => u.Uitgenodigde.Naam)
+        RuleFor(u => u.Uitgenodigde.Achternaam)
             .NotNull()
-            .WithName(u => $"{nameof(u.Uitgenodigde)}.{nameof(u.Uitgenodigde.Naam)}")
-            .WithMessage("Naam is verplicht.")
+            .WithName(u => $"{nameof(u.Uitgenodigde)}.{nameof(u.Uitgenodigde.Achternaam)}")
+            .WithMessage(u=> $"{nameof(u.Uitgenodigde.Achternaam)} is verplicht.")
             .When(u => u.Uitgenodigde != null);
         RuleFor(u => u.Uitgenodigde.Voornaam)
             .NotNull()
             .WithName(u => $"{nameof(u.Uitgenodigde)}.{nameof(u.Uitgenodigde.Voornaam)}")
-            .WithMessage("Voornaam is verplicht.")
+            .WithMessage(u=> $"{nameof(u.Uitgenodigde.Voornaam)} is verplicht.")
             .When(u => u.Uitgenodigde != null);
         RuleFor(u => u.Uitgenodigde.Email)
             .NotNull()
             .WithName(u => $"{nameof(u.Uitgenodigde)}.{nameof(u.Uitgenodigde.Email)}")
-            .WithMessage("Email is verplicht.")
+            .WithMessage(u=> $"{nameof(u.Uitgenodigde.Email)} is verplicht.")
             .When(u => u.Uitgenodigde != null);
         RuleFor(u => u.Uitgenodigde.Email)
             .EmailAddress()
             .WithName(u => $"{nameof(u.Uitgenodigde)}.{nameof(u.Uitgenodigde.Email)}")
-            .WithMessage("Email is ongeldig.")
+            .WithMessage(u=> $"{nameof(u.Uitgenodigde.Email)} is ongeldig.")
             .When(u => u.Uitgenodigde?.Email != null);
     }
 

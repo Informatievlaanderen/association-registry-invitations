@@ -65,7 +65,7 @@ public class GegevenEenOngeldigInsz : IClassFixture<GegevenEenOngeldigInsz.Setup
         {
             var response = await _client.RegistreerUitnodiging(Uitnodiging);
             var content = await response.Content.ReadAsStringAsync();
-            UitnodigingsId = Guid.Parse(JToken.Parse(content)["id"]!.Value<string>()!);
+            UitnodigingsId = UitnodigingsRequest.ParseIdFromContentString(content);
             UitnodigingAangemaaktOp = _fixture.Clock.PreviousInstant;
         }
 

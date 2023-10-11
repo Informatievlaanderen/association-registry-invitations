@@ -2,5 +2,5 @@
 
 public class RegistratieResponse
 {
-    public Guid Id { get; set; }
+    public Guid UitnodigingId { get; set; }
 }
