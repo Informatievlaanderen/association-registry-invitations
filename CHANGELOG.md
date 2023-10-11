@@ -1,3 +1,10 @@
+# [1.14.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.13.0...v1.14.0) (2023-10-11)
+
+
+### Features
+
+* or-1668 change routes ([a70552b](https://github.com/informatievlaanderen/association-registry-invitations/commit/a70552b0f47ad7b5f73838ed1321f58c01d93df1))
+
 # [1.13.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.12.0...v1.13.0) (2023-10-10)
 
 
