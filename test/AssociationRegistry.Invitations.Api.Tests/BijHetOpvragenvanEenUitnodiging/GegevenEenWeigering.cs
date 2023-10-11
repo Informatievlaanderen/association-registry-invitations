@@ -48,9 +48,9 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
         uitnodiging["uitnodiger"]!["vertegenwoordigerId"]!.Value<int>().Should()
             .Be(_setup.Uitnodiging.Uitnodiger.VertegenwoordigerId);
         uitnodiging["uitgenodigde"]!["insz"]!.Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Insz);
-        uitnodiging["uitgenodigde"]!["naam"]!.Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Achternaam);
+        uitnodiging["uitgenodigde"]!["achternaam"]!.Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Achternaam);
         uitnodiging["uitgenodigde"]!["voornaam"]!.Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Voornaam);
-        uitnodiging["uitgenodigde"]!["email"]!.Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Email);
+        uitnodiging["uitgenodigde"]!["e-mail"]!.Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Email);
     }
 
     public class Setup : IDisposable, IAsyncLifetime

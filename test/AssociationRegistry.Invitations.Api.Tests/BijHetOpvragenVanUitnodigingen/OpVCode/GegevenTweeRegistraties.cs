@@ -48,9 +48,9 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
         uitnodiging1["uitnodiger"]!["vertegenwoordigerId"]!.Value<int>().Should()
             .Be(_setup.Uitnodiging1.Uitnodiger.VertegenwoordigerId);
         uitnodiging1["uitgenodigde"]!["insz"]!.Value<string>().Should().Be(_setup.Uitnodiging1.Uitgenodigde.Insz);
-        uitnodiging1["uitgenodigde"]!["naam"]!.Value<string>().Should().Be(_setup.Uitnodiging1.Uitgenodigde.Achternaam);
+        uitnodiging1["uitgenodigde"]!["achternaam"]!.Value<string>().Should().Be(_setup.Uitnodiging1.Uitgenodigde.Achternaam);
         uitnodiging1["uitgenodigde"]!["voornaam"]!.Value<string>().Should().Be(_setup.Uitnodiging1.Uitgenodigde.Voornaam);
-        uitnodiging1["uitgenodigde"]!["email"]!.Value<string>().Should().Be(_setup.Uitnodiging1.Uitgenodigde.Email);
+        uitnodiging1["uitgenodigde"]!["e-mail"]!.Value<string>().Should().Be(_setup.Uitnodiging1.Uitgenodigde.Email);
 
         var uitnodiging2 = token["uitnodigingen"].Should()
             .ContainSingle(u => u["id"]!.Value<string>() == _setup.UitnodigingsId2.ToString()).Subject;
@@ -62,9 +62,9 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
         uitnodiging2["uitnodiger"]!["vertegenwoordigerId"]!.Value<int>().Should()
             .Be(_setup.Uitnodiging2.Uitnodiger.VertegenwoordigerId);
         uitnodiging2["uitgenodigde"]!["insz"]!.Value<string>().Should().Be(_setup.Uitnodiging2.Uitgenodigde.Insz);
-        uitnodiging2["uitgenodigde"]!["naam"]!.Value<string>().Should().Be(_setup.Uitnodiging2.Uitgenodigde.Achternaam);
+        uitnodiging2["uitgenodigde"]!["achternaam"]!.Value<string>().Should().Be(_setup.Uitnodiging2.Uitgenodigde.Achternaam);
         uitnodiging2["uitgenodigde"]!["voornaam"]!.Value<string>().Should().Be(_setup.Uitnodiging2.Uitgenodigde.Voornaam);
-        uitnodiging2["uitgenodigde"]!["email"]!.Value<string>().Should().Be(_setup.Uitnodiging2.Uitgenodigde.Email);
+        uitnodiging2["uitgenodigde"]!["e-mail"]!.Value<string>().Should().Be(_setup.Uitnodiging2.Uitgenodigde.Email);
     }
 
     public class Setup : IDisposable, IAsyncLifetime

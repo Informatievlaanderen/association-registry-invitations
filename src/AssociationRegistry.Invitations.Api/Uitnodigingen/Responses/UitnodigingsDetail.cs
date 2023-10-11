@@ -1,4 +1,7 @@
-﻿namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Responses;
+﻿using System.Text.Json.Serialization;
+using Newtonsoft.Json;
+
+namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Responses;
 
 public class UitnodigingsDetail
 {
@@ -22,7 +25,10 @@ public class UitnodigingsDetail
     {
         public string Insz { get; set; }
         public string Voornaam { get; set; }
-        public string Naam { get; set; }
+        public string Achternaam { get; set; }
+        
+        [JsonProperty("e-mail")]
+        [JsonPropertyName("e-mail")]
         public string Email { get; set; }
     }
 }
