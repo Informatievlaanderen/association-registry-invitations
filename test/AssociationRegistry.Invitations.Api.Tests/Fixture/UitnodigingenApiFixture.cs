@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using AssociationRegistry.Invitations.Api.Infrastructure.ConfigurationBindings;
+﻿using AssociationRegistry.Invitations.Api.Infrastructure.ConfigurationBindings;
 using AssociationRegistry.Invitations.Api.Infrastructure.Extensions;
 using AssociationRegistry.Invitations.Api.Tests.Autofixture;
 using AssociationRegistry.Invitations.Api.Tests.Fixture.Helpers;
@@ -133,17 +132,4 @@ public class UitnodigingenApiFixture : IAsyncLifetime
            $"database={database ?? postgreSqlOptions.Database};" +
            $"password={postgreSqlOptions.Password};" +
            $"username={postgreSqlOptions.Username}";
-}
-
-public class ReedsVerwerkteUitnodigingenTestData : UitnodigingenApiFixture, IEnumerable<object[]>
-{
-    public IEnumerator<object[]> GetEnumerator()
-    {
-        foreach (var id in VerwerkteUitnodigingIds.Cast<object>().ToArray())
-        {
-            yield return new object[]{id};
-        }
-    }
-
-    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
