@@ -9,4 +9,3 @@ public class Uitgenodigde
     public string Naam { get; set; }
     public string Email { get; set; }
 }
-
