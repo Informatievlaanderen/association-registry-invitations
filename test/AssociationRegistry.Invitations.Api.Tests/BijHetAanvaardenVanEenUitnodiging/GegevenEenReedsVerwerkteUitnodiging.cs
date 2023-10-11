@@ -1,73 +1,45 @@
 ﻿using System.Net;
-using AssociationRegistry.Invitations.Api.Tests.Autofixture;
 using AssociationRegistry.Invitations.Api.Tests.Fixture;
-using AssociationRegistry.Invitations.Api.Uitnodigingen.Requests;
 using Newtonsoft.Json.Linq;
 
 namespace AssociationRegistry.Invitations.Api.Tests.BijHetAanvaardenVanEenUitnodiging;
 
 [Collection(UitnodigingenApiCollection.Name)]
-public class GegevenEenReedsVerwerkteUitnodiging : IClassFixture<GegevenEenReedsVerwerkteUitnodiging.Setup>
+public class GegevenEenReedsVerwerkteUitnodiging 
 {
-    private readonly Setup _setup;
+    private readonly UitnodigingenApiFixture _fixture;
     private readonly UitnodigingenApiClient _client;
 
-    public GegevenEenReedsVerwerkteUitnodiging(UitnodigingenApiFixture fixture, Setup setup)
+    public GegevenEenReedsVerwerkteUitnodiging(UitnodigingenApiFixture fixture)
     {
-        _setup = setup;
+        _fixture = fixture;
         _client = fixture.Clients.Authenticated;
     }
+    
     [Fact]
     public async Task DanIsDeResponse400()
     {
-        var response = await _client.AanvaardUitnodiging(_setup.UitnodigingsId);
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-    }
+        foreach (var uitnodigingsId in _fixture.VerwerkteUitnodigingIds)
+        {
 
+            var response = await _client.AanvaardUitnodiging(uitnodigingsId);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+    }
 
     [Fact]
     public async Task DanBevatDeBodyEenErrorMessage()
     {
-        var response = await _client.AanvaardUitnodiging(_setup.UitnodigingsId);
-
-        var content = await response.Content.ReadAsStringAsync();
-        var token = JToken.Parse(content);
-        token["errors"]!.ToObject<Dictionary<string, string[]>>()
-            .Should().ContainKey("uitnodiging")
-            .WhoseValue
-            .Should().ContainEquivalentOf(Resources.AanvaardenOnmogelijk);
-    }
-
-    public class Setup : IDisposable, IAsyncLifetime
-    {
-        public UitnodigingsRequest Uitnodiging { get; set; }
-        public Guid UitnodigingsId { get; set; }
-
-        private readonly UitnodigingenApiClient _client;
-        private UitnodigingenApiFixture _fixture;
-
-        public Setup(UitnodigingenApiFixture fixture)
+        foreach (var uitnodigingsId in _fixture.VerwerkteUitnodigingIds)
         {
-            _fixture = fixture;
-            _client = fixture.Clients.Authenticated;
+            var response = await _client.AanvaardUitnodiging(uitnodigingsId);
 
-            Uitnodiging = new AutoFixture.Fixture().CustomizeAll()
-                .Create<UitnodigingsRequest>();
-        }
-
-        public void Dispose()
-        {
-            _fixture.ResetDatabase();
-        }
-
-        public async Task InitializeAsync()
-        {
-            var response = await _client.RegistreerUitnodiging(Uitnodiging);
             var content = await response.Content.ReadAsStringAsync();
-            UitnodigingsId = Guid.Parse(JToken.Parse(content)["id"]!.Value<string>()!);
-            await _client.AanvaardUitnodiging(UitnodigingsId);
+            var token = JToken.Parse(content);
+            token["errors"]!.ToObject<Dictionary<string, string[]>>()
+                .Should().ContainKey("uitnodiging")
+                .WhoseValue
+                .Should().ContainEquivalentOf(Resources.AanvaardenOnmogelijk);
         }
-
-        public Task DisposeAsync() => Task.CompletedTask;
     }
 }

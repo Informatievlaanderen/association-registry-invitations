@@ -2,7 +2,6 @@
 using AssociationRegistry.Invitations.Api.Tests.Autofixture;
 using AssociationRegistry.Invitations.Api.Tests.Fixture;
 using AssociationRegistry.Invitations.Api.Uitnodigingen.Requests;
-using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.Resources;
 using Newtonsoft.Json.Linq;
 
 namespace AssociationRegistry.Invitations.Api.Tests.BijHetIntrekkenVanEenUitnodiging;
