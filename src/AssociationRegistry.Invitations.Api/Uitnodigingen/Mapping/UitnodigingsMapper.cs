@@ -15,7 +15,7 @@ public static class UitnodigingsMapper
             {
                 Insz = request.Uitgenodigde.Insz,
                 Voornaam = request.Uitgenodigde.Voornaam,
-                Naam = request.Uitgenodigde.Achternaam,
+                Achternaam = request.Uitgenodigde.Achternaam,
                 Email = request.Uitgenodigde.Email,
             },
         };
@@ -37,7 +37,7 @@ public static class UitnodigingsMapper
             {
                 Insz = model.Uitgenodigde.Insz,
                 Voornaam = model.Uitgenodigde.Voornaam,
-                Achternaam = model.Uitgenodigde.Naam,
+                Achternaam = model.Uitgenodigde.Achternaam,
                 Email = model.Uitgenodigde.Email,
             },
         };
@@ -59,7 +59,7 @@ public static class UitnodigingsMapper
             {
                 Insz = model.Uitgenodigde.Insz,
                 Voornaam = model.Uitgenodigde.Voornaam,
-                Achternaam = model.Uitgenodigde.Naam,
+                Achternaam = model.Uitgenodigde.Achternaam,
                 Email = model.Uitgenodigde.Email,
             },
         };
