@@ -1,3 +1,10 @@
+## [1.14.1](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.14.0...v1.14.1) (2023-10-11)
+
+
+### Bug Fixes
+
+* OR-1662 add response examples and documentation ([569b317](https://github.com/informatievlaanderen/association-registry-invitations/commit/569b317eb2a46b43427fbad6d51fe48952c4bf39))
+
 # [1.14.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.13.0...v1.14.0) (2023-10-11)
 
 
