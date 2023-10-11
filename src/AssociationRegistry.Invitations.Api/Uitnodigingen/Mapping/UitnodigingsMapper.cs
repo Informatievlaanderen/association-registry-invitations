@@ -15,7 +15,7 @@ public static class UitnodigingsMapper
             {
                 Insz = request.Uitgenodigde.Insz,
                 Voornaam = request.Uitgenodigde.Voornaam,
-                Naam = request.Uitgenodigde.Naam,
+                Naam = request.Uitgenodigde.Achternaam,
                 Email = request.Uitgenodigde.Email,
             },
         };

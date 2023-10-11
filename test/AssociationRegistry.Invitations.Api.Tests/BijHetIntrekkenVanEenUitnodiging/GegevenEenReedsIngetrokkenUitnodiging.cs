@@ -64,7 +64,7 @@ public class GegevenEenReedsIngetrokkenUitnodiging : IClassFixture<GegevenEenRee
         {
             var response = await _client.RegistreerUitnodiging(Uitnodiging);
             var content = await response.Content.ReadAsStringAsync();
-            UitnodigingsId = Guid.Parse(JToken.Parse(content)["id"]!.Value<string>()!);
+            UitnodigingsId = UitnodigingsRequest.ParseIdFromContentString(content);
             await _client.TrekUitnodigingIn(UitnodigingsId);
         }
 

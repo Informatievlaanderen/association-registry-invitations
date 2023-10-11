@@ -86,7 +86,7 @@ public class UitnodigingenApiFixture : IAsyncLifetime
         var response = await Clients.Authenticated.RegistreerUitnodiging(uitnodiging);
         var content = await response.Content.ReadAsStringAsync();
             
-        var uitnodigingId = Guid.Parse(JToken.Parse(content)["id"]!.Value<string>()!);
+        var uitnodigingId = Guid.Parse(JToken.Parse(content)["uitnodigingId"]!.Value<string>()!);
         VerwerkteUitnodigingIds.Add(uitnodigingId);
 
         await verwerkActie(uitnodigingId);

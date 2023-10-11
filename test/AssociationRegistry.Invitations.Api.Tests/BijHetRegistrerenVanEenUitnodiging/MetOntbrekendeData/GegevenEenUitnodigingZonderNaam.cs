@@ -20,7 +20,7 @@ public class GegevenEenUitnodigingZonderNaam : IDisposable
         _request = new AutoFixture.Fixture()
             .CustomizeAll()
             .Create<UitnodigingsRequest>();
-        _request.Uitgenodigde.Naam = null!;
+        _request.Uitgenodigde.Achternaam = null!;
     }
 
     [Fact]
@@ -39,9 +39,9 @@ public class GegevenEenUitnodigingZonderNaam : IDisposable
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);
         token["errors"]!.ToObject<Dictionary<string, string[]>>()
-            .Should().ContainKey("uitgenodigde.Naam")
+            .Should().ContainKey("uitgenodigde.Achternaam")
             .WhoseValue
-            .Should().ContainEquivalentOf("Naam is verplicht.");
+            .Should().ContainEquivalentOf("Achternaam is verplicht.");
     }
 
     public void Dispose()

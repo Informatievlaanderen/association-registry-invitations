@@ -48,7 +48,7 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
         uitnodiging["uitnodiger"]!["vertegenwoordigerId"]!.Value<int>().Should()
             .Be(_setup.Uitnodiging.Uitnodiger.VertegenwoordigerId);
         uitnodiging["uitgenodigde"]!["insz"]!.Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Insz);
-        uitnodiging["uitgenodigde"]!["naam"]!.Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Naam);
+        uitnodiging["uitgenodigde"]!["naam"]!.Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Achternaam);
         uitnodiging["uitgenodigde"]!["voornaam"]!.Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Voornaam);
         uitnodiging["uitgenodigde"]!["email"]!.Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Email);
     }
@@ -83,7 +83,7 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
             var response = await _client.RegistreerUitnodiging(Uitnodiging);
             UitnodigingAangemaaktOp = _fixture.Clock.PreviousInstant;
             var content = await response.Content.ReadAsStringAsync();
-            UitnodigingsId = Guid.Parse(JToken.Parse(content)["id"]!.Value<string>()!);
+            UitnodigingsId = UitnodigingsRequest.ParseIdFromContentString(content);
 
             await _client.WeigerUitnodiging(UitnodigingsId);
 

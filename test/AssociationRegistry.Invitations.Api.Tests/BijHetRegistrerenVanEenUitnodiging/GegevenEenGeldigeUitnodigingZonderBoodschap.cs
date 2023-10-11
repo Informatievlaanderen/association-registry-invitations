@@ -38,7 +38,7 @@ public class GegevenEenGeldigeUitnodigingZonderBoodschap : IDisposable
 
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);
-        Guid.TryParse(token["id"]!.Value<string>(), out _).Should().BeTrue();
+        Guid.TryParse(token["uitnodigingId"]!.Value<string>(), out _).Should().BeTrue();
     }
 
     public void Dispose()

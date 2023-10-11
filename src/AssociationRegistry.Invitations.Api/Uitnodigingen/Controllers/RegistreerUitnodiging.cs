@@ -8,6 +8,7 @@ using AssociationRegistry.Invitations.Api.Uitnodigingen.Responses;
 using Marten;
 using Microsoft.AspNetCore.Mvc;
 using NodaTime;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Controllers;
 
@@ -31,7 +32,17 @@ public class RegistreerUitnodiging : ApiController
     /// </summary>
     /// <param name="request"></param>
     /// <param name="cancellationToken"></param>
+    /// <response code="201">Indien de registratie succesvol was.</response>
+    /// <response code="400">Er was een probleem met de doorgestuurde waarden.</response>
+    /// <response code="500">Er is een interne fout opgetreden.</response>
     /// <returns></returns>
+    [SwaggerResponseExample(StatusCodes.Status201Created, typeof(RegistratieResponseExamples))]
+    [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BadRequestProblemDetailsExamples))]
+    [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(InternalServerErrorResponseExamples))]
+    [ProducesResponseType(typeof(RegistratieResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+    [ProducesJson]
     [HttpPost("uitnodigingen")]
     public async Task<IActionResult> Post([FromBody] UitnodigingsRequest request,
         CancellationToken cancellationToken)
@@ -51,8 +62,17 @@ public class RegistreerUitnodiging : ApiController
 
                 return Created("uitnodigingen/0", new RegistratieResponse
                 {
-                    Id = uitnodiging.Id,
+                    UitnodigingId = uitnodiging.Id,
                 });
             }, this);
     }
+}
+
+internal class RegistratieResponseExamples : IExamplesProvider<RegistratieResponse>
+{
+    public RegistratieResponse GetExamples()
+        => new()
+        {
+            UitnodigingId = Guid.NewGuid()
+        };
 }

@@ -69,7 +69,7 @@ public class GegevenEenBestaandeUitnodiging : IClassFixture<GegevenEenBestaandeU
         {
             var response = await _client.RegistreerUitnodiging(Uitnodiging);
             var content = await response.Content.ReadAsStringAsync();
-            UitnodigingsId = Guid.Parse(JToken.Parse(content)["id"]!.Value<string>()!);
+            UitnodigingsId = UitnodigingsRequest.ParseIdFromContentString(content);
         }
 
         public Task DisposeAsync() => Task.CompletedTask;
