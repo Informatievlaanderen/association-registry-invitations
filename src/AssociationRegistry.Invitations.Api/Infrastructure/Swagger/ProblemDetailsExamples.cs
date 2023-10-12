@@ -33,6 +33,10 @@ public class BadRequestValidationProblemDetailsExamples : IExamplesProvider<Vali
                     "foutboodschap omschrijving 1",
                     "foutboodschap omschrijving 2"
                 } }
+            },
+            Extensions =
+            {
+                { "traceId", "00-0000000000x0xxx0x00x000000x0x000-00000x000xx00x00-00"}
             }
         };
 }
