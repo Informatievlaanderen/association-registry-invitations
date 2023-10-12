@@ -29,7 +29,7 @@ public class WeigerUitnodiging : ApiController
     /// </summary>
     /// <param name="uitnodigingId">Het id van de te weigeren uitnodiging</param>
     /// <param name="cancellationToken"></param>
-    /// <response code="202">De uitnodiging werd ingetrokken.</response>
+    /// <response code="202">De uitnodiging werd geweigerd.</response>
     /// <response code="400">Er was een probleem met de doorgestuurde waarden.</response>
     /// <response code="500">Er is een interne fout opgetreden.</response>
     /// <returns></returns>
