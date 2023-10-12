@@ -1,3 +1,13 @@
+## [1.14.2](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.14.1...v1.14.2) (2023-10-12)
+
+
+### Bug Fixes
+
+* OR-1663 changed incorrect label in documentation ([1767dcc](https://github.com/informatievlaanderen/association-registry-invitations/commit/1767dcc446442193172053fda3736c9b7304930d))
+* OR-1663 refactor into naming conventions and added some swagger examples ([b62d338](https://github.com/informatievlaanderen/association-registry-invitations/commit/b62d338a9cf095976dcf99f81ab26e5d95900c34))
+* OR-1663 remove hard coded vcode in test ([e3e6a8c](https://github.com/informatievlaanderen/association-registry-invitations/commit/e3e6a8c8bc2ff71a64d7a98d12b1669fe2261613))
+* OR-1663 updated documentation ([04bf549](https://github.com/informatievlaanderen/association-registry-invitations/commit/04bf5490f974247363e560f4cbaec1eec84d656c))
+
 ## [1.14.1](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.14.0...v1.14.1) (2023-10-11)
 
 
