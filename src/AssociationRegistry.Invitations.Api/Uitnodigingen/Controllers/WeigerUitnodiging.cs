@@ -34,7 +34,7 @@ public class WeigerUitnodiging : ApiController
     /// <response code="500">Er is een interne fout opgetreden.</response>
     /// <returns></returns>
     [HttpPost("uitnodigingen/{uitnodigingId:guid}/weigeringen")]
-    [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BadRequestProblemDetailsExamples))]
+    [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BadRequestValidationProblemDetailsExamples))]
     [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(InternalServerErrorResponseExamples))]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]

@@ -10,11 +10,33 @@ public class BadRequestProblemDetailsExamples : IExamplesProvider<ProblemDetails
         {
             Status = StatusCodes.Status400BadRequest,
             Title = "Er heeft zich een fout voorgedaan!",
-            Detail = "<meer informatie over foutieve aanvraag>",
+            Detail = "Meer informatie over foutieve aanvraag",
             Type = "urn:be.vlaanderen.basisregisters.api:bad-request",
             Instance = $"http://localhost/v1/foutmeldingen/{Guid.NewGuid():N}"
         };
 }
+
+public class BadRequestValidationProblemDetailsExamples : IExamplesProvider<ValidationProblemDetails>
+{
+    public ValidationProblemDetails GetExamples()
+        => new()
+        {
+            Status = StatusCodes.Status400BadRequest,
+            Title = "Er heeft zich een fout voorgedaan!",
+            Detail = "Meer informatie over foutieve aanvraag",
+            Type = "urn:be.vlaanderen.basisregisters.api:bad-request",
+            Instance = $"http://localhost/v1/foutmeldingen/{Guid.NewGuid():N}",
+            Errors =
+            {
+                { "veldnaam", new []
+                {
+                    "foutboodschap omschrijving 1",
+                    "foutboodschap omschrijving 2"
+                } }
+            }
+        };
+}
+
 
 public class InternalServerErrorResponseExamples : IExamplesProvider<ProblemDetails>
 {
@@ -23,7 +45,7 @@ public class InternalServerErrorResponseExamples : IExamplesProvider<ProblemDeta
         {
             Status = StatusCodes.Status500InternalServerError,
             Title = "Er heeft zich een fout voorgedaan!",
-            Detail = "<meer informatie over de interne fout>",
+            Detail = "Meer informatie over de interne fout",
             Type = "urn:be.vlaanderen.basisregisters.api:internal-server-error",
             Instance = $"http://localhost/v1/foutmeldingen/{Guid.NewGuid():N}"
         };

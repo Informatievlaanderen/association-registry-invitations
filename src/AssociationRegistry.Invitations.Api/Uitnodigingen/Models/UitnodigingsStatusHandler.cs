@@ -1,4 +1,5 @@
 using System.Globalization;
+using AssociationRegistry.Invitations.Api.Infrastructure.Extensions;
 using Marten;
 using NodaTime;
 
@@ -19,7 +20,7 @@ public class UitnodigingsStatusHandler
     {
         await using var session = _store.LightweightSession();
         uitnodiging.Status = status;
-        uitnodiging.DatumLaatsteAanpassing = _clock.GetCurrentInstant().ToString("g", CultureInfo.InvariantCulture);
+        uitnodiging.DatumLaatsteAanpassing = _clock.GetCurrentInstant().AsFormattedString();
         
         session.Store(uitnodiging);
         await session.SaveChangesAsync(cancellationToken);

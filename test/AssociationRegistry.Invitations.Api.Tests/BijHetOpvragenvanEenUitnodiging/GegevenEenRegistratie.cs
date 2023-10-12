@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Net;
+using AssociationRegistry.Invitations.Api.Infrastructure.Extensions;
 using AssociationRegistry.Invitations.Api.Tests.Autofixture;
 using AssociationRegistry.Invitations.Api.Tests.Fixture;
 using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
@@ -42,7 +43,7 @@ public class GegevenEenRegistratie : IClassFixture<GegevenEenRegistratie.Setup>
         uitnodiging["boodschap"]!.Value<string>().Should().Be(_setup.Uitnodiging.Boodschap);
         uitnodiging["status"]!.Value<string>().Should().Be(UitnodigingsStatus.WachtOpAntwoord.Status);
         uitnodiging["datumRegistratie"]!.Value<string>().Should()
-            .Be(_setup.UitnodigingGeregistreerdOp.ToString("g", CultureInfo.InvariantCulture));
+            .Be(_setup.UitnodigingGeregistreerdOp.AsFormattedString());
         uitnodiging["uitnodiger"]!["vertegenwoordigerId"]!.Value<int>().Should()
             .Be(_setup.Uitnodiging.Uitnodiger.VertegenwoordigerId);
         uitnodiging["uitgenodigde"]!["insz"]!.Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Insz);
