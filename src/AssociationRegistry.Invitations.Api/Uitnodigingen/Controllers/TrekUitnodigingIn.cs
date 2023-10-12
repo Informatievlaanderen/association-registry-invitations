@@ -39,8 +39,7 @@ public class TrekUitnodigingInController : ApiController
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     [ProducesJson]
-    public async Task<IActionResult> Post([FromRoute] Guid uitnodigingId,
-        CancellationToken cancellationToken)
+    public async Task<IActionResult> Post([FromRoute] Guid uitnodigingId, CancellationToken cancellationToken)
     {
         var uitnodiging = await _session.LoadAsync<Uitnodiging>(uitnodigingId, cancellationToken);
         
