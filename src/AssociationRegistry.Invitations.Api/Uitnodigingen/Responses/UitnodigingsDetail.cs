@@ -5,7 +5,7 @@ namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Responses;
 
 public class UitnodigingsDetail
 {
-    public Guid Id { get; set; }
+    public Guid UitnodigingId { get; set; }
     public string VCode { get; set; }
     public string Boodschap { get; set; }
     public string Status { get; set; }

@@ -28,14 +28,15 @@ public class RegistreerUitnodiging : ApiController
     }
 
     /// <summary>
-    /// Registreer een uitnodiging
+    /// Uitnodiging registreren
     /// </summary>
     /// <param name="request"></param>
     /// <param name="cancellationToken"></param>
-    /// <response code="201">Indien de registratie succesvol was.</response>
+    /// <response code="201">De uitnodiging werd geregistreerd.</response>
     /// <response code="400">Er was een probleem met de doorgestuurde waarden.</response>
     /// <response code="500">Er is een interne fout opgetreden.</response>
     /// <returns></returns>
+    [HttpPost("uitnodigingen")]
     [SwaggerResponseExample(StatusCodes.Status201Created, typeof(RegistratieResponseExamples))]
     [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BadRequestProblemDetailsExamples))]
     [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(InternalServerErrorResponseExamples))]
@@ -43,7 +44,6 @@ public class RegistreerUitnodiging : ApiController
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     [ProducesJson]
-    [HttpPost("uitnodigingen")]
     public async Task<IActionResult> Post([FromBody] UitnodigingsRequest request,
         CancellationToken cancellationToken)
     {

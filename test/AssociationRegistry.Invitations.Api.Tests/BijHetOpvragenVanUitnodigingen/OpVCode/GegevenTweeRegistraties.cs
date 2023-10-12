@@ -39,7 +39,7 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
             new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
         
         var uitnodiging1 = token!["uitnodigingen"].Should()
-            .ContainSingle(u => u["id"]!.Value<string>() == _setup.UitnodigingsId1.ToString()).Subject;
+            .ContainSingle(u => u["uitnodigingId"]!.Value<string>() == _setup.UitnodigingId1.ToString()).Subject;
         uitnodiging1["vCode"]!.Value<string>().Should().Be(_setup.VCode);
         uitnodiging1["boodschap"]!.Value<string>().Should().Be(_setup.Uitnodiging1.Boodschap);
         uitnodiging1["status"]!.Value<string>().Should().Be(UitnodigingsStatus.WachtOpAntwoord.Status);
@@ -53,7 +53,7 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
         uitnodiging1["uitgenodigde"]!["e-mail"]!.Value<string>().Should().Be(_setup.Uitnodiging1.Uitgenodigde.Email);
 
         var uitnodiging2 = token["uitnodigingen"].Should()
-            .ContainSingle(u => u["id"]!.Value<string>() == _setup.UitnodigingsId2.ToString()).Subject;
+            .ContainSingle(u => u["uitnodigingId"]!.Value<string>() == _setup.UitnodigingId2.ToString()).Subject;
         uitnodiging2["vCode"]!.Value<string>().Should().Be(_setup.VCode);
         uitnodiging2["boodschap"]!.Value<string>().Should().Be(_setup.Uitnodiging2.Boodschap);
         uitnodiging2["status"]!.Value<string>().Should().Be(UitnodigingsStatus.WachtOpAntwoord.Status);
@@ -72,8 +72,8 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
         public string VCode { get; set; }
         public UitnodigingsRequest Uitnodiging1 { get; set; }
         public UitnodigingsRequest Uitnodiging2 { get; set; }
-        public Guid UitnodigingsId1 { get; set; }
-        public Guid UitnodigingsId2 { get; set; }
+        public Guid UitnodigingId1 { get; set; }
+        public Guid UitnodigingId2 { get; set; }
         public Instant Uitnodiging1AangemaaktOp { get; set; }
         public Instant Uitnodiging2AangemaaktOp { get; set; }
 
@@ -103,10 +103,10 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
 
         public async Task InitializeAsync()
         {
-            UitnodigingsId1 = await RegistreerUitnodiging(Uitnodiging1);
+            UitnodigingId1 = await RegistreerUitnodiging(Uitnodiging1);
             Uitnodiging1AangemaaktOp = _fixture.Clock.PreviousInstant;
             
-            UitnodigingsId2 = await RegistreerUitnodiging(Uitnodiging2);
+            UitnodigingId2 = await RegistreerUitnodiging(Uitnodiging2);
             Uitnodiging2AangemaaktOp = _fixture.Clock.PreviousInstant;
         }
 

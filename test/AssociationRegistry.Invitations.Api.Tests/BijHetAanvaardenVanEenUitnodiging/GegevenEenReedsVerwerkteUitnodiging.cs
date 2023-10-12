@@ -19,10 +19,10 @@ public class GegevenEenReedsVerwerkteUitnodiging
     [Fact]
     public async Task DanIsDeResponse400()
     {
-        foreach (var uitnodigingsId in _fixture.VerwerkteUitnodigingIds)
+        foreach (var uitnodigingId in _fixture.VerwerkteUitnodigingIds)
         {
 
-            var response = await _client.AanvaardUitnodiging(uitnodigingsId);
+            var response = await _client.AanvaardUitnodiging(uitnodigingId);
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
     }
@@ -30,9 +30,9 @@ public class GegevenEenReedsVerwerkteUitnodiging
     [Fact]
     public async Task DanBevatDeBodyEenErrorMessage()
     {
-        foreach (var uitnodigingsId in _fixture.VerwerkteUitnodigingIds)
+        foreach (var uitnodigingId in _fixture.VerwerkteUitnodigingIds)
         {
-            var response = await _client.AanvaardUitnodiging(uitnodigingsId);
+            var response = await _client.AanvaardUitnodiging(uitnodigingId);
 
             var content = await response.Content.ReadAsStringAsync();
             var token = JToken.Parse(content);
