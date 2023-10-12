@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Net;
+using AssociationRegistry.Invitations.Api.Infrastructure.Extensions;
 using AssociationRegistry.Invitations.Api.Tests.Autofixture;
 using AssociationRegistry.Invitations.Api.Tests.Fixture;
 using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
@@ -44,7 +45,7 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
         uitnodiging1["boodschap"]!.Value<string>().Should().Be(_setup.Uitnodiging1.Boodschap);
         uitnodiging1["status"]!.Value<string>().Should().Be(UitnodigingsStatus.WachtOpAntwoord.Status);
         uitnodiging1["datumRegistratie"]!.Value<string>().Should()
-            .Be(_setup.Uitnodiging1AangemaaktOp.ToString("g", CultureInfo.InvariantCulture));
+            .Be(_setup.Uitnodiging1AangemaaktOp.AsFormattedString());
         uitnodiging1["uitnodiger"]!["vertegenwoordigerId"]!.Value<int>().Should()
             .Be(_setup.Uitnodiging1.Uitnodiger.VertegenwoordigerId);
         uitnodiging1["uitgenodigde"]!["insz"]!.Value<string>().Should().Be(_setup.Uitnodiging1.Uitgenodigde.Insz);
@@ -58,7 +59,7 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
         uitnodiging2["boodschap"]!.Value<string>().Should().Be(_setup.Uitnodiging2.Boodschap);
         uitnodiging2["status"]!.Value<string>().Should().Be(UitnodigingsStatus.WachtOpAntwoord.Status);
         uitnodiging2["datumRegistratie"]!.Value<string>().Should()
-            .Be(_setup.Uitnodiging2AangemaaktOp.ToString("g", CultureInfo.InvariantCulture));
+            .Be(_setup.Uitnodiging2AangemaaktOp.AsFormattedString());
         uitnodiging2["uitnodiger"]!["vertegenwoordigerId"]!.Value<int>().Should()
             .Be(_setup.Uitnodiging2.Uitnodiger.VertegenwoordigerId);
         uitnodiging2["uitgenodigde"]!["insz"]!.Value<string>().Should().Be(_setup.Uitnodiging2.Uitgenodigde.Insz);

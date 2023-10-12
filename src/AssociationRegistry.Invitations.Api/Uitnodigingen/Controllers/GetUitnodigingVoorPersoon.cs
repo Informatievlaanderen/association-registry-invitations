@@ -1,10 +1,13 @@
-﻿using AssociationRegistry.Invitations.Api.Infrastructure;
+﻿using System.Globalization;
+using AssociationRegistry.Invitations.Api.Infrastructure;
+using AssociationRegistry.Invitations.Api.Infrastructure.Extensions;
 using AssociationRegistry.Invitations.Api.Infrastructure.Swagger;
 using AssociationRegistry.Invitations.Api.Uitnodigingen.Mapping;
 using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
 using AssociationRegistry.Invitations.Api.Uitnodigingen.Responses;
 using Marten;
 using Microsoft.AspNetCore.Mvc;
+using NodaTime;
 using Swashbuckle.AspNetCore.Filters;
 using Uitnodiging = AssociationRegistry.Invitations.Api.Uitnodigingen.Models.Uitnodiging;
 
@@ -35,7 +38,7 @@ public class GetUitnodigingVoorPersoon : ApiController
     /// <returns></returns>
     [HttpGet("personen/{insz}/uitnodigingen/{uitnodigingId}")]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(UitnodigingsDetailExamples))]
-    [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BadRequestProblemDetailsExamples))]
+    [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BadRequestValidationProblemDetailsExamples))]
     [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(InternalServerErrorResponseExamples))]
     [ProducesResponseType(typeof(UitnodigingsDetail), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
@@ -64,6 +67,13 @@ public class GetUitnodigingVoorPersoon : ApiController
 
 internal class UitnodigingsDetailExamples : IExamplesProvider<UitnodigingsDetail>
 {
+    private readonly IClock _clock;
+
+    public UitnodigingsDetailExamples(IClock clock)
+    {
+        _clock = clock;
+    }
+    
     public UitnodigingsDetail GetExamples()
         => new()
         {
@@ -71,8 +81,8 @@ internal class UitnodigingsDetailExamples : IExamplesProvider<UitnodigingsDetail
             VCode = "V0000001",
             Boodschap = "Boodschap voor uitgenodigde",
             Status = UitnodigingsStatus.WachtOpAntwoord,
-            DatumRegistratie = DateTime.Today.AddDays(-1).ToLongDateString(),
-            DatumLaatsteAanpassing = DateTime.Today.ToLongDateString(),
+            DatumRegistratie = _clock.GetCurrentInstant().AsFormattedString(),
+            DatumLaatsteAanpassing = _clock.GetCurrentInstant().AsFormattedString(),
             Uitnodiger = new UitnodigingsDetail.UitnodigerDetail
             {
                 VertegenwoordigerId = 12345

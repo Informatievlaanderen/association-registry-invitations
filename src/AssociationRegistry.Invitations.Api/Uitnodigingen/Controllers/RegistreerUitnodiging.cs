@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using AssociationRegistry.Invitations.Api.Infrastructure;
+using AssociationRegistry.Invitations.Api.Infrastructure.Extensions;
 using AssociationRegistry.Invitations.Api.Infrastructure.Swagger;
 using AssociationRegistry.Invitations.Api.Uitnodigingen.Mapping;
 using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
@@ -38,7 +39,7 @@ public class RegistreerUitnodiging : ApiController
     /// <returns></returns>
     [HttpPost("uitnodigingen")]
     [SwaggerResponseExample(StatusCodes.Status201Created, typeof(RegistratieResponseExamples))]
-    [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BadRequestProblemDetailsExamples))]
+    [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BadRequestValidationProblemDetailsExamples))]
     [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(InternalServerErrorResponseExamples))]
     [ProducesResponseType(typeof(RegistratieResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
@@ -56,7 +57,7 @@ public class RegistreerUitnodiging : ApiController
             {
                 var uitnodiging = request.ToModel();
                 uitnodiging.Status = UitnodigingsStatus.WachtOpAntwoord;
-                uitnodiging.DatumRegistratie = _clock.GetCurrentInstant().ToString("g", CultureInfo.InvariantCulture);
+                uitnodiging.DatumRegistratie = _clock.GetCurrentInstant().AsFormattedString();
                 lightweightSession.Store(uitnodiging);
                 await lightweightSession.SaveChangesAsync(cancellationToken);
 
