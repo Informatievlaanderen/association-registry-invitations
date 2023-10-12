@@ -42,9 +42,9 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
         uitnodiging["boodschap"]!.Value<string>().Should().Be(_setup.Uitnodiging.Boodschap);
         uitnodiging["status"]!.Value<string>().Should().Be(UitnodigingsStatus.Geweigerd.Status);
         uitnodiging["datumRegistratie"]!.Value<string>().Should()
-            .Be(_setup.UitnodigingAangemaaktOp.ToString("g", CultureInfo.InvariantCulture));
+            .Be(_setup.UitnodigingGeregistreerdOp.ToString("g", CultureInfo.InvariantCulture));
         uitnodiging["datumLaatsteAanpassing"]!.Value<string>().Should()
-            .Be(_setup.UitnodigingAanvaardOp.ToString("g", CultureInfo.InvariantCulture));
+            .Be(_setup.UitnodigingGeweigerdOp.ToString("g", CultureInfo.InvariantCulture));
         uitnodiging["uitnodiger"]!["vertegenwoordigerId"]!.Value<int>().Should()
             .Be(_setup.Uitnodiging.Uitnodiger.VertegenwoordigerId);
         uitnodiging["uitgenodigde"]!["insz"]!.Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Insz);
@@ -58,8 +58,8 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
         public UitnodigingsRequest Uitnodiging { get; set; }
         public Guid UitnodigingId { get; set; }
         
-        public Instant UitnodigingAangemaaktOp { get; set; }
-        public Instant UitnodigingAanvaardOp { get; set; }
+        public Instant UitnodigingGeregistreerdOp { get; set; }
+        public Instant UitnodigingGeweigerdOp { get; set; }
 
         private readonly UitnodigingenApiClient _client;
         private UitnodigingenApiFixture _fixture;
@@ -80,14 +80,16 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
 
         public async Task InitializeAsync()
         {
-            var response = await _client.RegistreerUitnodiging(Uitnodiging);
-            UitnodigingAangemaaktOp = _fixture.Clock.PreviousInstant;
-            var content = await response.Content.ReadAsStringAsync();
-            UitnodigingId = UitnodigingsRequest.ParseIdFromContentString(content);
+            var response = await _client.RegistreerUitnodiging(Uitnodiging)
+                .EnsureSuccessOrThrow();
+            
+            UitnodigingId = await response.ParseIdFromContentString();
+            
+            UitnodigingGeregistreerdOp = _fixture.Clock.PreviousInstant;
 
             await _client.WeigerUitnodiging(UitnodigingId);
 
-            UitnodigingAanvaardOp = _fixture.Clock.PreviousInstant;
+            UitnodigingGeweigerdOp = _fixture.Clock.PreviousInstant;
         }
 
         public Task DisposeAsync() => Task.CompletedTask;

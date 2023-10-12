@@ -10,9 +10,6 @@ public class UitnodigingsRequest
     public string Boodschap { get; set; }
     public Uitnodiger Uitnodiger { get; set; }
     public Uitgenodigde Uitgenodigde { get; set; }
-
-    public static Guid ParseIdFromContentString(string content) 
-        => Guid.Parse(JToken.Parse(content)["uitnodigingId"]!.Value<string>()!);
 }
 
 public class Uitnodiger

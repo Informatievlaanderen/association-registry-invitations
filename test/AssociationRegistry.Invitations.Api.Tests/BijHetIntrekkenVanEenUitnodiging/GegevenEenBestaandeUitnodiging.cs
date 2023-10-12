@@ -49,9 +49,11 @@ public class GegevenEenBestaandeUitnodiging : IClassFixture<GegevenEenBestaandeU
 
         public async Task InitializeAsync()
         {
-            var response = await _client.RegistreerUitnodiging(Uitnodiging);
-            var content = await response.Content.ReadAsStringAsync();
-            UitnodigingId = UitnodigingsRequest.ParseIdFromContentString(content);
+            var response = await _client.RegistreerUitnodiging(Uitnodiging)
+                .EnsureSuccessOrThrow();
+            
+            UitnodigingId = await response.ParseIdFromContentString();
+
         }
 
         public Task DisposeAsync() => Task.CompletedTask;

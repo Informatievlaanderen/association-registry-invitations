@@ -55,7 +55,7 @@ public class GegevenEenUitnodigingMetEenOngeldigeVCode : IDisposable
         get
         {
             yield return new object[] { "random tekst" }; // Geen vcode
-            yield return new object[] { "V012345" }; // Te wijnig character
+            yield return new object[] { "V012345" }; // Te weinig character
             yield return new object[] { "V01234567" }; // Te veel nummers
             yield return new object[] { "W0123456" }; // Geen V als eerste char
         }

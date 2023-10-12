@@ -25,7 +25,7 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
     [Fact]
     public async Task DanIsDeResponse200()
     {
-        var response = await _client.GetUitnodigingenOpVcode("V0000001");
+        var response = await _client.GetUitnodigingenOpVcode(_setup.Uitnodiging.VCode);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
@@ -75,9 +75,10 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
 
         public async Task InitializeAsync()
         {
-            var response = await _client.RegistreerUitnodiging(Uitnodiging);
-            var content = await response.Content.ReadAsStringAsync();
-            UitnodigingId = UitnodigingsRequest.ParseIdFromContentString(content);
+            var response = await _client.RegistreerUitnodiging(Uitnodiging)
+                .EnsureSuccessOrThrow();
+            
+            UitnodigingId = await response.ParseIdFromContentString();
             
             await _client.WeigerUitnodiging(UitnodigingId);
             

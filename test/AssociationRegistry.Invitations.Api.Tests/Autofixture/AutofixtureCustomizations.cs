@@ -7,12 +7,13 @@ public static class AutofixtureCustomizations
     public static IFixture CustomizeAll(this IFixture fixture)
     {
         return fixture
-            .CustomizeInsz()
+            .CustomizeTestInsz()
+            .CustomizeTestVCode()
             .CustomizeUitgenodigde()
             .CustomizeUitnodigingsRequest();
     }
     
-    public static IFixture CustomizeInsz(this IFixture fixture)
+    public static IFixture CustomizeTestInsz(this IFixture fixture)
     {
         fixture.Customize<TestInsz>(
             composerTransformation: composer => composer.FromFactory(
@@ -21,6 +22,21 @@ public static class AutofixtureCustomizations
                         var inszBase = new Random().Next(0, 999999999);
                         var inszModulo = 97 - inszBase % 97;
                         return new TestInsz($"{inszBase:D9}{inszModulo:D2}");
+                    })
+                .OmitAutoProperties()
+        );
+
+        return fixture;
+    }
+    
+    public static IFixture CustomizeTestVCode(this IFixture fixture)
+    {
+        fixture.Customize<TestVCode>(
+            composerTransformation: composer => composer.FromFactory(
+                    factory: () =>
+                    {
+                        var randomCode = new Random().Next(0, 9999999);
+                        return $"V{randomCode:0000000}";
                     })
                 .OmitAutoProperties()
         );
@@ -49,12 +65,16 @@ public static class AutofixtureCustomizations
     {
         fixture.Customize<UitnodigingsRequest>(
             composerTransformation: composer => composer.FromFactory(
-                    factory: () => new UitnodigingsRequest()
+                    factory: () =>
                     {
-                        Uitgenodigde = fixture.Create<Uitgenodigde>(),
-                        Boodschap = fixture.Create<string>(),
-                        VCode = $"V{fixture.Create<int>():0000000}",
-                        Uitnodiger = fixture.Create<Uitnodiger>(),
+                        var randomCode = new Random().Next(0, 9999999);
+                        return new UitnodigingsRequest()
+                        {
+                            Uitgenodigde = fixture.Create<Uitgenodigde>(),
+                            Boodschap = fixture.Create<string>(),
+                            VCode = fixture.Create<TestVCode>(),
+                            Uitnodiger = fixture.Create<Uitnodiger>(),
+                        };
                     })
                 .OmitAutoProperties()
         );

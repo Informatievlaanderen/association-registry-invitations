@@ -70,7 +70,7 @@ public class GegevenEenOnbekendeVCode : IClassFixture<GegevenEenOnbekendeVCode.S
         {
             foreach (var request in _uitnodigingen)
             {
-                await _client.RegistreerUitnodiging(request);
+                await _client.RegistreerUitnodiging(request).EnsureSuccessOrThrow();
             }
         }
 

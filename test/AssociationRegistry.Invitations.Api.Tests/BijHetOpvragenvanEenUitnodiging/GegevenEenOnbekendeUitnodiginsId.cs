@@ -61,7 +61,7 @@ public class GegevenEenOnbekendeUitnodiginsId : IClassFixture<GegevenEenOnbekend
         {
             foreach (var request in _uitnodigingen)
             {
-                await _client.RegistreerUitnodiging(request);
+                await _client.RegistreerUitnodiging(request).EnsureSuccessOrThrow();
             }
         }
 

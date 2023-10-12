@@ -77,9 +77,10 @@ public class GegevenEenAanvaarding : IClassFixture<GegevenEenAanvaarding.Setup>
 
         public async Task InitializeAsync()
         {
-            var response = await _client.RegistreerUitnodiging(Uitnodiging);
-            var content = await response.Content.ReadAsStringAsync();
-            UitnodigingId = UitnodigingsRequest.ParseIdFromContentString(content);
+            var response = await _client.RegistreerUitnodiging(Uitnodiging)
+                .EnsureSuccessOrThrow();
+            
+            UitnodigingId = await response.ParseIdFromContentString();
             await _client.AanvaardUitnodiging(UitnodigingId);
             UitnodigingAanvaardOp = _fixture.Clock.PreviousInstant;
         }
