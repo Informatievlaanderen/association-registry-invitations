@@ -20,7 +20,7 @@ public class GegevenEenReedsIngetrokkenUitnodiging : IClassFixture<GegevenEenRee
     [Fact]
     public async Task DanIsDeResponse400()
     {
-        var response = await _client.TrekUitnodigingIn(_setup.UitnodigingsId);
+        var response = await _client.TrekUitnodigingIn(_setup.UitnodigingId);
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
@@ -28,7 +28,7 @@ public class GegevenEenReedsIngetrokkenUitnodiging : IClassFixture<GegevenEenRee
     [Fact]
     public async Task DanBevatDeBodyEenErrorMessage()
     {
-        var response = await _client.TrekUitnodigingIn(_setup.UitnodigingsId);
+        var response = await _client.TrekUitnodigingIn(_setup.UitnodigingId);
 
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);
@@ -41,7 +41,7 @@ public class GegevenEenReedsIngetrokkenUitnodiging : IClassFixture<GegevenEenRee
     public class Setup : IDisposable, IAsyncLifetime
     {
         public UitnodigingsRequest Uitnodiging { get; set; }
-        public Guid UitnodigingsId { get; set; }
+        public Guid UitnodigingId { get; set; }
 
         private readonly UitnodigingenApiClient _client;
         private UitnodigingenApiFixture _fixture;
@@ -64,8 +64,8 @@ public class GegevenEenReedsIngetrokkenUitnodiging : IClassFixture<GegevenEenRee
         {
             var response = await _client.RegistreerUitnodiging(Uitnodiging);
             var content = await response.Content.ReadAsStringAsync();
-            UitnodigingsId = UitnodigingsRequest.ParseIdFromContentString(content);
-            await _client.TrekUitnodigingIn(UitnodigingsId);
+            UitnodigingId = UitnodigingsRequest.ParseIdFromContentString(content);
+            await _client.TrekUitnodigingIn(UitnodigingId);
         }
 
         public Task DisposeAsync() => Task.CompletedTask;

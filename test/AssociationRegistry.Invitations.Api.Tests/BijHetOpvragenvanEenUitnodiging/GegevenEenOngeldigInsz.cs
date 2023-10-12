@@ -22,14 +22,14 @@ public class GegevenEenOngeldigInsz : IClassFixture<GegevenEenOngeldigInsz.Setup
     [Fact]
     public async Task DanIsDeResponse400()
     {
-        var response = await _client.GetUitnodigingsDetail("99.99.99-999.64", _setup.UitnodigingsId);
+        var response = await _client.GetUitnodigingsDetail("99.99.99-999.64", _setup.UitnodigingId);
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
     [Fact]
     public async Task DanBevatDeBodyEenError()
     {
-        var response = await _client.GetUitnodigingsDetail("99.99.99-999.64", _setup.UitnodigingsId);
+        var response = await _client.GetUitnodigingsDetail("99.99.99-999.64", _setup.UitnodigingId);
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);
         token["errors"]!.ToObject<Dictionary<string, string[]>>()
@@ -41,7 +41,7 @@ public class GegevenEenOngeldigInsz : IClassFixture<GegevenEenOngeldigInsz.Setup
     public class Setup : IDisposable, IAsyncLifetime
     {
         public UitnodigingsRequest Uitnodiging { get; set; }
-        public Guid UitnodigingsId { get; set; }
+        public Guid UitnodigingId { get; set; }
         public Instant UitnodigingAangemaaktOp { get; set; }
 
         private readonly UitnodigingenApiClient _client;
@@ -65,7 +65,7 @@ public class GegevenEenOngeldigInsz : IClassFixture<GegevenEenOngeldigInsz.Setup
         {
             var response = await _client.RegistreerUitnodiging(Uitnodiging);
             var content = await response.Content.ReadAsStringAsync();
-            UitnodigingsId = UitnodigingsRequest.ParseIdFromContentString(content);
+            UitnodigingId = UitnodigingsRequest.ParseIdFromContentString(content);
             UitnodigingAangemaaktOp = _fixture.Clock.PreviousInstant;
         }
 

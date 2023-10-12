@@ -31,7 +31,7 @@ public class GegevenEenOnbekendeUitnodiginsId : IClassFixture<GegevenEenOnbekend
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);
         token["errors"]!.ToObject<Dictionary<string, string[]>>()
-            .Should().ContainKey("uitnodigingsId")
+            .Should().ContainKey("uitnodigingId")
             .WhoseValue
             .Should().ContainEquivalentOf("Deze uitnodiging is niet gekend.");
     }

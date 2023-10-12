@@ -38,7 +38,7 @@ public class GegevenEenAanvaarding : IClassFixture<GegevenEenAanvaarding.Setup>
         var token = JsonConvert.DeserializeObject<JObject>(content,
             new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
         var uitnodiging = token["uitnodigingen"].Should().ContainSingle().Subject;
-        uitnodiging["id"].Value<string>().Should().Be(_setup.UitnodigingsId.ToString());
+        uitnodiging["uitnodigingId"].Value<string>().Should().Be(_setup.UitnodigingId.ToString());
         uitnodiging["vCode"].Value<string>().Should().Be(_setup.Uitnodiging.VCode);
         uitnodiging["boodschap"].Value<string>().Should().Be(_setup.Uitnodiging.Boodschap);
         uitnodiging["status"].Value<string>().Should().Be(UitnodigingsStatus.Aanvaard.Status);
@@ -55,7 +55,7 @@ public class GegevenEenAanvaarding : IClassFixture<GegevenEenAanvaarding.Setup>
     public class Setup : IDisposable, IAsyncLifetime
     {
         public UitnodigingsRequest Uitnodiging { get; set; }
-        public Guid UitnodigingsId { get; set; }
+        public Guid UitnodigingId { get; set; }
         public Instant UitnodigingAanvaardOp { get; set; }
 
         private readonly UitnodigingenApiClient _client;
@@ -79,8 +79,8 @@ public class GegevenEenAanvaarding : IClassFixture<GegevenEenAanvaarding.Setup>
         {
             var response = await _client.RegistreerUitnodiging(Uitnodiging);
             var content = await response.Content.ReadAsStringAsync();
-            UitnodigingsId = UitnodigingsRequest.ParseIdFromContentString(content);
-            await _client.AanvaardUitnodiging(UitnodigingsId);
+            UitnodigingId = UitnodigingsRequest.ParseIdFromContentString(content);
+            await _client.AanvaardUitnodiging(UitnodigingId);
             UitnodigingAanvaardOp = _fixture.Clock.PreviousInstant;
         }
 

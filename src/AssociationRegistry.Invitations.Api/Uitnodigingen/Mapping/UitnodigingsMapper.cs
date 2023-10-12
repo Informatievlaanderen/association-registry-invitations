@@ -23,7 +23,7 @@ public static class UitnodigingsMapper
     public static Responses.Uitnodiging ToResponse(this Models.Uitnodiging model) =>
         new()
         {
-            Id = model.Id,
+            UitnodigingId = model.Id,
             VCode = model.VCode,
             Boodschap = model.Boodschap,
             Status = model.Status,
@@ -45,7 +45,7 @@ public static class UitnodigingsMapper
     public static Responses.UitnodigingsDetail ToDetail(this Models.Uitnodiging model) =>
         new()
         {
-            Id = model.Id,
+            UitnodigingId = model.Id,
             VCode = model.VCode,
             Boodschap = model.Boodschap,
             Status = model.Status,

@@ -5,6 +5,7 @@ using AssociationRegistry.Invitations.Api.Uitnodigingen.Queries;
 using AssociationRegistry.Invitations.Api.Uitnodigingen.Responses;
 using Marten;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Filters;
 using Uitnodiging = AssociationRegistry.Invitations.Api.Uitnodigingen.Models.Uitnodiging;
 
 namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Controllers;
@@ -27,8 +28,14 @@ public class GetUitnodigingenVoorVereniging : ApiController
     /// </summary>
     /// <param name="vCode">De vCode van de vereniging waarvoor je de uitnodigingen wil ophalen</param>
     /// <param name="cancellationToken"></param>
+    /// <response code="200">Bevat een lijst met uitnodigingen voor de gevraagde vereniging.</response>
+    /// <response code="500">Er is een interne fout opgetreden.</response>
     /// <returns></returns>
     [HttpGet("verenigingen/{vcode}/uitnodigingen")]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(UitnodigingenResponseExamples))]
+    [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(InternalServerErrorResponseExamples))]
+    [ProducesResponseType(typeof(UitnodigingenResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     [ProducesJson]
     [ConsumesJson]
     public async Task<IActionResult> Get([FromRoute] string vCode, CancellationToken cancellationToken)
@@ -43,4 +50,55 @@ public class GetUitnodigingenVoorVereniging : ApiController
             Uitnodigingen = uitnodigingen.Select(UitnodigingsMapper.ToResponse).ToArray(),
         });
     }
+}
+
+internal class UitnodigingenResponseExamples : IExamplesProvider<UitnodigingenResponse>
+{
+    public UitnodigingenResponse GetExamples()
+        => new()
+        {
+            Uitnodigingen = new []
+            {
+                new Responses.Uitnodiging()
+                {
+                    UitnodigingId = Guid.NewGuid(),
+                    VCode = "V0000001",
+                    Boodschap = "<boodschap voor uitgenodigde>",
+                    Uitgenodigde = new Uitgenodigde()
+                    {
+                        Voornaam = "John",
+                        Achternaam = "Doe",
+                        Email = "john.doe@example.com",
+                        Insz = "<insz>"
+                    },
+                    Uitnodiger = new Uitnodiger()
+                    {
+                        VertegenwoordigerId = 12345
+                    },
+                    Status = "<status>",
+                    DatumRegistratie = DateTime.Today.AddDays(-1).ToLongDateString(),
+                    DatumLaatsteAanpassing = DateTime.Today.ToLongDateString()
+                },
+                new Responses.Uitnodiging()
+                {
+                    UitnodigingId = Guid.NewGuid(),
+                    VCode = "V0000001",
+                    Boodschap = "<boodschap voor uitgenodigde>",
+                    Uitgenodigde = new Uitgenodigde()
+                    {
+                        Voornaam = "Jane",
+                        Achternaam = "Smith",
+                        Email = "jane.smith@example.com",
+                        Insz = "<insz>"
+                    },
+                    Uitnodiger = new Uitnodiger()
+                    {
+                        VertegenwoordigerId = 12345
+                    },
+                    Status = "<status>",
+                    DatumRegistratie = DateTime.Today.AddDays(-1).ToLongDateString(),
+                    DatumLaatsteAanpassing = DateTime.Today.ToLongDateString()
+                }
+            }
+        };
 }

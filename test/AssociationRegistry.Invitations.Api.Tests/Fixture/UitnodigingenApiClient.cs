@@ -22,21 +22,21 @@ public class UitnodigingenApiClient : IDisposable
     public async Task<HttpResponseMessage> GetUitnodigingenOpVcode(string vCode)
         => await _httpClient.GetAsync($"/v1/verenigingen/{vCode}/uitnodigingen");
 
-    public async Task<HttpResponseMessage> GetUitnodigingsDetail(string insz, Guid uitnodigingsId)
-        => await _httpClient.GetAsync($"/v1/personen/{insz}/uitnodigingen/{uitnodigingsId}");
+    public async Task<HttpResponseMessage> GetUitnodigingsDetail(string insz, Guid uitnodigingId)
+        => await _httpClient.GetAsync($"/v1/personen/{insz}/uitnodigingen/{uitnodigingId}");
 
     public async Task<HttpResponseMessage> RegistreerUitnodiging(UitnodigingsRequest uitnodigingsRequest)
         => await _httpClient.PostAsJsonAsync($"/v1/uitnodigingen", uitnodigingsRequest);
 
-    public async Task<HttpResponseMessage> AanvaardUitnodiging(Guid uitnodigingsId)
-        => await _httpClient.PostAsync($"/v1/uitnodigingen/{uitnodigingsId}/aanvaardingen", null);
+    public async Task<HttpResponseMessage> AanvaardUitnodiging(Guid uitnodigingId)
+        => await _httpClient.PostAsync($"/v1/uitnodigingen/{uitnodigingId}/aanvaardingen", null);
 
-    public async Task<HttpResponseMessage> WeigerUitnodiging(Guid uitnodigingsId)
-        => await _httpClient.PostAsync($"/v1/uitnodigingen/{uitnodigingsId}/weigeringen", null);
+    public async Task<HttpResponseMessage> WeigerUitnodiging(Guid uitnodigingId)
+        => await _httpClient.PostAsync($"/v1/uitnodigingen/{uitnodigingId}/weigeringen", null);
 
     public async Task<HttpResponseMessage> GetHealth()
         => await _httpClient.GetAsync("/health");
 
-    public async Task<HttpResponseMessage> TrekUitnodigingIn(Guid uitnodigingsId)
-        => await _httpClient.PostAsync($"/v1/uitnodigingen/{uitnodigingsId}/intrekkingen", null);
+    public async Task<HttpResponseMessage> TrekUitnodigingIn(Guid uitnodigingId)
+        => await _httpClient.PostAsync($"/v1/uitnodigingen/{uitnodigingId}/intrekkingen", null);
 }

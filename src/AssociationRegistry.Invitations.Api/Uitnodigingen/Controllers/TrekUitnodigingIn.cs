@@ -3,6 +3,7 @@ using AssociationRegistry.Invitations.Api.Infrastructure.Swagger;
 using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
 using Marten;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Controllers;
 
@@ -25,20 +26,23 @@ public class TrekUitnodigingInController : ApiController
     /// <summary>
     /// Uitnodiging intrekken
     /// </summary>
-    /// <param name="uitnodigingsId">Het id van de in te trekken uitnodiging</param>
+    /// <param name="uitnodigingId">Het id van de in te trekken uitnodiging</param>
     /// <param name="cancellationToken"></param>
+    /// <response code="202">De uitnodiging werd ingetrokken.</response>
+    /// <response code="400">Er was een probleem met de doorgestuurde waarden.</response>
+    /// <response code="500">Er is een interne fout opgetreden.</response>
     /// <returns></returns>
-    [HttpPost("uitnodigingen/{uitnodigingsId:guid}/intrekkingen")]
-    [ConsumesJson]
-    [ProducesJson]
+    [HttpPost("uitnodigingen/{uitnodigingId:guid}/intrekkingen")]
+    [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BadRequestProblemDetailsExamples))]
+    [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(InternalServerErrorResponseExamples))]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-
-    public async Task<IActionResult> Post([FromRoute] Guid uitnodigingsId,
+    [ProducesJson]
+    public async Task<IActionResult> Post([FromRoute] Guid uitnodigingId,
         CancellationToken cancellationToken)
     {
-        var uitnodiging = await _session.LoadAsync<Uitnodiging>(uitnodigingsId, cancellationToken);
+        var uitnodiging = await _session.LoadAsync<Uitnodiging>(uitnodigingId, cancellationToken);
         
         return await uitnodiging
             .BadRequestIfNietBestaand()

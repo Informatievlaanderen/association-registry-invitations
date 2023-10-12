@@ -21,14 +21,14 @@ public class GegevenEenBestaandeUitnodiging : IClassFixture<GegevenEenBestaandeU
     [Fact]
     public async Task DanIsDeResponse202()
     {
-        var response = await _client.TrekUitnodigingIn(_setup.UitnodigingsId);
+        var response = await _client.TrekUitnodigingIn(_setup.UitnodigingId);
         response.StatusCode.Should().Be(HttpStatusCode.Accepted);
     }
 
     public class Setup : IDisposable, IAsyncLifetime
     {
         public UitnodigingsRequest Uitnodiging { get; set; }
-        public Guid UitnodigingsId { get; set; }
+        public Guid UitnodigingId { get; set; }
 
         private readonly UitnodigingenApiClient _client;
         private UitnodigingenApiFixture _fixture;
@@ -51,7 +51,7 @@ public class GegevenEenBestaandeUitnodiging : IClassFixture<GegevenEenBestaandeU
         {
             var response = await _client.RegistreerUitnodiging(Uitnodiging);
             var content = await response.Content.ReadAsStringAsync();
-            UitnodigingsId = UitnodigingsRequest.ParseIdFromContentString(content);
+            UitnodigingId = UitnodigingsRequest.ParseIdFromContentString(content);
         }
 
         public Task DisposeAsync() => Task.CompletedTask;

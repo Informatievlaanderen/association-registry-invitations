@@ -25,19 +25,19 @@ public class GegevenEenAanvaarding : IClassFixture<GegevenEenAanvaarding.Setup>
     [Fact]
     public async Task DanIsDeResponse200()
     {
-        var response = await _client.GetUitnodigingsDetail(_setup.Uitnodiging.Uitgenodigde.Insz, _setup.UitnodigingsId);
+        var response = await _client.GetUitnodigingsDetail(_setup.Uitnodiging.Uitgenodigde.Insz, _setup.UitnodigingId);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
     [Fact]
     public async Task DanBevatDeBodyDeGeregistreerdeUitnodiging()
     {
-        var response = await _client.GetUitnodigingsDetail(_setup.Uitnodiging.Uitgenodigde.Insz, _setup.UitnodigingsId);
+        var response = await _client.GetUitnodigingsDetail(_setup.Uitnodiging.Uitgenodigde.Insz, _setup.UitnodigingId);
         var content = await response.Content.ReadAsStringAsync();
 
         var uitnodiging = JsonConvert.DeserializeObject<JObject>(content,
             new JsonSerializerSettings { DateParseHandling = DateParseHandling.None })!;
-        uitnodiging["id"]!.Value<string>().Should().Be(_setup.UitnodigingsId.ToString());
+        uitnodiging["uitnodigingId"]!.Value<string>().Should().Be(_setup.UitnodigingId.ToString());
         uitnodiging["vCode"]!.Value<string>().Should().Be(_setup.Uitnodiging.VCode);
         uitnodiging["boodschap"]!.Value<string>().Should().Be(_setup.Uitnodiging.Boodschap);
         uitnodiging["status"]!.Value<string>().Should().Be(UitnodigingsStatus.Aanvaard.Status);
@@ -56,7 +56,7 @@ public class GegevenEenAanvaarding : IClassFixture<GegevenEenAanvaarding.Setup>
     public class Setup : IDisposable, IAsyncLifetime
     {
         public UitnodigingsRequest Uitnodiging { get; set; }
-        public Guid UitnodigingsId { get; set; }
+        public Guid UitnodigingId { get; set; }
         public Instant UitnodigingAangemaaktOp { get; set; }
         public Instant UitnodigingAanvaardOp { get; set; }
 
@@ -82,8 +82,8 @@ public class GegevenEenAanvaarding : IClassFixture<GegevenEenAanvaarding.Setup>
             var response = await _client.RegistreerUitnodiging(Uitnodiging);
             UitnodigingAangemaaktOp = _fixture.Clock.PreviousInstant;
             var content = await response.Content.ReadAsStringAsync();
-            UitnodigingsId = UitnodigingsRequest.ParseIdFromContentString(content);
-            await _client.AanvaardUitnodiging(UitnodigingsId);
+            UitnodigingId = UitnodigingsRequest.ParseIdFromContentString(content);
+            await _client.AanvaardUitnodiging(UitnodigingId);
             UitnodigingAanvaardOp = _fixture.Clock.PreviousInstant;
         }
 
