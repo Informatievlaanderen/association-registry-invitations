@@ -62,9 +62,11 @@ public class GegevenEenReedsIngetrokkenUitnodiging : IClassFixture<GegevenEenRee
 
         public async Task InitializeAsync()
         {
-            var response = await _client.RegistreerUitnodiging(Uitnodiging);
-            var content = await response.Content.ReadAsStringAsync();
-            UitnodigingId = UitnodigingsRequest.ParseIdFromContentString(content);
+            var response = await _client.RegistreerUitnodiging(Uitnodiging)
+                .EnsureSuccessOrThrow();
+            
+            UitnodigingId = await response.ParseIdFromContentString();
+
             await _client.TrekUitnodigingIn(UitnodigingId);
         }
 

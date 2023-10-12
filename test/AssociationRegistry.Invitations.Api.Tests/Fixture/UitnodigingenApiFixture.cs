@@ -83,7 +83,7 @@ public class UitnodigingenApiFixture : IAsyncLifetime
         var uitnodiging = _autoFixture.Create<UitnodigingsRequest>();
         uitnodiging.Uitgenodigde.Insz = _autoFixture.Create<TestInsz>();
             
-        var response = await Clients.Authenticated.RegistreerUitnodiging(uitnodiging);
+        var response = await Clients.Authenticated.RegistreerUitnodiging(uitnodiging).EnsureSuccessOrThrow();
         var content = await response.Content.ReadAsStringAsync();
             
         var uitnodigingId = Guid.Parse(JToken.Parse(content)["uitnodigingId"]!.Value<string>()!);

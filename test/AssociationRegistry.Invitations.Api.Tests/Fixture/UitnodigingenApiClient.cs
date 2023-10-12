@@ -40,3 +40,15 @@ public class UitnodigingenApiClient : IDisposable
     public async Task<HttpResponseMessage> TrekUitnodigingIn(Guid uitnodigingId)
         => await _httpClient.PostAsync($"/v1/uitnodigingen/{uitnodigingId}/intrekkingen", null);
 }
+
+public static class UitnodigingenApiClientExtensions{
+
+    public static async Task<HttpResponseMessage> EnsureSuccessOrThrow(this Task<HttpResponseMessage> source)
+    {
+        var response = await source;
+        if (!response.IsSuccessStatusCode)
+            throw new Exception("Kon uitnodiging niet registreren: \n" + await response.Content.ReadAsStringAsync());
+
+        return response;
+    }
+}

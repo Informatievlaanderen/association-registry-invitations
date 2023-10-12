@@ -112,7 +112,7 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
 
         private async Task<Guid> RegistreerUitnodiging(UitnodigingsRequest uitnodigingsRequest)
         {
-            var response = await _client.RegistreerUitnodiging(uitnodigingsRequest);
+            var response = await _client.RegistreerUitnodiging(uitnodigingsRequest).EnsureSuccessOrThrow();
             var content = await response.Content.ReadAsStringAsync();
             return Guid.Parse(JToken.Parse(content)["uitnodigingId"]!.Value<string>()!);
         }
