@@ -1,6 +1,7 @@
 ﻿using AssociationRegistry.Invitations.Api.Infrastructure;
 using AssociationRegistry.Invitations.Api.Infrastructure.Swagger;
 using AssociationRegistry.Invitations.Api.Uitnodigingen.Mapping;
+using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
 using AssociationRegistry.Invitations.Api.Uitnodigingen.Responses;
 using Marten;
 using Microsoft.AspNetCore.Mvc;
@@ -68,8 +69,8 @@ internal class UitnodigingsDetailExamples : IExamplesProvider<UitnodigingsDetail
         {
             UitnodigingId = Guid.NewGuid(),
             VCode = "V0000001",
-            Boodschap = "<boodschap voor uitgenodigde>",
-            Status = "<status>",
+            Boodschap = "Boodschap voor uitgenodigde",
+            Status = UitnodigingsStatus.WachtOpAntwoord,
             DatumRegistratie = DateTime.Today.AddDays(-1).ToLongDateString(),
             DatumLaatsteAanpassing = DateTime.Today.ToLongDateString(),
             Uitnodiger = new UitnodigingsDetail.UitnodigerDetail
@@ -81,7 +82,7 @@ internal class UitnodigingsDetailExamples : IExamplesProvider<UitnodigingsDetail
                 Voornaam = "John",
                 Achternaam = "Doe",
                 Email = "john.doe@example.com",
-                Insz = "<insz>"
+                Insz = "00000000000"
             }
         };
 }

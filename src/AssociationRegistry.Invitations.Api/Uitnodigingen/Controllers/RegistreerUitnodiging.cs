@@ -44,8 +44,8 @@ public class RegistreerUitnodiging : ApiController
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     [ProducesJson]
-    public async Task<IActionResult> Post([FromBody] UitnodigingsRequest request,
-        CancellationToken cancellationToken)
+    [ConsumesJson]
+    public async Task<IActionResult> Post([FromBody] UitnodigingsRequest request, CancellationToken cancellationToken)
     {
         await using var lightweightSession = _store.LightweightSession();
         

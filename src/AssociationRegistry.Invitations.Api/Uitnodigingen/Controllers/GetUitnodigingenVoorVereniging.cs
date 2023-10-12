@@ -1,11 +1,14 @@
 ﻿using AssociationRegistry.Invitations.Api.Infrastructure;
 using AssociationRegistry.Invitations.Api.Infrastructure.Swagger;
 using AssociationRegistry.Invitations.Api.Uitnodigingen.Mapping;
+using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
 using AssociationRegistry.Invitations.Api.Uitnodigingen.Queries;
 using AssociationRegistry.Invitations.Api.Uitnodigingen.Responses;
 using Marten;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Filters;
+using Uitgenodigde = AssociationRegistry.Invitations.Api.Uitnodigingen.Responses.Uitgenodigde;
+using Uitnodiger = AssociationRegistry.Invitations.Api.Uitnodigingen.Responses.Uitnodiger;
 using Uitnodiging = AssociationRegistry.Invitations.Api.Uitnodigingen.Models.Uitnodiging;
 
 namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Controllers;
@@ -37,7 +40,6 @@ public class GetUitnodigingenVoorVereniging : ApiController
     [ProducesResponseType(typeof(UitnodigingenResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     [ProducesJson]
-    [ConsumesJson]
     public async Task<IActionResult> Get([FromRoute] string vCode, CancellationToken cancellationToken)
     {
         var uitnodigingen = await _session
@@ -63,19 +65,19 @@ internal class UitnodigingenResponseExamples : IExamplesProvider<UitnodigingenRe
                 {
                     UitnodigingId = Guid.NewGuid(),
                     VCode = "V0000001",
-                    Boodschap = "<boodschap voor uitgenodigde>",
+                    Boodschap = "Boodschap voor uitgenodigde",
                     Uitgenodigde = new Uitgenodigde()
                     {
                         Voornaam = "John",
                         Achternaam = "Doe",
                         Email = "john.doe@example.com",
-                        Insz = "<insz>"
+                        Insz = "00000000001"
                     },
                     Uitnodiger = new Uitnodiger()
                     {
                         VertegenwoordigerId = 12345
                     },
-                    Status = "<status>",
+                    Status = UitnodigingsStatus.All[Random.Shared.Next(0, UitnodigingsStatus.All.Length - 1)],
                     DatumRegistratie = DateTime.Today.AddDays(-1).ToLongDateString(),
                     DatumLaatsteAanpassing = DateTime.Today.ToLongDateString()
                 },
@@ -83,19 +85,19 @@ internal class UitnodigingenResponseExamples : IExamplesProvider<UitnodigingenRe
                 {
                     UitnodigingId = Guid.NewGuid(),
                     VCode = "V0000001",
-                    Boodschap = "<boodschap voor uitgenodigde>",
+                    Boodschap = "Boodschap voor uitgenodigde",
                     Uitgenodigde = new Uitgenodigde()
                     {
                         Voornaam = "Jane",
                         Achternaam = "Smith",
                         Email = "jane.smith@example.com",
-                        Insz = "<insz>"
+                        Insz = "00000000002"
                     },
                     Uitnodiger = new Uitnodiger()
                     {
                         VertegenwoordigerId = 12345
                     },
-                    Status = "<status>",
+                    Status = UitnodigingsStatus.All[Random.Shared.Next(0, UitnodigingsStatus.All.Length - 1)],
                     DatumRegistratie = DateTime.Today.AddDays(-1).ToLongDateString(),
                     DatumLaatsteAanpassing = DateTime.Today.ToLongDateString()
                 }
