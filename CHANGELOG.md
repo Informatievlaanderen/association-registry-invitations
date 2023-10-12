@@ -1,3 +1,10 @@
+## [1.14.3](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.14.2...v1.14.3) (2023-10-12)
+
+
+### Bug Fixes
+
+* add trace identifier to bad request output ([9518ca5](https://github.com/informatievlaanderen/association-registry-invitations/commit/9518ca5ca5401dad1b0a9ec14432f0aeca54ce55))
+
 ## [1.14.2](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.14.1...v1.14.2) (2023-10-12)
 
 
