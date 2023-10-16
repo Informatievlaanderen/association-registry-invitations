@@ -38,6 +38,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\workflows\pre-merge-tests.yml = .github\workflows\pre-merge-tests.yml
 		.github\workflows\main.yml = .github\workflows\main.yml
 		.github\workflows\staging-manual.yml = .github\workflows\staging-manual.yml
+		.github\workflows\test-manual.yml = .github\workflows\test-manual.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build-scripts", "build-scripts", "{A2B8FAE0-EE58-4E28-B1DB-03F6AB693569}"
