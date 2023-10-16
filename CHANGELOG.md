@@ -1,3 +1,11 @@
+## [1.14.4](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.14.3...v1.14.4) (2023-10-16)
+
+
+### Bug Fixes
+
+* or-1962 allow uitnodiging for ingetrokken or geweigerde uitnodiging ([6546abb](https://github.com/informatievlaanderen/association-registry-invitations/commit/6546abb7842e04f0abe67360b0901bee7568832b))
+* or-1962 allow uitnodiging for ingetrokken or geweigerde uitnodiging (without serializer) ([a9ee118](https://github.com/informatievlaanderen/association-registry-invitations/commit/a9ee118fd8bc6d25a34c400353fe9c9a982cfc9c))
+
 ## [1.14.3](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.14.2...v1.14.3) (2023-10-12)
 
 
