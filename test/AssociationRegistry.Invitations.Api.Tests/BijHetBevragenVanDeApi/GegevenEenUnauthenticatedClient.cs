@@ -13,7 +13,7 @@ public class GegevenEenUnauthenticatedClient
         _client = fixture.Clients.Unauthenticated;
     }
 
-    [Fact(Skip = "Skip for now until we have acm/idm integration")]
+    [Fact]
     public async Task Then_It_Returns_401_With_Unauthenticated_Client()
     {
         var response = await _client.GetRoot();

@@ -1,8 +1,6 @@
 using System.Globalization;
 using System.IO.Compression;
 using System.Net;
-using System.Net.Mime;
-using System.Reflection;
 using System.Text;
 using AssociationRegistry.Invitations.Api.Constants;
 using AssociationRegistry.Invitations.Api.Infrastructure;
@@ -14,15 +12,11 @@ using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
 using Be.Vlaanderen.Basisregisters.AspNetCore.Swagger;
 using Destructurama;
 using IdentityModel.AspNetCore.OAuth2Introspection;
-using JasperFx.CodeGeneration;
 using JasperFx.Core;
-using Marten.Events;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Localization;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -41,6 +35,7 @@ using Newtonsoft.Json.Serialization;
 using NodaTime;
 using Serilog;
 using Serilog.Debugging;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace AssociationRegistry.Invitations.Api;
 
@@ -70,14 +65,14 @@ public class Program
         ConfigureLogger(builder);
         ConfigureWebHost(builder);
         ConfigureServices(builder);
-        
+
         var app = builder.Build();
 
         GlobalStringLocalizer.Instance = new GlobalStringLocalizer(app.Services);
 
         app
-           .ConfigureDevelopmentEnvironment()
-           .UseCors(StartupConstants.AllowSpecificOrigin);
+            .ConfigureDevelopmentEnvironment()
+            .UseCors(StartupConstants.AllowSpecificOrigin);
 
         // Deze volgorde is belangrijk ! DKW
         ConfigureExceptionHandler(app);
@@ -90,9 +85,10 @@ public class Program
 
         // Deze volgorde is belangrijk ! DKW
         app.UseRouting()
-            // .UseAuthentication()
-            // .UseAuthorization()
-            .UseEndpoints(routeBuilder => routeBuilder.MapControllers());//.RequireAuthorization(AdminGlobalPolicyName));
+            .UseAuthentication()
+            .UseAuthorization()
+            .UseEndpoints(routeBuilder => routeBuilder.MapControllers());
+            // .RequireAuthorization());
 
         ConfigureLifetimeHooks(app);
 
@@ -102,8 +98,8 @@ public class Program
     private static void ConfigureRequestLocalization(WebApplication app)
     {
         var requestLocalizationOptions = app.Services
-                                            .GetRequiredService<IOptions<RequestLocalizationOptions>>()
-                                            .Value;
+            .GetRequiredService<IOptions<RequestLocalizationOptions>>()
+            .Value;
 
         app.UseRequestLocalization(requestLocalizationOptions);
     }
@@ -205,34 +201,35 @@ public class Program
     private static void LoadConfiguration(WebApplicationBuilder builder, params string[] args)
     {
         builder.Configuration
-               .AddJsonFile("appsettings.json")
-               .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName.ToLowerInvariant()}.json", optional: true,
-                            reloadOnChange: false)
-               .AddJsonFile($"appsettings.{Environment.MachineName.ToLowerInvariant()}.json", optional: true, reloadOnChange: false)
-               .AddEnvironmentVariables()
-               .AddCommandLine(args)
-               .AddInMemoryCollection();
+            .AddJsonFile("appsettings.json")
+            .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName.ToLowerInvariant()}.json", optional: true,
+                reloadOnChange: false)
+            .AddJsonFile($"appsettings.{Environment.MachineName.ToLowerInvariant()}.json", optional: true,
+                reloadOnChange: false)
+            .AddEnvironmentVariables()
+            .AddCommandLine(args)
+            .AddInMemoryCollection();
     }
 
     private static void ConfigureMiddleware(IApplicationBuilder app)
     {
         app
-           // .UseMiddleware<EnableRequestRewindMiddleware>()
-           // .UseMiddleware<CorrelationIdMiddleware>()
-           // .UseMiddleware<AddCorrelationIdToLogContextMiddleware>()
-           .UseMiddleware<AddHttpSecurityHeadersMiddleware>()
-           // .UseMiddleware<AddRemoteIpAddressMiddleware>(AddRemoteIpAddressMiddleware.UrnBasisregistersVlaanderenIp)
-           .UseMiddleware<AddVersionHeaderMiddleware>(AddVersionHeaderMiddleware.HeaderName)
-           // .UseMiddleware<AddNoCacheHeadersMiddleware>()
-           // .UseMiddleware<DefaultResponseCompressionQualityMiddleware>(
-           //      new Dictionary<string, double>
-           //      {
-           //          { "br", 1.0 },
-           //          { "gzip", 0.9 },
-           //      })
-           // .UseMiddleware<UnexpectedAggregateVersionMiddleware>()
-           // .UseMiddleware<InitiatorHeaderMiddleware>()
-           .UseResponseCompression();
+            // .UseMiddleware<EnableRequestRewindMiddleware>()
+            // .UseMiddleware<CorrelationIdMiddleware>()
+            // .UseMiddleware<AddCorrelationIdToLogContextMiddleware>()
+            .UseMiddleware<AddHttpSecurityHeadersMiddleware>()
+            // .UseMiddleware<AddRemoteIpAddressMiddleware>(AddRemoteIpAddressMiddleware.UrnBasisregistersVlaanderenIp)
+            .UseMiddleware<AddVersionHeaderMiddleware>(AddVersionHeaderMiddleware.HeaderName)
+            // .UseMiddleware<AddNoCacheHeadersMiddleware>()
+            // .UseMiddleware<DefaultResponseCompressionQualityMiddleware>(
+            //      new Dictionary<string, double>
+            //      {
+            //          { "br", 1.0 },
+            //          { "gzip", 0.9 },
+            //      })
+            // .UseMiddleware<UnexpectedAggregateVersionMiddleware>()
+            // .UseMiddleware<InitiatorHeaderMiddleware>()
+            .UseResponseCompression();
     }
 
     private static void ConfigureServices(WebApplicationBuilder builder)
@@ -245,28 +242,29 @@ public class Program
 
         builder.Services
             .AddSingleton<UitnodigingsStatusHandler>()
-               .AddSingleton(postgreSqlOptionsSection)
-               // .AddSingleton(magdaOptionsSection)
-               .AddSingleton(appSettings)
-               // .AddSingleton(magdaTemporaryVertegenwoordigersSection)
-               // .AddSingleton<IVCodeService, SequenceVCodeService>()
-               // .AddScoped<ICorrelationIdProvider, CorrelationIdProvider>()
-               // .AddScoped<InitiatorProvider>()
-               // .AddScoped<ICommandMetadataProvider, CommandMetadataProvider>()
-               .AddSingleton<IClock>(SystemClock.Instance)
-               // .AddTransient<IEventStore, EventStore>()
-               // .AddTransient<IVerenigingsRepository, VerenigingsRepository>()
-               // .AddTransient<IDuplicateVerenigingDetectionService, SearchDuplicateVerenigingDetectionService>()
-               // .AddTransient<IMagdaGeefVerenigingService, MagdaGeefVerenigingService>()
-               // .AddTransient<IMagdaFacade, MagdaFacade>()
-               // .AddTransient<IMagdaCallReferenceRepository, MagdaCallReferenceRepository>()
-               .AddMarten(postgreSqlOptionsSection)
-               // .AddElasticSearch(elasticSearchOptionsSection)
-               .AddOpenTelemetryServices()
-               .AddHttpContextAccessor()
-               .AddControllers();
+            .AddSingleton(postgreSqlOptionsSection)
+            // .AddSingleton(magdaOptionsSection)
+            .AddSingleton(appSettings)
+            // .AddSingleton(magdaTemporaryVertegenwoordigersSection)
+            // .AddSingleton<IVCodeService, SequenceVCodeService>()
+            // .AddScoped<ICorrelationIdProvider, CorrelationIdProvider>()
+            // .AddScoped<InitiatorProvider>()
+            // .AddScoped<ICommandMetadataProvider, CommandMetadataProvider>()
+            .AddSingleton<IClock>(SystemClock.Instance)
+            // .AddTransient<IEventStore, EventStore>()
+            // .AddTransient<IVerenigingsRepository, VerenigingsRepository>()
+            // .AddTransient<IDuplicateVerenigingDetectionService, SearchDuplicateVerenigingDetectionService>()
+            // .AddTransient<IMagdaGeefVerenigingService, MagdaGeefVerenigingService>()
+            // .AddTransient<IMagdaFacade, MagdaFacade>()
+            // .AddTransient<IMagdaCallReferenceRepository, MagdaCallReferenceRepository>()
+            .AddMarten(postgreSqlOptionsSection)
+            // .AddElasticSearch(elasticSearchOptionsSection)
+            .AddOpenTelemetryServices()
+            .AddHttpContextAccessor()
+            .AddControllers();
 
-        builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IApiControllerSpecification, ApiControllerSpec>());
+        builder.Services.TryAddEnumerable(ServiceDescriptor
+            .Transient<IApiControllerSpecification, ApiControllerSpec>());
 
         builder.Services
             .AddSingleton(
@@ -279,157 +277,158 @@ public class Program
                 });
 
         builder.Services
-               .AddMvcCore(
-                    cfg =>
-                    {
-                        cfg.RespectBrowserAcceptHeader = false;
-                        cfg.ReturnHttpNotAcceptable = true;
+            .AddMvcCore(
+                cfg =>
+                {
+                    cfg.RespectBrowserAcceptHeader = false;
+                    cfg.ReturnHttpNotAcceptable = true;
 
-                        // cfg.Filters.Add(new LoggingFilterFactory(StartupConstants.HttpMethodsAsString));
+                    // cfg.Filters.Add(new LoggingFilterFactory(StartupConstants.HttpMethodsAsString));
 
-                        cfg.Filters.Add<OperationCancelledExceptionFilter>();
+                    cfg.Filters.Add<OperationCancelledExceptionFilter>();
 
-                        cfg.EnableEndpointRouting = false;
-                    })
-               .AddCors(
-                    cfg =>
-                    {
-                        cfg.AddPolicy(
-                            StartupConstants.AllowAnyOrigin,
-                            configurePolicy: corsPolicy => corsPolicy
-                                                          .AllowAnyOrigin()
-                                                          .WithMethods(StartupConstants.HttpMethodsAsString)
-                                                          .WithHeaders(StartupConstants.Headers)
-                                                          .WithExposedHeaders(StartupConstants.ExposedHeaders)
-                                                          .SetPreflightMaxAge(TimeSpan.FromSeconds(60 * 15)));
+                    cfg.EnableEndpointRouting = false;
+                })
+            .AddCors(
+                cfg =>
+                {
+                    cfg.AddPolicy(
+                        StartupConstants.AllowAnyOrigin,
+                        configurePolicy: corsPolicy => corsPolicy
+                            .AllowAnyOrigin()
+                            .WithMethods(StartupConstants.HttpMethodsAsString)
+                            .WithHeaders(StartupConstants.Headers)
+                            .WithExposedHeaders(StartupConstants.ExposedHeaders)
+                            .SetPreflightMaxAge(TimeSpan.FromSeconds(60 * 15)));
 
-                        cfg.AddPolicy(
-                            StartupConstants.AllowSpecificOrigin,
-                            configurePolicy: corsPolicy => corsPolicy
-                                                          .WithOrigins(builder.Configuration.GetValue<string[]>("Cors") ??
-                                                                       Array.Empty<string>())
-                                                          .WithMethods(StartupConstants.HttpMethodsAsString)
-                                                          .WithHeaders(StartupConstants.Headers)
-                                                          .WithExposedHeaders(StartupConstants.ExposedHeaders)
-                                                          .SetPreflightMaxAge(TimeSpan.FromSeconds(60 * 15))
-                                                          .AllowCredentials());
-                    })
-               .AddControllersAsServices()
-               // .AddAuthorization(
-               //      options =>
-               //          options.AddPolicy(
-               //              AdminGlobalPolicyName,
-               //              new AuthorizationPolicyBuilder()
-               //                 .RequireClaim(Security.ClaimTypes.Scope, Security.Scopes.Admin)
-               //                 .Build()))
-               .AddNewtonsoftJson(
-                    opt =>
-                    {
-                        opt.SerializerSettings.Converters.Add(
-                            new StringEnumConverter(new DefaultNamingStrategy(), allowIntegerValues: false));
+                    cfg.AddPolicy(
+                        StartupConstants.AllowSpecificOrigin,
+                        configurePolicy: corsPolicy => corsPolicy
+                            .WithOrigins(builder.Configuration.GetValue<string[]>("Cors") ??
+                                         Array.Empty<string>())
+                            .WithMethods(StartupConstants.HttpMethodsAsString)
+                            .WithHeaders(StartupConstants.Headers)
+                            .WithExposedHeaders(StartupConstants.ExposedHeaders)
+                            .SetPreflightMaxAge(TimeSpan.FromSeconds(60 * 15))
+                            .AllowCredentials());
+                })
+            .AddControllersAsServices()
+            .AddNewtonsoftJson(
+                opt =>
+                {
+                    opt.SerializerSettings.Converters.Add(
+                        new StringEnumConverter(new DefaultNamingStrategy(), allowIntegerValues: false));
 
-                        // opt.SerializerSettings.Converters.Add(new NullOrEmptyDateOnlyJsonConvertor());
-                        // opt.SerializerSettings.Converters.Add(new NullableNullOrEmptyDateOnlyJsonConvertor());
-                        // opt.SerializerSettings.Converters.Add(new NullableDateOnlyJsonConvertor(WellknownFormats.DateOnly));
-                        // opt.SerializerSettings.Converters.Add(new DateOnlyJsonConvertor(WellknownFormats.DateOnly));
-                        opt.SerializerSettings.NullValueHandling = NullValueHandling.Include;
-                        opt.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                    })
-               .AddXmlDataContractSerializerFormatters()
-               .AddFormatterMappings()
-               .AddApiExplorer();
+                    // opt.SerializerSettings.Converters.Add(new NullOrEmptyDateOnlyJsonConvertor());
+                    // opt.SerializerSettings.Converters.Add(new NullableNullOrEmptyDateOnlyJsonConvertor());
+                    // opt.SerializerSettings.Converters.Add(new NullableDateOnlyJsonConvertor(WellknownFormats.DateOnly));
+                    // opt.SerializerSettings.Converters.Add(new DateOnlyJsonConvertor(WellknownFormats.DateOnly));
+                    opt.SerializerSettings.NullValueHandling = NullValueHandling.Include;
+                    opt.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                })
+            .AddXmlDataContractSerializerFormatters()
+            .AddFormatterMappings()
+            .AddApiExplorer();
 
-        builder.Services.AddAuthentication(
-                    options =>
-                    {
-                        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                    })
-               .AddOAuth2Introspection(
-                    JwtBearerDefaults.AuthenticationScheme,
-                    configureOptions: options =>
-                    {
-                        var configOptions = builder.Configuration.GetSection(nameof(OAuth2IntrospectionOptions))
-                                                   .Get<OAuth2IntrospectionOptions>();
+        builder.Services
+            .AddAuthentication(options =>
+            {
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddOAuth2Introspection(
+                JwtBearerDefaults.AuthenticationScheme,
+                configureOptions: options =>
+                {
+                    var configOptions = builder.Configuration.GetSection(nameof(OAuth2IntrospectionOptions))
+                        .Get<OAuth2IntrospectionOptions>()!;
 
-                        options.ClientId = configOptions.ClientId;
-                        options.ClientSecret = configOptions.ClientSecret;
-                        options.Authority = configOptions.Authority;
-                        options.IntrospectionEndpoint = configOptions.IntrospectionEndpoint;
-                    }
-                );
+                    options.ClientId = configOptions.ClientId;
+                    options.ClientSecret = configOptions.ClientSecret;
+                    options.Authority = configOptions.Authority;
+                    options.IntrospectionEndpoint = configOptions.IntrospectionEndpoint;
+                }
+            );
+
+        builder.Services
+            .AddAuthorization(
+                options =>
+                    options.FallbackPolicy =
+                        new AuthorizationPolicyBuilder()
+                            .RequireClaim(Security.ClaimTypes.Scope, Security.Scopes.Uitnodigingen)
+                            .Build());
 
         // builder.Services
-               // .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly())
-               // .AddDatabaseDeveloperPageExceptionFilter();
-               
-               builder.Services.AddHealthChecks();
+        // .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly())
+        // .AddDatabaseDeveloperPageExceptionFilter();
+
+        builder.Services.AddHealthChecks();
 
 
         builder.Services
-               .AddLocalization(cfg => cfg.ResourcesPath = "Resources")
-               .AddSingleton<IStringLocalizerFactory, SharedStringLocalizerFactory<DefaultResources>>()
-               .AddSingleton<ResourceManagerStringLocalizerFactory, ResourceManagerStringLocalizerFactory>()
-               .Configure<RequestLocalizationOptions>(
-                    opts =>
+            .AddLocalization(cfg => cfg.ResourcesPath = "Resources")
+            .AddSingleton<IStringLocalizerFactory, SharedStringLocalizerFactory<DefaultResources>>()
+            .AddSingleton<ResourceManagerStringLocalizerFactory, ResourceManagerStringLocalizerFactory>()
+            .Configure<RequestLocalizationOptions>(
+                opts =>
+                {
+                    opts.DefaultRequestCulture = new RequestCulture(new CultureInfo(StartupConstants.Culture));
+                    opts.SupportedCultures = new[] { new CultureInfo(StartupConstants.Culture) };
+                    opts.SupportedUICultures = new[] { new CultureInfo(StartupConstants.Culture) };
+
+                    opts.FallBackToParentCultures = true;
+                    opts.FallBackToParentUICultures = true;
+                })
+            .AddVersionedApiExplorer(
+                cfg =>
+                {
+                    cfg.GroupNameFormat = "'v'VVV";
+                    cfg.SubstituteApiVersionInUrl = true;
+                })
+            .AddApiVersioning(
+                cfg =>
+                {
+                    cfg.ReportApiVersions = true;
+                    // cfg.ErrorResponses = new ProblemDetailsResponseProvider();
+                })
+            .AddEndpointsApiExplorer()
+            .AddResponseCompression(
+                cfg =>
+                {
+                    cfg.EnableForHttps = true;
+
+                    cfg.Providers.Add<BrotliCompressionProvider>();
+                    cfg.Providers.Add<GzipCompressionProvider>();
+
+                    cfg.MimeTypes = new[]
                     {
-                        opts.DefaultRequestCulture = new RequestCulture(new CultureInfo(StartupConstants.Culture));
-                        opts.SupportedCultures = new[] { new CultureInfo(StartupConstants.Culture) };
-                        opts.SupportedUICultures = new[] { new CultureInfo(StartupConstants.Culture) };
+                        // General
+                        "text/plain",
+                        "text/csv",
 
-                        opts.FallBackToParentCultures = true;
-                        opts.FallBackToParentUICultures = true;
-                    })
-               .AddVersionedApiExplorer(
-                    cfg =>
-                    {
-                        cfg.GroupNameFormat = "'v'VVV";
-                        cfg.SubstituteApiVersionInUrl = true;
-                    })
-               .AddApiVersioning(
-                    cfg =>
-                    {
-                        cfg.ReportApiVersions = true;
-                        // cfg.ErrorResponses = new ProblemDetailsResponseProvider();
-                    })
-               .AddEndpointsApiExplorer()
-               .AddResponseCompression(
-                    cfg =>
-                    {
-                        cfg.EnableForHttps = true;
+                        // Static files
+                        "text/css",
+                        "application/javascript",
 
-                        cfg.Providers.Add<BrotliCompressionProvider>();
-                        cfg.Providers.Add<GzipCompressionProvider>();
+                        // MVC
+                        "text/html",
+                        "application/xml",
+                        "text/xml",
+                        "application/json",
+                        "text/json",
+                        "application/ld+json",
+                        "application/atom+xml",
 
-                        cfg.MimeTypes = new[]
-                        {
-                            // General
-                            "text/plain",
-                            "text/csv",
-
-                            // Static files
-                            "text/css",
-                            "application/javascript",
-
-                            // MVC
-                            "text/html",
-                            "application/xml",
-                            "text/xml",
-                            "application/json",
-                            "text/json",
-                            "application/ld+json",
-                            "application/atom+xml",
-
-                            // Fonts
-                            "application/font-woff",
-                            "font/otf",
-                            "application/vnd.ms-fontobject",
-                        };
-                    })
-               .Configure<GzipCompressionProviderOptions>(cfg => cfg.Level = CompressionLevel.Fastest)
-               .Configure<BrotliCompressionProviderOptions>(cfg => cfg.Level = CompressionLevel.Fastest)
-               .Configure<KestrelServerOptions>(serverOptions => serverOptions.AllowSynchronousIO = true);
+                        // Fonts
+                        "application/font-woff",
+                        "font/otf",
+                        "application/vnd.ms-fontobject",
+                    };
+                })
+            .Configure<GzipCompressionProviderOptions>(cfg => cfg.Level = CompressionLevel.Fastest)
+            .Configure<BrotliCompressionProviderOptions>(cfg => cfg.Level = CompressionLevel.Fastest)
+            .Configure<KestrelServerOptions>(serverOptions => serverOptions.AllowSynchronousIO = true);
 
         builder.Services.AddAdminApiSwagger(appSettings);
     }
@@ -441,20 +440,20 @@ public class Program
     {
         var loggerConfig =
             new LoggerConfiguration()
-               .ReadFrom.Configuration(builder.Configuration)
-               .Enrich.FromLogContext()
-               .Enrich.WithMachineName()
-               .Enrich.WithThreadId()
-               .Enrich.WithEnvironmentUserName()
-               .Destructure.JsonNetTypes();
+                .ReadFrom.Configuration(builder.Configuration)
+                .Enrich.FromLogContext()
+                .Enrich.WithMachineName()
+                .Enrich.WithThreadId()
+                .Enrich.WithEnvironmentUserName()
+                .Destructure.JsonNetTypes();
 
         var logger = loggerConfig.CreateLogger();
 
         Log.Logger = logger;
 
         builder.Logging
-                //.AddSerilog(logger)
-               .AddOpenTelemetry();
+            //.AddSerilog(logger)
+            .AddOpenTelemetry();
     }
 
     private static void RunWithLock<T>(IWebHostBuilder webHostBuilder) where T : class
@@ -463,7 +462,7 @@ public class Program
         var services = webHost.Services;
         var logger = services.GetRequiredService<ILogger<T>>();
 
-webHost.Run();
+        webHost.Run();
     }
 
     private static void ConfigereKestrel(WebApplicationBuilder builder)
@@ -535,10 +534,15 @@ webHost.Run();
         };
     }
 }
-public class ApiExceptionHandler { }
+
+public class ApiExceptionHandler
+{
+}
+
 public class JsonRequestFilter : IAsyncActionFilter
 {
-    private static readonly JsonLoadSettings JsonLoadSettings = new() { DuplicatePropertyNameHandling = DuplicatePropertyNameHandling.Error };
+    private static readonly JsonLoadSettings JsonLoadSettings = new()
+        { DuplicatePropertyNameHandling = DuplicatePropertyNameHandling.Error };
 
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
@@ -555,89 +559,89 @@ public class JsonRequestFilter : IAsyncActionFilter
         JObject.Parse(json, JsonLoadSettings);
     }
 }
-    public class StartupConfigureOptions
+
+public class StartupConfigureOptions
+{
+    public bool EnableJsonErrorActionFilter { get; set; } = false;
+
+    public StartupConfigureOptions EnableJsonErrorActionFilterOption()
     {
-        public bool EnableJsonErrorActionFilter { get; set; } = false;
-        public StartupConfigureOptions EnableJsonErrorActionFilterOption()
-        {
-            EnableJsonErrorActionFilter = true;
-            return this;
-        }
-
-        public CorsOptions Cors { get; } = new CorsOptions();
-
-        public class CorsOptions
-        {
-            public string[] Origins { get; set; } = null;
-            public string[] Methods { get; set; } = null;
-            public string[] Headers { get; set; } = null;
-            public string[] ExposedHeaders { get; set; } = null;
-        }
-
-        public ServerOptions Server { get; } = new ServerOptions();
-
-        public class ServerOptions
-        {
-            public string BaseUrl { get; set; } = string.Empty;
-
-            public string VersionHeaderName { get; set; } = AddVersionHeaderMiddleware.HeaderName;
-
-            public string[] MethodsToLog { get; set; } = new []
-            {
-                HttpMethod.Get,
-                HttpMethod.Head,
-                HttpMethod.Post,
-                HttpMethod.Put,
-                HttpMethod.Patch,
-                HttpMethod.Delete,
-                HttpMethod.Options
-            }.Select(x => x.Method).ToArray();
-
-            public string ProblemDetailsTypeNamespaceOverride { get; set; } = string.Empty;
-        }
-
-        public SwaggerOptions Swagger { get; } = new SwaggerOptions();
-
-        public class SwaggerOptions
-        {
-            /// <summary>
-            /// Function which returns global metadata to be included in the Swagger output.
-            /// </summary>
-            public Func<IApiVersionDescriptionProvider, ApiVersionDescription, OpenApiInfo> ApiInfo { get; set; }
-
-            /// <summary>
-            /// Inject human-friendly descriptions for Operations, Parameters and Schemas based on XML Comment files.
-            /// A list of absolute paths to the files that contains XML Comments.
-            /// </summary>
-            public string[] XmlCommentPaths { get; set; } = null;
-
-            /// <summary>
-            /// Easily add additional header parameters to each request.
-            /// </summary>
-            public IEnumerable<HeaderOperationFilter> AdditionalHeaderOperationFilters { get; set; } = new List<HeaderOperationFilter>();
-
-            /// <summary>
-            /// Available servers.
-            /// </summary>
-            public IEnumerable<Server> Servers { get; set; } = new List<Server>();
-
-
-            public MiddlewareHookOptions MiddlewareHooks { get; } = new MiddlewareHookOptions();
-
-            public class MiddlewareHookOptions
-            {
-                public Action<Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenOptions>? AfterSwaggerGen { get; set; }
-            }
-        }
-
-        public LocalizationOptions Localization { get; } = new LocalizationOptions();
-
-        public class LocalizationOptions
-        {
-            public CultureInfo DefaultCulture { get; set; } = null;
-            public CultureInfo[] SupportedCultures { get; set; } = null;
-        }
-
-
-
+        EnableJsonErrorActionFilter = true;
+        return this;
     }
+
+    public CorsOptions Cors { get; } = new CorsOptions();
+
+    public class CorsOptions
+    {
+        public string[] Origins { get; set; } = null;
+        public string[] Methods { get; set; } = null;
+        public string[] Headers { get; set; } = null;
+        public string[] ExposedHeaders { get; set; } = null;
+    }
+
+    public ServerOptions Server { get; } = new ServerOptions();
+
+    public class ServerOptions
+    {
+        public string BaseUrl { get; set; } = string.Empty;
+
+        public string VersionHeaderName { get; set; } = AddVersionHeaderMiddleware.HeaderName;
+
+        public string[] MethodsToLog { get; set; } = new[]
+        {
+            HttpMethod.Get,
+            HttpMethod.Head,
+            HttpMethod.Post,
+            HttpMethod.Put,
+            HttpMethod.Patch,
+            HttpMethod.Delete,
+            HttpMethod.Options
+        }.Select(x => x.Method).ToArray();
+
+        public string ProblemDetailsTypeNamespaceOverride { get; set; } = string.Empty;
+    }
+
+    public SwaggerOptions Swagger { get; } = new SwaggerOptions();
+
+    public class SwaggerOptions
+    {
+        /// <summary>
+        /// Function which returns global metadata to be included in the Swagger output.
+        /// </summary>
+        public Func<IApiVersionDescriptionProvider, ApiVersionDescription, OpenApiInfo> ApiInfo { get; set; }
+
+        /// <summary>
+        /// Inject human-friendly descriptions for Operations, Parameters and Schemas based on XML Comment files.
+        /// A list of absolute paths to the files that contains XML Comments.
+        /// </summary>
+        public string[] XmlCommentPaths { get; set; } = null;
+
+        /// <summary>
+        /// Easily add additional header parameters to each request.
+        /// </summary>
+        public IEnumerable<HeaderOperationFilter> AdditionalHeaderOperationFilters { get; set; } =
+            new List<HeaderOperationFilter>();
+
+        /// <summary>
+        /// Available servers.
+        /// </summary>
+        public IEnumerable<Server> Servers { get; set; } = new List<Server>();
+
+
+        public MiddlewareHookOptions MiddlewareHooks { get; } = new MiddlewareHookOptions();
+
+        public class MiddlewareHookOptions
+        {
+            public Action<SwaggerGenOptions>? AfterSwaggerGen { get; set; }
+        }
+    }
+
+    public LocalizationOptions Localization { get; } = new LocalizationOptions();
+
+    public class LocalizationOptions
+    {
+        public CultureInfo DefaultCulture { get; set; } = null;
+        public CultureInfo[] SupportedCultures { get; set; } = null;
+    }
+}
