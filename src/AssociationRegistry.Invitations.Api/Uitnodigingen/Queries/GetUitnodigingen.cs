@@ -37,14 +37,16 @@ public static class QueryExtensions
         return source.Where(u => u.VCode == vCode);
     }
 
-    public static Task<bool> HeeftBestaandeUitnodigingVoor(this IQueryable<Uitnodiging> source,
+    public static async Task<bool> HeeftBestaandeUitnodigingVoor(this IQueryable<Uitnodiging> source,
         string vCode,
         string insz,
         CancellationToken cancellationToken)
     {
-        return source.Where(u => u.VCode == vCode 
+        var all = source.ToList();
+        
+        return (await source.Where(u => u.VCode == vCode 
                                  && u.Uitgenodigde.Insz == insz 
                                  && u.Status.Status == UitnodigingsStatus.WachtOpAntwoord.Status)
-            .AnyAsync(cancellationToken);
+            .FirstOrDefaultAsync(cancellationToken)) != null;
     }
 }

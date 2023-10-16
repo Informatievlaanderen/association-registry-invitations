@@ -9,33 +9,23 @@ namespace AssociationRegistry.Invitations.Api.Tests.BijHetRegistrerenVanEenUitno
 [Collection(UitnodigingenApiCollection.Name)]
 public class GegevenEenReedsIngetrokkenUitnodiging : IClassFixture<GegevenEenReedsIngetrokkenUitnodiging.Setup>
 {
-    private readonly UitnodigingenApiClient _client;
-    private readonly UitnodigingsRequest _request;
+    private readonly Setup _setup;
 
-    public GegevenEenReedsIngetrokkenUitnodiging(UitnodigingenApiFixture fixture, Setup setup)
+    public GegevenEenReedsIngetrokkenUitnodiging(Setup setup)
     {
-        _client = fixture.Clients.Authenticated;
-        _request = new AutoFixture.Fixture()
-            .CustomizeAll()
-            .Create<UitnodigingsRequest>();
-        _request.VCode = setup.Uitnodiging.VCode;
-        _request.Uitgenodigde.Insz = setup.Uitnodiging.Uitgenodigde.Insz;
+        _setup = setup;
     }
 
     [Fact]
     public async Task DanIsDeResponse201()
     {
-        var response = await _client.RegistreerUitnodiging(_request);
-
-        response.StatusCode.Should().Be(HttpStatusCode.Created);
+        _setup.ActResponse.StatusCode.Should().Be(HttpStatusCode.Created);
     }
 
     [Fact]
     public async Task DanHeeftDeBodyEenIdDatEenGuidIs()
     {
-        var response = await _client.RegistreerUitnodiging(_request);
-
-        var content = await response.Content.ReadAsStringAsync();
+        var content = await _setup.ActResponse.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);
         Guid.TryParse(token["uitnodigingId"]!.Value<string>(), out _).Should().BeTrue();
     }
@@ -47,6 +37,7 @@ public class GegevenEenReedsIngetrokkenUitnodiging : IClassFixture<GegevenEenRee
 
         private readonly UitnodigingenApiClient _client;
         private UitnodigingenApiFixture _fixture;
+        public HttpResponseMessage ActResponse { get; private set; }
 
         public Setup(UitnodigingenApiFixture fixture)
         {
@@ -68,6 +59,13 @@ public class GegevenEenReedsIngetrokkenUitnodiging : IClassFixture<GegevenEenRee
             
             UitnodigingId = await response.ParseIdFromContentString();
             await _client.TrekUitnodigingIn(UitnodigingId).EnsureSuccessOrThrow();
+            
+            var request = new AutoFixture.Fixture()
+                .CustomizeAll()
+                .Create<UitnodigingsRequest>();
+            request.VCode = Uitnodiging.VCode;
+            request.Uitgenodigde.Insz = Uitnodiging.Uitgenodigde.Insz;
+            ActResponse = await _client.RegistreerUitnodiging(request);
         }
 
         public Task DisposeAsync() => Task.CompletedTask;
