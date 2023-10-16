@@ -17,7 +17,7 @@ public class GivenAnUnauthorizedClient
     [Fact]
     public async Task Then_It_Returns_403_With_Unauthorized_Client()
     {
-        var response = await _client.GetRoot();
+        var response = await _client.GetUitnodigingsDetail("", Guid.NewGuid());
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }
     
