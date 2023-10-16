@@ -1,4 +1,6 @@
-﻿namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
+﻿using Newtonsoft.Json;
+
+namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
 
 public record UitnodigingsStatus
 {
@@ -8,6 +10,7 @@ public record UitnodigingsStatus
     public static UitnodigingsStatus Ingetrokken = new("Ingetrokken");
     public static UitnodigingsStatus[] All = { WachtOpAntwoord, Aanvaard, Geweigerd, Ingetrokken };
 
+    [JsonConstructor]
     private UitnodigingsStatus(string status)
     {
         Status = status;

@@ -59,7 +59,6 @@ public static class Marten
             s =>
             {
                 s.DateParseHandling = DateParseHandling.None;
-                s.Converters.Add(new UitnodigingsStatusJsonConverter());
             });
 
 

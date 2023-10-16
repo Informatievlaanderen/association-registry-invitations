@@ -40,7 +40,7 @@ public class GegevenEenBestaandeUitnodiging : IClassFixture<GegevenEenBestaandeU
         token["errors"]!.ToObject<Dictionary<string, string[]>>()
             .Should().ContainKey("uitnodiging")
             .WhoseValue
-            .Should().ContainEquivalentOf("Deze vertegenwoordiger is reeds uitgenodigd.");
+            .Should().ContainEquivalentOf("Deze persoon is reeds uitgenodigd.");
     }
 
     public class Setup : IDisposable, IAsyncLifetime

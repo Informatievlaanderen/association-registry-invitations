@@ -46,7 +46,7 @@ public static class RegistreerPipeline
             {
                 Failure = controller =>
                 {
-                    controller.ModelState.AddModelError("Uitnodiging", "Deze vertegenwoordiger is reeds uitgenodigd.");
+                    controller.ModelState.AddModelError("Uitnodiging", "Deze persoon is reeds uitgenodigd.");
                     return Task.FromResult(controller.ValidationProblem(controller.ModelState));
                 }
             };
