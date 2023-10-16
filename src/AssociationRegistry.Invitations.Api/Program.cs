@@ -88,7 +88,6 @@ public class Program
             .UseAuthentication()
             .UseAuthorization()
             .UseEndpoints(routeBuilder => routeBuilder.MapControllers());
-            // .RequireAuthorization());
 
         ConfigureLifetimeHooks(app);
 
