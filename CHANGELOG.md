@@ -1,3 +1,10 @@
+# [1.15.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.14.4...v1.15.0) (2023-10-16)
+
+
+### Features
+
+* or-1953 re-enable auth ([89d9204](https://github.com/informatievlaanderen/association-registry-invitations/commit/89d9204ae1f7dd0e8523b1c142a7fcdb997c916c))
+
 ## [1.14.4](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.14.3...v1.14.4) (2023-10-16)
 
 
