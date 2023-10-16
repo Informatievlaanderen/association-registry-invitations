@@ -16,11 +16,6 @@ public class GegevenEenBestaandeUitnodiging : IClassFixture<GegevenEenBestaandeU
     {
         _client = fixture.Clients.Authenticated;
         _request = setup.Uitnodiging; 
-        //     new AutoFixture.Fixture()
-        //     .CustomizeAll()
-        //     .Create<UitnodigingsRequest>();
-        // _request.VCode = setup.Uitnodiging.VCode;
-        // _request.Uitgenodigde.Insz = setup.Uitnodiging.Uitgenodigde.Insz;
     }
 
     [Fact]
