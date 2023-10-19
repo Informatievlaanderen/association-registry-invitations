@@ -50,6 +50,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build-scripts", "build-scri
 		.github\build-scripts\publish.sh = .github\build-scripts\publish.sh
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssociationRegistry.Invitations.Archiver", "src\AssociationRegistry.Invitations.Archiver\AssociationRegistry.Invitations.Archiver.csproj", "{217A4276-9E04-48E7-B560-05E7A5387861}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssociationRegistry.Invitations.Archiver.Tests", "test\AssociationRegistry.Invitations.Archiver.Tests\AssociationRegistry.Invitations.Archiver.Tests.csproj", "{B9CD112B-7C90-4D6C-A40B-A63F16F29D78}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -64,6 +68,14 @@ Global
 		{CFB9F416-B520-452B-B4A8-BF5341C88E79}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CFB9F416-B520-452B-B4A8-BF5341C88E79}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CFB9F416-B520-452B-B4A8-BF5341C88E79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{217A4276-9E04-48E7-B560-05E7A5387861}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{217A4276-9E04-48E7-B560-05E7A5387861}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{217A4276-9E04-48E7-B560-05E7A5387861}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{217A4276-9E04-48E7-B560-05E7A5387861}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9CD112B-7C90-4D6C-A40B-A63F16F29D78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9CD112B-7C90-4D6C-A40B-A63F16F29D78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9CD112B-7C90-4D6C-A40B-A63F16F29D78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9CD112B-7C90-4D6C-A40B-A63F16F29D78}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{580B24EC-9E76-455D-B55A-26E2B1E12F81} = {31048724-CEBD-49F5-B488-0A4C3D397F9D}
@@ -72,5 +84,7 @@ Global
 		{CFB9F416-B520-452B-B4A8-BF5341C88E79} = {EEDE61AC-4B92-4865-BD3D-EA2B13A7CF57}
 		{D9F1A1F8-730F-489F-9632-43AF574A0DA3} = {39123255-1A6F-4F7E-9E07-92E321BF81E7}
 		{A2B8FAE0-EE58-4E28-B1DB-03F6AB693569} = {39123255-1A6F-4F7E-9E07-92E321BF81E7}
+		{217A4276-9E04-48E7-B560-05E7A5387861} = {5D03F387-BF1D-4752-9736-C529A42C4F48}
+		{B9CD112B-7C90-4D6C-A40B-A63F16F29D78} = {EEDE61AC-4B92-4865-BD3D-EA2B13A7CF57}
 	EndGlobalSection
 EndGlobal
