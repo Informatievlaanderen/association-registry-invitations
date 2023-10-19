@@ -1,3 +1,5 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using AssociationRegistry.Invitations.Archiver;
 
 Console.WriteLine("Hello, World!");
+
+await new Archival().Start();
