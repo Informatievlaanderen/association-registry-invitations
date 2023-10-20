@@ -3,7 +3,7 @@ namespace AssociationRegistry.Invitations.Archiver;
 using System.Text.RegularExpressions;
 using NodaTime;
 
-public static class ArchivalDateHelper
+public static class ArchiverDateHelper
 {
     public static Instant CalculateArchivalStartDate(string archivalPeriod, Instant currentTime)
     {

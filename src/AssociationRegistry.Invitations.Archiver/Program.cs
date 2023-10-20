@@ -3,22 +3,31 @@ using AssociationRegistry.Invitations.Api.Infrastructure.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog.Debugging;
 
-var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-Console.WriteLine(env);
+namespace AssociationRegistry.Invitations.Archiver;
 
-var host = Host.CreateDefaultBuilder()
-    .ConfigureServices((context, services) =>
+public class Program
+{
+    public static async Task Main(string[] args)
     {
+        SelfLog.Enable(Console.WriteLine);
+
+        var host = Host.CreateDefaultBuilder()
+            .ConfigureServices(ConfigureDefaultServices)
+            .Build();
+
+        await host.RunAsync();
+    }
+
+    public static void ConfigureDefaultServices(HostBuilderContext context, IServiceCollection services) {
         var postgreSqlOptionsSection = context.Configuration.GetPostgreSqlOptionsSection();
-        var appSettings = context.Configuration.Get<AppSettings>();
+        var archiverOptions = context.Configuration.Get<ArchiverOptions>();
 
         services
-            .AddSingleton(appSettings)
+            .AddSingleton<ArchiverOptions>(archiverOptions)
             .AddSingleton(postgreSqlOptionsSection)
             .AddMarten(postgreSqlOptionsSection)
-            .AddHostedService<Archival>();
-    })
-    .Build();
-
-await host.RunAsync();
+            .AddHostedService<ArchiverService>();
+    }    
+}

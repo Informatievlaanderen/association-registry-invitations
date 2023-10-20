@@ -57,7 +57,7 @@ public class RegistreerUitnodiging : ApiController
             {
                 var uitnodiging = request.ToModel();
                 uitnodiging.Status = UitnodigingsStatus.WachtOpAntwoord;
-                uitnodiging.DatumRegistratie = _clock.GetCurrentInstant().AsFormattedString();
+                uitnodiging.DatumRegistratie = _clock.GetCurrentInstant().ToDateTimeOffset();
                 lightweightSession.Store(uitnodiging);
                 await lightweightSession.SaveChangesAsync(cancellationToken);
 

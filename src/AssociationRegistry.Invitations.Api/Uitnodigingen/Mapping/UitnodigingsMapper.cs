@@ -1,4 +1,8 @@
-﻿namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Mapping;
+﻿using AssociationRegistry.Invitations.Api.Infrastructure.Extensions;
+using JasperFx.Core.Reflection;
+using NodaTime;
+
+namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Mapping;
 
 public static class UitnodigingsMapper
 {
@@ -27,8 +31,8 @@ public static class UitnodigingsMapper
             VCode = model.VCode,
             Boodschap = model.Boodschap,
             Status = model.Status,
-            DatumRegistratie = model.DatumRegistratie,
-            DatumLaatsteAanpassing = model.DatumLaatsteAanpassing,
+            DatumRegistratie = Instant.FromDateTimeOffset(model.DatumRegistratie).AsFormattedString(),
+            DatumLaatsteAanpassing = Instant.FromDateTimeOffset(model.DatumLaatsteAanpassing).AsFormattedString(),
             Uitnodiger = new Responses.Uitnodiger
             {
                 VertegenwoordigerId = model.Uitnodiger.VertegenwoordigerId,
@@ -49,8 +53,8 @@ public static class UitnodigingsMapper
             VCode = model.VCode,
             Boodschap = model.Boodschap,
             Status = model.Status,
-            DatumRegistratie = model.DatumRegistratie,
-            DatumLaatsteAanpassing = model.DatumLaatsteAanpassing,
+            DatumRegistratie = Instant.FromDateTimeOffset(model.DatumRegistratie).AsFormattedString(),
+            DatumLaatsteAanpassing = Instant.FromDateTimeOffset(model.DatumLaatsteAanpassing).AsFormattedString(),
             Uitnodiger = new Responses.UitnodigingsDetail.UitnodigerDetail
             {
                 VertegenwoordigerId = model.Uitnodiger.VertegenwoordigerId,
