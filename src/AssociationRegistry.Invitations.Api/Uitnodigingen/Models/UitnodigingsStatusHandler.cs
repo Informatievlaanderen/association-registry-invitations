@@ -20,7 +20,7 @@ public class UitnodigingsStatusHandler
     {
         await using var session = _store.LightweightSession();
         uitnodiging.Status = status;
-        uitnodiging.DatumLaatsteAanpassing = _clock.GetCurrentInstant().AsFormattedString();
+        uitnodiging.DatumLaatsteAanpassing = _clock.GetCurrentInstant().ToDateTimeOffset();
         
         session.Store(uitnodiging);
         await session.SaveChangesAsync(cancellationToken);
