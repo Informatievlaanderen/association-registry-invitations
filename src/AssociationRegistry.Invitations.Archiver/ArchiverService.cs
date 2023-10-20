@@ -1,9 +1,9 @@
-﻿using AssociationRegistry.Invitations.Api.Infrastructure.Extensions;
-using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
-using AssociationRegistry.Invitations.Archiver;
+﻿using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
 using Marten;
 using Microsoft.Extensions.Hosting;
 using NodaTime;
+
+namespace AssociationRegistry.Invitations.Archiver;
 
 public class ArchiverService : BackgroundService
 {
