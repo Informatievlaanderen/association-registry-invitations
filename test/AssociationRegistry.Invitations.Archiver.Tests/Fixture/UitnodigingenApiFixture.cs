@@ -26,12 +26,12 @@ public class UitnodigingenApiFixture : IAsyncLifetime
 {
     private const string RootDatabase = @"postgres";
 
-    private readonly WebApplicationFactory<Program> _application;
+    public WebApplicationFactory<Program> Application { get; }
     private readonly IFixture? _autoFixture;
+    public UitnodigingTestDataFactory TestDataFactory { get; }
 
     public Clients Clients { get; }
     public ClockWithHistory Clock { get; }
-    public List<Guid> VerwerkteUitnodigingIds { get; } = new();
 
     public UitnodigingenApiFixture()
     {
@@ -43,8 +43,7 @@ public class UitnodigingenApiFixture : IAsyncLifetime
         
         _autoFixture = new AutoFixture.Fixture()
             .CustomizeAll();
-
-
+        
         WaitFor.Postgres.ToBecomeAvailable(new NullLogger<UitnodigingenApiFixture>(),
             GetConnectionString(postgreSqlOptionsSection, RootDatabase));
 
@@ -52,7 +51,8 @@ public class UitnodigingenApiFixture : IAsyncLifetime
 
         Clock = new ClockWithHistory();
 
-        _application = new WebApplicationFactory<Program>()
+        TestDataFactory = new UitnodigingTestDataFactory(SystemClock.Instance.GetCurrentInstant());
+        Application = new WebApplicationFactory<Program>()
             .WithWebHostBuilder(
                 builder =>
                 {
@@ -60,53 +60,26 @@ public class UitnodigingenApiFixture : IAsyncLifetime
                     builder.ConfigureTestServices(services =>
                     {
                         services.AddSingleton<IClock>(Clock);
-                        services.AddSingleton(new UitnodigingTestData());
-                        services.InitializeMartenWith();
+                        services.InitializeMartenWith(new UitnodigingTestData(TestDataFactory));
                     });
                 });
 
         Clients = new Clients(
             config.GetSection(nameof(OAuth2IntrospectionOptions))
                 .Get<OAuth2IntrospectionOptions>()!,
-            _application.CreateClient);
+            Application.CreateClient);
     }
 
     public async Task InitializeAsync()
     {
-        
-        await CreateReedsVerwerkteUitnodiging(id => Clients.Authenticated.AanvaardUitnodiging(id));
-        await CreateReedsVerwerkteUitnodiging(id => Clients.Authenticated.WeigerUitnodiging(id));
-        await CreateReedsVerwerkteUitnodiging(id => Clients.Authenticated.TrekUitnodigingIn(id));
     }
 
     public async Task DisposeAsync()
     {
-        var store = _application.Services.GetRequiredService<IDocumentStore>();
+        var store = Application.Services.GetRequiredService<IDocumentStore>();
         var session = store.LightweightSession();
         session.DeleteWhere<Uitnodiging>(u => true);
         await session.SaveChangesAsync();
-    }
-
-    private async Task CreateReedsVerwerkteUitnodiging(Func<Guid, Task> verwerkActie)
-    {
-        var uitnodiging = _autoFixture.Create<UitnodigingsRequest>();
-        uitnodiging.Uitgenodigde.Insz = _autoFixture.Create<TestInsz>();
-            
-        var response = await Clients.Authenticated.RegistreerUitnodiging(uitnodiging).EnsureSuccessOrThrow();
-        var content = await response.Content.ReadAsStringAsync();
-            
-        var uitnodigingId = Guid.Parse(JToken.Parse(content)["uitnodigingId"]!.Value<string>()!);
-        VerwerkteUitnodigingIds.Add(uitnodigingId);
-
-        await verwerkActie(uitnodigingId);
-    }
-    
-    public void ResetDatabase()
-    {
-        // var store = _application.Services.GetRequiredService<IDocumentStore>();
-        // var session = store.LightweightSession();
-        // session.DeleteWhere<Uitnodiging>(u => true);
-        // session.SaveChanges();
     }
 
     private static void DropCreateDatabase(PostgreSqlOptionsSection postgreSqlOptionsSection)
@@ -145,54 +118,51 @@ public class UitnodigingenApiFixture : IAsyncLifetime
 
 public class UitnodigingTestData : IInitialData
 {
-    private readonly UitnodigingTestDataBuilder _builder;
+    private readonly UitnodigingTestDataFactory _factory;
     public Dictionary<UitnodigingsStatus, IReadOnlyCollection<Uitnodiging>> Collection = new();
     
-    public UitnodigingTestData()
+    public UitnodigingTestData(UitnodigingTestDataFactory testDataFactory)
     {
-        _builder = new UitnodigingTestDataBuilder(SystemClock.Instance.GetCurrentInstant());
+        _factory = testDataFactory;
     }
     
     public async Task Populate(IDocumentStore store, CancellationToken cancellation)
     {
         await using var session = store.LightweightSession();
-        session.StoreObjects(new[]
-        {
-        });
+        session.StoreObjects(_factory.Build());
         await session.SaveChangesAsync(cancellation);
     }
 }
 
-public class UitnodigingTestDataBuilder
+public class UitnodigingTestDataFactory
 {
     private readonly IFixture? _autoFixture;
+    public Uitnodigingen NietVerlopenUitnodigingen { get; }
+    public Uitnodigingen VerlopenUitnodigingen { get; }
     public Instant Date { get; }
-    public UitnodigingsStatus Status { get; private set; }
     
-    public UitnodigingTestDataBuilder(Instant date)
+    
+    public UitnodigingTestDataFactory(Instant date)
     {
         _autoFixture = new AutoFixture.Fixture()
             .CustomizeAll();
+        
         Date = date;
-        Status = UitnodigingsStatus.WachtOpAntwoord;
-    }
 
-    public UitnodigingTestDataBuilder WithInvalidationDuration(string invalidationDuration)
-    {
-        return this;
+        var wachtendOpAntwoord = _autoFixture.Create<Uitnodiging>();
+        wachtendOpAntwoord.Status = UitnodigingsStatus.WachtOpAntwoord;
+        wachtendOpAntwoord.DatumLaatsteAanpassing = date.AsFormattedString();
+
+        NietVerlopenUitnodigingen = new Uitnodigingen(wachtendOpAntwoord);
+        VerlopenUitnodigingen = new Uitnodigingen(wachtendOpAntwoord);
     }
     
-    public UitnodigingTestDataBuilder WithStatus(UitnodigingsStatus status)
-    {
-        Status = status;
-        return this;
-    }
 
-    public Uitnodiging Build()
+    public IEnumerable<Uitnodiging> Build()
     {
-        var uitnodiging = _autoFixture.Create<Uitnodiging>();
-        uitnodiging.Status = Status;
-        uitnodiging.DatumRegistratie = Date.AsFormattedString();
-        return uitnodiging;
+
+        return new []{NietVerlopenUitnodigingen.WachtOpAntwoord};
     }
+    
 }
+public record Uitnodigingen(Uitnodiging WachtOpAntwoord);
