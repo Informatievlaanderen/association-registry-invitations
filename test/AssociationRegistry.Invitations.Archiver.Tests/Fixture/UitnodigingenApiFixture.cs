@@ -2,21 +2,16 @@
 using AssociationRegistry.Invitations.Api.Infrastructure.ConfigurationBindings;
 using AssociationRegistry.Invitations.Api.Infrastructure.Extensions;
 using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
-using AssociationRegistry.Invitations.Api.Uitnodigingen.Requests;
 using AssociationRegistry.Invitations.Archiver.Tests.Autofixture;
 using AssociationRegistry.Invitations.Archiver.Tests.Fixture.Helpers;
 using AssociationRegistry.Invitations.Archiver.Tests.Fixture.Stubs;
 using AutoFixture;
-using IdentityModel.AspNetCore.OAuth2Introspection;
 using Marten;
 using Marten.Schema;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging.Abstractions;
-using Newtonsoft.Json.Linq;
 using NodaTime;
 using Npgsql;
 
@@ -25,12 +20,9 @@ namespace AssociationRegistry.Invitations.Archiver.Tests.Fixture;
 public class UitnodigingenApiFixture : IAsyncLifetime
 {
     private const string RootDatabase = @"postgres";
-
-    public WebApplicationFactory<Program> Application { get; }
     private readonly IFixture? _autoFixture;
+    public IHost Application { get; }
     public UitnodigingTestDataFactory TestDataFactory { get; }
-
-    public Clients Clients { get; }
     public ClockWithHistory Clock { get; }
 
     public UitnodigingenApiFixture()
@@ -52,26 +44,29 @@ public class UitnodigingenApiFixture : IAsyncLifetime
         Clock = new ClockWithHistory();
 
         TestDataFactory = new UitnodigingTestDataFactory(SystemClock.Instance.GetCurrentInstant());
-        Application = new WebApplicationFactory<Program>()
-            .WithWebHostBuilder(
-                builder =>
-                {
-                    builder.UseContentRoot(Directory.GetCurrentDirectory());
-                    builder.ConfigureTestServices(services =>
-                    {
-                        services.AddSingleton<IClock>(Clock);
-                        services.InitializeMartenWith(new UitnodigingTestData(TestDataFactory));
-                    });
-                });
 
-        Clients = new Clients(
-            config.GetSection(nameof(OAuth2IntrospectionOptions))
-                .Get<OAuth2IntrospectionOptions>()!,
-            Application.CreateClient);
+        Application = Host.CreateDefaultBuilder()
+            .ConfigureAppConfiguration(builder => builder.AddJsonFile("appsettings.testrunner.json").Build())
+            .ConfigureServices((context, services) =>
+            {
+                var postgreSqlOptionsSection = context.Configuration.GetPostgreSqlOptionsSection();
+                var appSettings = context.Configuration.Get<AppSettings>();
+
+                services
+                    .AddSingleton(appSettings)
+                    .AddSingleton<Archival>()
+                    .AddSingleton<IClock>(Clock)
+                    .AddSingleton(postgreSqlOptionsSection)
+                    .AddMarten(postgreSqlOptionsSection)
+                    .InitializeMartenWith(new UitnodigingTestData(TestDataFactory))
+                    .AddHostedService<Archival>();
+            })
+            .Build();
     }
 
     public async Task InitializeAsync()
     {
+        await Application.Services.GetRequiredService<Archival>().StartAsync(CancellationToken.None);
     }
 
     public async Task DisposeAsync()
@@ -137,8 +132,8 @@ public class UitnodigingTestData : IInitialData
 public class UitnodigingTestDataFactory
 {
     private readonly IFixture? _autoFixture;
-    public Uitnodigingen NietVerlopenUitnodigingen { get; }
-    public Uitnodigingen VerlopenUitnodigingen { get; }
+    public Uitnodigingen NietOverTijdUitnodigingen { get; }
+    public Uitnodigingen OverTijdUitnodigingen { get; }
     public Instant Date { get; }
     
     
@@ -153,15 +148,14 @@ public class UitnodigingTestDataFactory
         wachtendOpAntwoord.Status = UitnodigingsStatus.WachtOpAntwoord;
         wachtendOpAntwoord.DatumLaatsteAanpassing = date.AsFormattedString();
 
-        NietVerlopenUitnodigingen = new Uitnodigingen(wachtendOpAntwoord);
-        VerlopenUitnodigingen = new Uitnodigingen(wachtendOpAntwoord);
+        NietOverTijdUitnodigingen = new Uitnodigingen(wachtendOpAntwoord);
+        OverTijdUitnodigingen = new Uitnodigingen(wachtendOpAntwoord);
     }
     
 
     public IEnumerable<Uitnodiging> Build()
     {
-
-        return new []{NietVerlopenUitnodigingen.WachtOpAntwoord};
+        return new []{NietOverTijdUitnodigingen.WachtOpAntwoord, OverTijdUitnodigingen.WachtOpAntwoord};
     }
     
 }

@@ -17,7 +17,7 @@ var host = Host.CreateDefaultBuilder()
             .AddSingleton(appSettings)
             .AddSingleton(postgreSqlOptionsSection)
             .AddMarten(postgreSqlOptionsSection)
-            .AddHostedService<ArchivalHostedService>();
+            .AddHostedService<Archival>();
     })
     .Build();
 

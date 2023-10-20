@@ -5,12 +5,12 @@ using Marten;
 using Microsoft.Extensions.Hosting;
 using NodaTime;
 
-public class ArchivalHostedService : BackgroundService
+public class Archival : BackgroundService
 {
     private readonly IDocumentStore _store;
     private readonly IClock _clock;
 
-    public ArchivalHostedService(IDocumentStore store, IClock clock)
+    public Archival(IDocumentStore store, IClock clock)
     {
         _store = store;
         _clock = clock;
