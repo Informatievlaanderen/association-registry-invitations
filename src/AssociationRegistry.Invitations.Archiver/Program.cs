@@ -1,5 +1,5 @@
-﻿using AssociationRegistry.Invitations.Api;
-using AssociationRegistry.Invitations.Api.Infrastructure.Extensions;
+﻿using AssociationRegistry.Invitations.Hosts.Infrastructure.Extensions;
+using Marten;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -13,6 +13,7 @@ public static class Program
     {
         SelfLog.Enable(Console.WriteLine);
 
+        
         var host = Host.CreateDefaultBuilder()
             .ConfigureServices(ConfigureDefaultServices)
             .Build();

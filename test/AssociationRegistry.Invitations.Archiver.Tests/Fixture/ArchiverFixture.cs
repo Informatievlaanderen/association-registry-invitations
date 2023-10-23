@@ -1,10 +1,8 @@
-﻿using AssociationRegistry.Invitations.Api;
-using AssociationRegistry.Invitations.Api.Infrastructure.ConfigurationBindings;
-using AssociationRegistry.Invitations.Api.Infrastructure.Extensions;
-using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
+﻿using AssociationRegistry.Invitations.Api.Infrastructure.ConfigurationBindings;
 using AssociationRegistry.Invitations.Archiver.Tests.Autofixture;
 using AssociationRegistry.Invitations.Archiver.Tests.Fixture.Helpers;
 using AssociationRegistry.Invitations.Archiver.Tests.Fixture.Stubs;
+using AssociationRegistry.Invitations.Hosts.Infrastructure.Extensions;
 using AutoFixture;
 using Marten;
 using Microsoft.Extensions.Configuration;

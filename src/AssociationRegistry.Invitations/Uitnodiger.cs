@@ -1,4 +1,4 @@
-namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
+namespace AssociationRegistry.Invitations;
 
 public class Uitnodiger
 {

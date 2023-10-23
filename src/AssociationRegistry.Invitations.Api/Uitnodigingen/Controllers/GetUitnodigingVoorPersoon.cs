@@ -1,15 +1,13 @@
-﻿using System.Globalization;
-using AssociationRegistry.Invitations.Api.Infrastructure;
+﻿using AssociationRegistry.Invitations.Api.Infrastructure;
 using AssociationRegistry.Invitations.Api.Infrastructure.Extensions;
 using AssociationRegistry.Invitations.Api.Infrastructure.Swagger;
 using AssociationRegistry.Invitations.Api.Uitnodigingen.Mapping;
-using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
 using AssociationRegistry.Invitations.Api.Uitnodigingen.Responses;
 using Marten;
 using Microsoft.AspNetCore.Mvc;
 using NodaTime;
 using Swashbuckle.AspNetCore.Filters;
-using Uitnodiging = AssociationRegistry.Invitations.Api.Uitnodigingen.Models.Uitnodiging;
+using Uitnodiging = AssociationRegistry.Invitations.Api.Uitnodigingen;
 
 namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Controllers;
 

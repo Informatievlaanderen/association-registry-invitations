@@ -70,10 +70,10 @@ public static class AutofixtureCustomizations
                         var randomCode = new Random().Next(0, 9999999);
                         return new UitnodigingsRequest()
                         {
-                            Uitgenodigde = fixture.Create<Uitgenodigde>(),
+                            Uitgenodigde = fixture.Create<AssociationRegistry.Invitations.Api.Uitnodigingen.Requests.Uitgenodigde>(),
                             Boodschap = fixture.Create<string>(),
                             VCode = fixture.Create<TestVCode>(),
-                            Uitnodiger = fixture.Create<Uitnodiger>(),
+                            Uitnodiger = fixture.Create<AssociationRegistry.Invitations.Api.Uitnodigingen.Requests.Uitnodiger>(),
                         };
                     })
                 .OmitAutoProperties()

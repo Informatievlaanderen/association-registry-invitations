@@ -1,5 +1,4 @@
-﻿using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
-using Marten;
+﻿using Marten;
 using Marten.Linq;
 
 namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Queries;

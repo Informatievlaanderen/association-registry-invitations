@@ -1,5 +1,4 @@
-﻿using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
-using Marten;
+﻿using Marten;
 using Marten.Schema;
 
 namespace AssociationRegistry.Invitations.Archiver.Tests.Fixture;

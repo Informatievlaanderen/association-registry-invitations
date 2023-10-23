@@ -1,9 +1,7 @@
-using System.Globalization;
-using AssociationRegistry.Invitations.Api.Infrastructure.Extensions;
 using Marten;
 using NodaTime;
 
-namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
+namespace AssociationRegistry.Invitations;
 
 public class UitnodigingsStatusHandler
 {

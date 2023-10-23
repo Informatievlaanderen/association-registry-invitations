@@ -1,21 +1,20 @@
 ﻿using AssociationRegistry.Invitations.Api.Infrastructure.Extensions;
-using JasperFx.Core.Reflection;
 using NodaTime;
 
 namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Mapping;
 
 public static class UitnodigingsMapper
 {
-    public static Models.Uitnodiging ToModel(this Requests.UitnodigingsRequest request) =>
+    public static Uitnodiging ToModel(this Requests.UitnodigingsRequest request) =>
         new()
         {
             VCode = request.VCode,
             Boodschap = request.Boodschap,
-            Uitnodiger = new Models.Uitnodiger
+            Uitnodiger = new Uitnodiger
             {
                 VertegenwoordigerId = request.Uitnodiger.VertegenwoordigerId,
             },
-            Uitgenodigde = new Models.Uitgenodigde
+            Uitgenodigde = new Uitgenodigde
             {
                 Insz = request.Uitgenodigde.Insz,
                 Voornaam = request.Uitgenodigde.Voornaam,
@@ -24,7 +23,7 @@ public static class UitnodigingsMapper
             },
         };
 
-    public static Responses.Uitnodiging ToResponse(this Models.Uitnodiging model) =>
+    public static Responses.Uitnodiging ToResponse(this Uitnodiging model) =>
         new()
         {
             UitnodigingId = model.Id,
@@ -46,7 +45,7 @@ public static class UitnodigingsMapper
             },
         };
 
-    public static Responses.UitnodigingsDetail ToDetail(this Models.Uitnodiging model) =>
+    public static Responses.UitnodigingsDetail ToDetail(this Uitnodiging model) =>
         new()
         {
             UitnodigingId = model.Id,

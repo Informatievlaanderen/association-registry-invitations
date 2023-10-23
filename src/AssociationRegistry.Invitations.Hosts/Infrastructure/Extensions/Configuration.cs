@@ -1,7 +1,8 @@
 using AssociationRegistry.Invitations.Api.Infrastructure.ConfigurationBindings;
-using AssociationRegistry.Invitations.Api.Infrastructure.Utilities;
+using AssociationRegistry.Invitations.Utilities;
+using Microsoft.Extensions.Configuration;
 
-namespace AssociationRegistry.Invitations.Api.Infrastructure.Extensions;
+namespace AssociationRegistry.Invitations.Hosts.Infrastructure.Extensions;
 
 public static class Configuration
 {

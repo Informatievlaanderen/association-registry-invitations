@@ -43,5 +43,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AssociationRegistry.Invitations.Hosts\AssociationRegistry.Invitations.Hosts.csproj" />
+    <ProjectReference Include="..\AssociationRegistry.Invitations\AssociationRegistry.Invitations.csproj" />
+  </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

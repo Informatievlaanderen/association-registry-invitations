@@ -7,7 +7,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AssociationRegistry.Invitations.Api\AssociationRegistry.Invitations.Api.csproj" />
+    <ProjectReference Include="..\AssociationRegistry.Invitations.Hosts\AssociationRegistry.Invitations.Hosts.csproj" />
+    <ProjectReference Include="..\AssociationRegistry.Invitations\AssociationRegistry.Invitations.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="appsettings.json">

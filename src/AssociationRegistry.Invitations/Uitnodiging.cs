@@ -1,6 +1,6 @@
 ﻿using Marten.Schema;
 
-namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
+namespace AssociationRegistry.Invitations;
 
 public record Uitnodiging
 {
