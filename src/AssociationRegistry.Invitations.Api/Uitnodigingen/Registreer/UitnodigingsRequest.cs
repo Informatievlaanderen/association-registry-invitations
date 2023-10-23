@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 
-namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Requests;
+namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Registreer;
 
 public class UitnodigingsRequest
 {

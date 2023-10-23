@@ -1,9 +1,8 @@
 ﻿using AssociationRegistry.Invitations.Api.Infrastructure.ConfigurationBindings;
-using AssociationRegistry.Invitations.Api.Infrastructure.Extensions;
 using AssociationRegistry.Invitations.Api.Tests.Autofixture;
 using AssociationRegistry.Invitations.Api.Tests.Fixture.Helpers;
 using AssociationRegistry.Invitations.Api.Tests.Fixture.Stubs;
-using AssociationRegistry.Invitations.Api.Uitnodigingen.Requests;
+using AssociationRegistry.Invitations.Api.Uitnodigingen.Registreer;
 using AssociationRegistry.Invitations.Hosts.Infrastructure.Extensions;
 using IdentityModel.AspNetCore.OAuth2Introspection;
 using Marten;

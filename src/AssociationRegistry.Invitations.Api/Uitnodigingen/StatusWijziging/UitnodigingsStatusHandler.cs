@@ -1,7 +1,7 @@
 using Marten;
 using NodaTime;
 
-namespace AssociationRegistry.Invitations;
+namespace AssociationRegistry.Invitations.Api.Uitnodigingen.StatusWijziging;
 
 public class UitnodigingsStatusHandler
 {

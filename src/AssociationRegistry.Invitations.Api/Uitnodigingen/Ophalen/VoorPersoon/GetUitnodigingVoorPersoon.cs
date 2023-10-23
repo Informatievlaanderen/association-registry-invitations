@@ -1,15 +1,12 @@
 ﻿using AssociationRegistry.Invitations.Api.Infrastructure;
 using AssociationRegistry.Invitations.Api.Infrastructure.Extensions;
 using AssociationRegistry.Invitations.Api.Infrastructure.Swagger;
-using AssociationRegistry.Invitations.Api.Uitnodigingen.Mapping;
-using AssociationRegistry.Invitations.Api.Uitnodigingen.Responses;
 using Marten;
 using Microsoft.AspNetCore.Mvc;
 using NodaTime;
 using Swashbuckle.AspNetCore.Filters;
-using Uitnodiging = AssociationRegistry.Invitations.Api.Uitnodigingen;
 
-namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Controllers;
+namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Ophalen.VoorPersoon;
 
 [ApiVersion("1.0")]
 [AdvertiseApiVersions("1.0")]
@@ -59,38 +56,29 @@ public class GetUitnodigingVoorPersoon : ApiController
             return ValidationProblem(ModelState);
         }
 
-        return Ok(uitnodiging.ToDetail());
+        return Ok(ToDetail(uitnodiging));
     }
-}
 
-internal class UitnodigingsDetailExamples : IExamplesProvider<UitnodigingsDetail>
-{
-    private readonly IClock _clock;
-
-    public UitnodigingsDetailExamples(IClock clock)
-    {
-        _clock = clock;
-    }
-    
-    public UitnodigingsDetail GetExamples()
-        => new()
+    private static UitnodigingsDetail ToDetail(Uitnodiging model) =>
+        new()
         {
-            UitnodigingId = Guid.NewGuid(),
-            VCode = "V0000001",
-            Boodschap = "Boodschap voor uitgenodigde",
-            Status = UitnodigingsStatus.WachtOpAntwoord,
-            DatumRegistratie = _clock.GetCurrentInstant().AsFormattedString(),
-            DatumLaatsteAanpassing = _clock.GetCurrentInstant().AsFormattedString(),
+            UitnodigingId = model.Id,
+            VCode = model.VCode,
+            Boodschap = model.Boodschap,
+            Status = model.Status,
+            DatumRegistratie = Instant.FromDateTimeOffset(model.DatumRegistratie).AsFormattedString(),
+            DatumLaatsteAanpassing = Instant.FromDateTimeOffset(model.DatumLaatsteAanpassing).AsFormattedString(),
             Uitnodiger = new UitnodigingsDetail.UitnodigerDetail
             {
-                VertegenwoordigerId = 12345
+                VertegenwoordigerId = model.Uitnodiger.VertegenwoordigerId,
             },
             Uitgenodigde = new UitnodigingsDetail.UitgenodigdeDetail
             {
-                Voornaam = "John",
-                Achternaam = "Doe",
-                Email = "john.doe@example.com",
-                Insz = "00000000000"
-            }
+                Insz = model.Uitgenodigde.Insz,
+                Voornaam = model.Uitgenodigde.Voornaam,
+                Achternaam = model.Uitgenodigde.Achternaam,
+                Email = model.Uitgenodigde.Email,
+            },
         };
+
 }

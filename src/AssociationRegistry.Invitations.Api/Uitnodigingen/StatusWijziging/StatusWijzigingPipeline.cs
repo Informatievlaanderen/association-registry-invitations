@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Controllers;
+namespace AssociationRegistry.Invitations.Api.Uitnodigingen.StatusWijziging;
 
 public static class StatusWijzigingPipeline
 {

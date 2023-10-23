@@ -3,9 +3,8 @@ using AssociationRegistry.Invitations.Api.Infrastructure.Swagger;
 using Marten;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Filters;
-using Uitnodiging = AssociationRegistry.Invitations.Api.Uitnodigingen;
 
-namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Controllers;
+namespace AssociationRegistry.Invitations.Api.Uitnodigingen.StatusWijziging;
 
 [ApiVersion("1.0")]
 [AdvertiseApiVersions("1.0")]

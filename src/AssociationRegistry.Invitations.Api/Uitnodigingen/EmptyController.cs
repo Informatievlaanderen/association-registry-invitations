@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
 
-namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Controllers;
+namespace AssociationRegistry.Invitations.Api.Uitnodigingen;
 
 [ApiVersionNeutral]
 [Route("")]

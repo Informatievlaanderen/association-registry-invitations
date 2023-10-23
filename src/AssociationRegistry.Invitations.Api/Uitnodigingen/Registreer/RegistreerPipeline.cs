@@ -1,10 +1,9 @@
-using AssociationRegistry.Invitations.Api.Uitnodigingen.Queries;
-using AssociationRegistry.Invitations.Api.Uitnodigingen.Requests;
-using AssociationRegistry.Invitations.Api.Uitnodigingen.Validators;
+using AssociationRegistry.Invitations.Api.Uitnodigingen.Ophalen;
+using AssociationRegistry.Invitations.Api.Uitnodigingen.StatusWijziging;
 using Marten;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Controllers;
+namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Registreer;
 
 public static class RegistreerPipeline
 {

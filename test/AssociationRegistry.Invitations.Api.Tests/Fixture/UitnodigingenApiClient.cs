@@ -1,5 +1,5 @@
 ﻿using System.Net.Http.Json;
-using AssociationRegistry.Invitations.Api.Uitnodigingen.Requests;
+using AssociationRegistry.Invitations.Api.Uitnodigingen.Registreer;
 
 namespace AssociationRegistry.Invitations.Api.Tests.Fixture;
 

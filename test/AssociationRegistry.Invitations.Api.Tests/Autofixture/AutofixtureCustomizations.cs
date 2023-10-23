@@ -1,4 +1,4 @@
-using AssociationRegistry.Invitations.Api.Uitnodigingen.Requests;
+using AssociationRegistry.Invitations.Api.Uitnodigingen.Registreer;
 
 namespace AssociationRegistry.Invitations.Api.Tests.Autofixture;
 
@@ -46,9 +46,9 @@ public static class AutofixtureCustomizations
     
     public static IFixture CustomizeUitgenodigde(this IFixture fixture)
     {
-        fixture.Customize<AssociationRegistry.Invitations.Api.Uitnodigingen.Requests.Uitgenodigde>(
+        fixture.Customize<Uitnodigingen.Registreer.Uitgenodigde>(
             composerTransformation: composer => composer.FromFactory(
-                    factory: () => new AssociationRegistry.Invitations.Api.Uitnodigingen.Requests.Uitgenodigde()
+                    factory: () => new Uitnodigingen.Registreer.Uitgenodigde
                     {
                         Email = "test@example.com",
                         Insz = fixture.Create<TestInsz>(),
@@ -68,12 +68,12 @@ public static class AutofixtureCustomizations
                     factory: () =>
                     {
                         var randomCode = new Random().Next(0, 9999999);
-                        return new UitnodigingsRequest()
+                        return new UitnodigingsRequest
                         {
-                            Uitgenodigde = fixture.Create<AssociationRegistry.Invitations.Api.Uitnodigingen.Requests.Uitgenodigde>(),
+                            Uitgenodigde = fixture.Create<Uitnodigingen.Registreer.Uitgenodigde>(),
                             Boodschap = fixture.Create<string>(),
                             VCode = fixture.Create<TestVCode>(),
-                            Uitnodiger = fixture.Create<AssociationRegistry.Invitations.Api.Uitnodigingen.Requests.Uitnodiger>(),
+                            Uitnodiger = fixture.Create<Uitnodigingen.Registreer.Uitnodiger>(),
                         };
                     })
                 .OmitAutoProperties()

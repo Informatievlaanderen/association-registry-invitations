@@ -1,4 +1,4 @@
-﻿namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Responses;
+﻿namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Registreer;
 
 public class RegistratieResponse
 {

@@ -1,26 +1,7 @@
-﻿using Marten;
+using Marten;
 using Marten.Linq;
 
-namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Queries;
-
-public class GetUitnodigingen
-{
-    private string? _vCode;
-
-    public GetUitnodigingen(string vCode)
-    {
-        _vCode = vCode;
-    }
-
-    public static GetUitnodigingen MetVCode(string vCode) => new(vCode);
-
-    public async Task<IEnumerable<Uitnodiging>> ExecuteAsync(IDocumentStore store, CancellationToken cancellationToken)
-    {
-        await using var querySession = store.QuerySession();
-        return await querySession.Query<Uitnodiging>()
-            .Where(u => u.VCode == _vCode).ToListAsync(cancellationToken);
-    }
-}
+namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Ophalen;
 
 public static class QueryExtensions
 {
@@ -44,8 +25,8 @@ public static class QueryExtensions
         var all = source.ToList();
         
         return (await source.Where(u => u.VCode == vCode 
-                                 && u.Uitgenodigde.Insz == insz 
-                                 && u.Status.Status == UitnodigingsStatus.WachtOpAntwoord.Status)
+                                        && u.Uitgenodigde.Insz == insz 
+                                        && u.Status.Status == UitnodigingsStatus.WachtOpAntwoord.Status)
             .FirstOrDefaultAsync(cancellationToken)) != null;
     }
 }

@@ -1,14 +1,11 @@
 ﻿using AssociationRegistry.Invitations.Api.Infrastructure;
 using AssociationRegistry.Invitations.Api.Infrastructure.Swagger;
-using AssociationRegistry.Invitations.Api.Uitnodigingen.Mapping;
-using AssociationRegistry.Invitations.Api.Uitnodigingen.Requests;
-using AssociationRegistry.Invitations.Api.Uitnodigingen.Responses;
 using Marten;
 using Microsoft.AspNetCore.Mvc;
 using NodaTime;
 using Swashbuckle.AspNetCore.Filters;
 
-namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Controllers;
+namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Registreer;
 
 [ApiVersion("1.0")]
 [AdvertiseApiVersions("1.0")]
@@ -52,7 +49,7 @@ public class RegistreerUitnodiging : ApiController
             .BadRequestIfUitnodidingReedsBestaand(lightweightSession, cancellationToken))
             .Handle(async () =>
             {
-                var uitnodiging = request.ToModel();
+                var uitnodiging = ToModel(request);
                 uitnodiging.Status = UitnodigingsStatus.WachtOpAntwoord;
                 uitnodiging.DatumRegistratie = _clock.GetCurrentInstant().ToDateTimeOffset();
                 lightweightSession.Store(uitnodiging);
@@ -64,13 +61,23 @@ public class RegistreerUitnodiging : ApiController
                 });
             }, this);
     }
-}
-
-internal class RegistratieResponseExamples : IExamplesProvider<RegistratieResponse>
-{
-    public RegistratieResponse GetExamples()
-        => new()
+    
+    public static Uitnodiging ToModel(UitnodigingsRequest request) =>
+        new()
         {
-            UitnodigingId = Guid.NewGuid()
+            VCode = request.VCode,
+            Boodschap = request.Boodschap,
+            Uitnodiger = new Invitations.Uitnodiger
+            {
+                VertegenwoordigerId = request.Uitnodiger.VertegenwoordigerId,
+            },
+            Uitgenodigde = new Invitations.Uitgenodigde
+            {
+                Insz = request.Uitgenodigde.Insz,
+                Voornaam = request.Uitgenodigde.Voornaam,
+                Achternaam = request.Uitgenodigde.Achternaam,
+                Email = request.Uitgenodigde.Email,
+            },
         };
+
 }
