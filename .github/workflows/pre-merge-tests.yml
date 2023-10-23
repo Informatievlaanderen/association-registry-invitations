@@ -122,7 +122,7 @@ jobs:
           
       - name: Restore paket packages
         id: cache-paket-restore
-        uses: informatievlaanderen/build-pipeline/cache-paket
+        uses: informatievlaanderen/build-pipeline/.github/actions/cache-paket
 
       - name: Create testresults directory
         run: mkdir -p testresults
