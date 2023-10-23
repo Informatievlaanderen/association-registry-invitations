@@ -9,147 +9,17 @@ concurrency: CI
 jobs:
 
   analyze-code:
-    runs-on: ubuntu-latest
-
-    steps:
-
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Cache Paket
-        uses: actions/cache@v3
-        env:
-          cache-name: cache-paket
-        with:
-          path: packages
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('paket.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-
-      - name: Parse repository name
-        run: echo REPOSITORY_NAME=$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}' | sed -e "s/:refs//") >> $GITHUB_ENV
-        shell: bash
-
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: ${{ secrets.VBR_DOTNET_VERSION }}
-
-      - name: .NET version
-        shell: bash
-        run: dotnet --info
-
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v3
-        with:
-          path: ~/sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v1
-        with:
-          java-version: 17
-
-      - name: Restore dotnet tools
-        shell: bash
-        run: |
-          dotnet tool restore
-
-      - name: Cache SonarCloud scanner
-        id: cache-sonar-scanner
-        uses: actions/cache@v3
-        with:
-          path: ./.sonar/scanner
-          key: ${{ runner.os }}-sonar-scanner
-          restore-keys: ${{ runner.os }}-sonar-scanner
-
-      - name: Install SonarCloud scanner
-        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
-        shell: bash
-        run: |
-          mkdir .sonar
-          mkdir .sonar/scanner
-          dotnet tool update dotnet-sonarscanner --tool-path ./.sonar/scanner
-
-      - name: Start sonar scanner
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        shell: bash
-        run: |
-          ./.sonar/scanner/dotnet-sonarscanner begin /k:"Informatievlaanderen_association-registry-invitations" /o:"informatievlaanderen" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.dotcover.reportsPaths=dotCover.Output.html
-
-      - name: Paket install
-        shell: bash
-        run: dotnet paket install
-
-      - name: Paket restore
-        shell: bash
-        run: dotnet paket restore
-
-      - name: Dotnet restore
-        shell: bash
-        run: dotnet restore --runtime linux-x64
-
-      - name: Dotnet build
-        shell: bash
-        run: dotnet build --no-restore
-
-      - name: Analyze with sonar scanner
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        shell: bash
-        run: |
-          ./.sonar/scanner/dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-
-
+    name: Analyze Code
+    uses: Informatievlaanderen/build-pipeline/.github/workflows/analyze-code.yml@main
+    with:
+      registry: association-registry-invitations
+    secrets: inherit
 
   set-release-version:
-    if: github.repository_owner == 'Informatievlaanderen'
-    name: Decide next version
-    runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.set-version.outputs.version }}
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-
-      - name: Node version
-        shell: bash
-        run: node --version
-
-      - name: Install NPM dependencies
-        shell: bash
-        run: npm install --legacy-peer-deps
-
-      - name: Run Semantic Release dry-run
-        shell: bash
-        run: npx semantic-release --dry-run
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          BUILD_DOCKER_REGISTRY: ${{ secrets.VBR_BUILD_DOCKER_REGISTRY_TST }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GIT_COMMIT: ${{ github.sha }}
-          GIT_USERNAME: ${{ secrets.VBR_GIT_USER }}
-          GIT_AUTHOR_NAME: ${{ secrets.VBR_GIT_USER }}
-          GIT_COMMITTER_NAME: ${{ secrets.VBR_GIT_USER }}
-          GIT_EMAIL: ${{ secrets.VBR_GIT_EMAIL }}
-          GIT_AUTHOR_EMAIL: ${{ secrets.VBR_GIT_EMAIL }}
-          GIT_COMMITTER_EMAIL: ${{ secrets.VBR_GIT_EMAIL }}
-
-      - name: Set Release Version
-        id: set-version
-        run: |
-          [ ! -f semver ] && echo none > semver
-          echo $(cat semver)
-          echo ::set-output name=version::$(cat semver)
-          echo RELEASE_VERSION=$(cat semver) >> $GITHUB_ENV
-        shell: bash
-
+    name: Decide Next Version
+    uses: Informatievlaanderen/build-pipeline/.github/workflows/set-release-version.yml@main
+    secrets: inherit
+  
   build-invitations-api:
     name: Build Invitations Api
     runs-on: ubuntu-latest
@@ -254,7 +124,6 @@ jobs:
         run: |
           docker logs db
 
-
   build-invitations-archiver:
     name: Build Invitations Archiver
     runs-on: ubuntu-latest
@@ -341,7 +210,6 @@ jobs:
         run: |
           docker logs db
 
-
   release:
     if: github.repository_owner == 'Informatievlaanderen'
     name: Semantic Release
@@ -349,58 +217,22 @@ jobs:
     needs: 
       - build-invitations-api
       - build-invitations-archiver
-
-    outputs:
-      version: ${{ steps.set-version.outputs.version }}
-
     steps:
-      # build
       - name: Checkout Code
         uses: actions/checkout@v4
 
       - name: Cache NPM
-        uses: actions/cache@v3
-        env:
-          cache-name: cache-npm
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
+        uses: informatievlaanderen/build-pipeline/.github/actions/cache-npm@main
 
       - name: Parse repository name
         run: echo REPOSITORY_NAME=$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}' | sed -e "s/:refs//") >> $GITHUB_ENV
         shell: bash
+        
+      - name: Setup NodeJS
+        uses: informatievlaanderen/build-pipeline/.github/actions/setup-nodejs@main
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
-
-      - name: Node version
-        shell: bash
-        run: node --version
-
-      - name: .NET version
-        shell: bash
-        run: dotnet --info
-
-      - name: Python version
-        shell: bash
-        run: python --version
-
-      - name: Install NPM dependencies
-        shell: bash
-        run: npm install --legacy-peer-deps
-
-      - name: Install Python dependencies
-        shell: bash
-        run: |
-          python -m pip install --upgrade pip
-          pip install requests markdown argparse
+      - name: Setup Python
+        uses: informatievlaanderen/build-pipeline/.github/actions/setup-python@main
 
       - name: Generate Token
         id: generate_token   # Add an ID to this step for reference
@@ -423,7 +255,6 @@ jobs:
         run: npx semantic-release
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          BUILD_DOCKER_REGISTRY: ${{ secrets.VBR_BUILD_DOCKER_REGISTRY_TST }}
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.installationToken  }}
           GIT_COMMIT: ${{ github.sha }}
           GIT_USERNAME: ${{ steps.generate_token.outputs.installationToken }}
@@ -432,19 +263,13 @@ jobs:
           GIT_EMAIL: ${{ secrets.VBR_GIT_EMAIL }}
           GIT_AUTHOR_EMAIL: ${{ secrets.VBR_GIT_EMAIL }}
           GIT_COMMITTER_EMAIL: ${{ secrets.VBR_GIT_EMAIL }}
-
-      - name: Set Release Version
-        id: set-version
-        run: |
-          [ ! -f semver ] && echo none > semver
-          echo $(cat semver)
-          echo ::set-output name=version::$(cat semver)
-          echo RELEASE_VERSION=$(cat semver) >> $GITHUB_ENV
-        shell: bash
+          BUILD_DOCKER_REGISTRY: ${{ secrets.VBR_BUILD_DOCKER_REGISTRY_TST }}
 
   publish_to_atlassian:
-    if: needs.release.outputs.version != 'none'
-    needs: [ release ]
+    if: needs.set-release-version.outputs.version != 'none'
+    needs: 
+      - set-release-version
+      - release
     name: Publish to Atlassian
     runs-on: ubuntu-latest
     steps:
@@ -485,7 +310,7 @@ jobs:
           pip install requests markdown argparse
 
       - name: Publish to Confluence
-        if: needs.release.outputs.version != 'none'
+        if: needs.set-release-version.outputs.version != 'none'
         shell: bash
         run: ./packages/Be.Vlaanderen.Basisregisters.Build.Pipeline/Content/ci-confluence.sh
         env:
@@ -494,7 +319,7 @@ jobs:
           CONFLUENCE_PASSWORD: ${{ secrets.VBR_CONFLUENCE_PASSWORD }}
 
       - name: Create Jira Release
-        if: needs.release.outputs.version != 'none'
+        if: needs.set-release-version.outputs.version != 'none'
         shell: bash
         run: ./packages/Be.Vlaanderen.Basisregisters.Build.Pipeline/Content/ci-jira.sh
         env:
@@ -503,11 +328,13 @@ jobs:
           CONFLUENCE_PASSWORD: ${{ secrets.VBR_CONFLUENCE_PASSWORD }}
           JIRA_PREFIX: Association-Invitations
           JIRA_PROJECT: OR
-          JIRA_VERSION: ${{ needs.release.outputs.version }}
+          JIRA_VERSION: ${{ needs.set-release-version.outputs.version }}
 
   push_images_to_test:
-    if: needs.release.outputs.version != 'none'
-    needs: [ release ]
+    if: needs.set-release-version.outputs.version != 'none'
+    needs: 
+      - set-release-version
+      - release
     name: Push images to Test
     runs-on: ubuntu-latest
     strategy:
@@ -519,7 +346,7 @@ jobs:
           ]
     steps:
       - name: Configure AWS credentials (Test)
-        if: needs.release.outputs.version != 'none'
+        if: needs.set-release-version.outputs.version != 'none'
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.VBR_AWS_ACCESS_KEY_ID_TST }}
@@ -527,7 +354,7 @@ jobs:
           aws-region: ${{ secrets.VBR_AWS_REGION_PRD }}
 
       - name: Login to Amazon ECR (Test)
-        if: needs.release.outputs.version != 'none'
+        if: needs.set-release-version.outputs.version != 'none'
         uses: aws-actions/amazon-ecr-login@v2.0.1
 
       - name: Download artifact
@@ -541,19 +368,21 @@ jobs:
         run: docker image load -i ~/${{matrix.services}}.tar
 
       - name: Push docker images to ECR Test
-        if: needs.release.outputs.version != 'none'
+        if: needs.set-release-version.outputs.version != 'none'
         shell: bash
         run: |
           echo $SEMVER
           docker push $BUILD_DOCKER_REGISTRY/association-registry/${{matrix.services}}:$SEMVER
         env:
           BUILD_DOCKER_REGISTRY: ${{ secrets.VBR_BUILD_DOCKER_REGISTRY_TST }}
-          SEMVER: ${{ needs.release.outputs.version }}
+          SEMVER: ${{ needs.set-release-version.outputs.version }}
           WORKSPACE: ${{ github.workspace }}
 
   push_images_to_staging:
-    if: needs.release.outputs.version != 'none'
-    needs: [ release ]
+    if: needs.set-release-version.outputs.version != 'none'
+    needs:
+      - set-release-version
+      - release
     name: Push images to Staging
     runs-on: ubuntu-latest
     strategy:
@@ -565,7 +394,7 @@ jobs:
           ]
     steps:
       - name: Configure AWS credentials (Staging)
-        if: needs.release.outputs.version != 'none'
+        if: needs.set-release-version.outputs.version != 'none'
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.VBR_AWS_ACCESS_KEY_ID }}
@@ -573,7 +402,7 @@ jobs:
           aws-region: ${{ secrets.VBR_AWS_REGION_PRD }}
 
       - name: Login to Amazon ECR (Staging)
-        if: needs.release.outputs.version != 'none'
+        if: needs.set-release-version.outputs.version != 'none'
         uses: aws-actions/amazon-ecr-login@v2.0.1
 
       - name: Download artifact
@@ -587,7 +416,7 @@ jobs:
         run: docker image load -i ~/${{matrix.services}}.tar
 
       - name: Push docker images to ECR Staging
-        if: needs.release.outputs.version != 'none'
+        if: needs.set-release-version.outputs.version != 'none'
         shell: bash
         run: |
           echo $SEMVER
@@ -596,15 +425,15 @@ jobs:
         env:
           BUILD_DOCKER_REGISTRY_TST: ${{ secrets.VBR_BUILD_DOCKER_REGISTRY_TST }}
           BUILD_DOCKER_REGISTRY: ${{ secrets.VBR_BUILD_DOCKER_REGISTRY }}
-          SEMVER: ${{ needs.release.outputs.version }}
+          SEMVER: ${{ needs.set-release-version.outputs.version }}
           WORKSPACE: ${{ github.workspace }}
           
   deploy_test:
-    if: needs.release.outputs.version != 'none'
+    if: needs.set-release-version.outputs.version != 'none'
     needs: 
       - set-release-version
-      - push_images_to_test
       - release
+      - push_images_to_test
     name: Deploy to Test
     runs-on: ubuntu-latest
     strategy:
@@ -618,16 +447,16 @@ jobs:
       - name: debug_output
         shell: bash
         run: |
-          echo ${{ needs.release.outputs.version }}
+          echo ${{ needs.set-release-version.outputs.version }}
       - name: CD
-        if: needs.release.outputs.version != 'none'
+        if: needs.set-release-version.outputs.version != 'none'
         env:
           BUILD_URL: ${{ secrets.VBR_AWS_BUILD_API }}/${{matrix.services}}
           STATUS_URL: ${{ secrets.VBR_AWS_BUILD_STATUS_API }}/${{matrix.services}}
         uses: informatievlaanderen/awscurl-polling-action/polling-action@main
         with:
           environment: test
-          version: ${{ needs.release.outputs.version }}
+          version: ${{ needs.set-release-version.outputs.version }}
           status-url: $STATUS_URL
           deploy-url: $BUILD_URL
           access-key: ${{ secrets.VBR_AWS_BUILD_USER_ACCESS_KEY_ID }}
@@ -640,4 +469,3 @@ jobs:
           echo build-uuid: ${{ steps.awscurl-polling-action.outputs.build-uuid }}
           echo Status: ${{ steps.awscurl-polling-action.outputs.status }}
           echo ${{ steps.awscurl-polling-action.outputs.final-message }}
-
