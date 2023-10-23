@@ -31,7 +31,7 @@ public class ArchiverFixture : IAsyncLifetime
             .AddJsonFile("appsettings.testrunner.json").Build();
 
         var postgreSqlOptionsSection = config.GetPostgreSqlOptionsSection();
-        var archiverOptions = config.Get<ArchiverOptions>();
+        var archiverOptions = config.Get<AppSettings>();
 
         _autoFixture = new AutoFixture.Fixture()
             .CustomizeAll();

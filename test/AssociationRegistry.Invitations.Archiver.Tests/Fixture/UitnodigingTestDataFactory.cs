@@ -14,7 +14,7 @@ public class UitnodigingTestDataFactory
     public Instant Date { get; }
 
 
-    public UitnodigingTestDataFactory(Instant date, ArchiverOptions options)
+    public UitnodigingTestDataFactory(Instant date, AppSettings options)
     {
         _autoFixture = new AutoFixture.Fixture()
             .CustomizeAll();

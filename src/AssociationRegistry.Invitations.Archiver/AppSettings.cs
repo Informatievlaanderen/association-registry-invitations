@@ -1,6 +1,6 @@
 namespace AssociationRegistry.Invitations.Archiver;
 
-public class ArchiverOptions
+public class AppSettings
 {
     public BewaartijdenOptions Bewaartijden { get; set; } = new();
     
