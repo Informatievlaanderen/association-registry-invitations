@@ -14,7 +14,8 @@ jobs:
       matrix:
         services:
           [
-            'association-registry-invitations-api'
+            'association-registry-invitations-api',
+            'association-registry-invitations-archiver'
           ]
     steps:
       - name: CD

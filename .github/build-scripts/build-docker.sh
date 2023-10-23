@@ -1,14 +1,14 @@
 # Set up the docker build command
 dockerRegistry="${BUILD_DOCKER_REGISTRY:-dev.local}"
 dockerRepository="association-registry"
-containerName="invitations-api"
+containerName=$2
 buildNumber="${CI_BUILD_NUMBER:-0.0.0}"
-project="AssociationRegistry.Invitations.Api"
+project=$1
 
 docker_cmd="docker build . --no-cache --tag $dockerRegistry/$dockerRepository/$containerName:$buildNumber --build-arg build_number=$buildNumber"
 
 # Go to dist folder
-cd "dist/AssociationRegistry.Invitations.Api/linux" || exit
+cd "dist/$1/linux" || exit
 
 # Run the docker build command, and storeit's result
 $docker_cmd 

@@ -105,6 +105,7 @@ jobs:
           ./.sonar/scanner/dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
 
+
   set-release-version:
     if: github.repository_owner == 'Informatievlaanderen'
     name: Decide next version
@@ -188,7 +189,7 @@ jobs:
       - name: Test via docker run
         shell: bash
         run: |
-          docker run --network host --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 /bin/sh .github/build-scripts/run-tests-docker.sh
+          docker run --network host --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 /bin/sh .github/build-scripts/run-tests-docker.sh AssociationRegistry.Invitations.Api.Tests
 
       - name: Set solution info
         shell: bash
@@ -200,12 +201,12 @@ jobs:
       - name: Publish via docker run
         shell: bash
         run: |
-          docker run --network host --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 /bin/sh .github/build-scripts/publish.sh
+          docker run --network host --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 /bin/sh .github/build-scripts/publish.sh AssociationRegistry.Invitations.Api
 
       - name: Build image
         shell: bash
         run: |
-          .github/build-scripts/build-docker.sh
+          .github/build-scripts/build-docker.sh AssociationRegistry.Invitations.Api invitations-api
         env:
           BUILD_DOCKER_REGISTRY: ${{ secrets.VBR_BUILD_DOCKER_REGISTRY_TST }}
           CI_BUILD_NUMBER: ${{ needs.set-release-version.outputs.version }}
@@ -252,7 +253,93 @@ jobs:
         shell: bash
         run: |
           docker logs db
-  
+
+  build-invitations-archiver:
+    name: Build Invitations Archiver
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'Informatievlaanderen'
+    needs: [ set-release-version ]
+    steps:
+      - name: Check version
+        shell: bash
+        run: echo $SEMVER
+        env:
+          SEMVER: ${{ needs.set-release-version.outputs.version }}
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Parse repository name
+        run: echo REPOSITORY_NAME=$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}' | sed -e "s/:refs//") >> $GITHUB_ENV
+        shell: bash
+
+      - name: Run dependencies
+        shell: bash
+        run: |
+          docker compose up -d db
+
+      - name: Restore paket packages
+        id: cache-paket-restore
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            packages
+            .paket/Paket.Restore.targets
+          key: ${{ runner.os }}-paket-${{ hashFiles('paket.lock', '.paket/Paket.Restore.targets') }}
+
+      - name: Create testresults directory
+        run: mkdir -p testresults
+
+      - name: Test via docker run
+        shell: bash
+        run: |
+          docker run --network host --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 /bin/sh .github/build-scripts/run-tests-docker.sh AssociationRegistry.Invitations.Archiver.Tests
+
+      - name: Set solution info
+        shell: bash
+        run: |
+          docker run --network host -e CI_BUILD_NUMBER -e GIT_HASH --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 /bin/sh .github/build-scripts/set-solution-info.sh
+        env:
+          CI_BUILD_NUMBER: ${{ needs.set-release-version.outputs.version }}
+
+      - name: Publish via docker run
+        shell: bash
+        run: |
+          docker run --network host --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 /bin/sh .github/build-scripts/publish-archiver.sh AssociationRegistry.Invitations.Archiver
+
+      - name: Build image
+        shell: bash
+        run: |
+          .github/build-scripts/build-docker.sh AssociationRegistry.Invitations.Archiver invitations-archiver
+        env:
+          BUILD_DOCKER_REGISTRY: ${{ secrets.VBR_BUILD_DOCKER_REGISTRY_TST }}
+          CI_BUILD_NUMBER: ${{ needs.set-release-version.outputs.version }}
+
+      - name: Show images
+        shell: bash
+        run: docker images
+
+      - name: Save Image
+        if: needs.set-release-version.outputs.version != 'none'
+        shell: bash
+        run: docker image save $BUILD_DOCKER_REGISTRY/association-registry/invitations-archiver:$SEMVER -o ~/invitations-archiver.tar
+        env:
+          BUILD_DOCKER_REGISTRY: ${{ secrets.VBR_BUILD_DOCKER_REGISTRY_TST }}
+          SEMVER: ${{ needs.set-release-version.outputs.version }}
+
+      - name: Upload Archiver artifact
+        if: needs.set-release-version.outputs.version != 'none'
+        uses: actions/upload-artifact@v3
+        with:
+          name: invitations-archiver
+          path: ~/invitations-archiver.tar
+
+      - name: Shows logs db container
+        if: ${{ failure() }}
+        shell: bash
+        run: |
+          docker logs db
+
   release:
     if: github.repository_owner == 'Informatievlaanderen'
     name: Semantic Release

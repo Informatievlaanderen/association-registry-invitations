@@ -47,6 +47,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build-scripts", "build-scri
 		.github\build-scripts\SetSolutionInfo.csx = .github\build-scripts\SetSolutionInfo.csx
 		.github\build-scripts\set-solution-info.sh = .github\build-scripts\set-solution-info.sh
 		.github\build-scripts\publish.sh = .github\build-scripts\publish.sh
+		.github\build-scripts\run-tests-docker.sh = .github\build-scripts\run-tests-docker.sh
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssociationRegistry.Invitations.Archiver", "src\AssociationRegistry.Invitations.Archiver\AssociationRegistry.Invitations.Archiver.csproj", "{217A4276-9E04-48E7-B560-05E7A5387861}"
