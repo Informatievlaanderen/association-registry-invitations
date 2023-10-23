@@ -4,6 +4,7 @@ using AssociationRegistry.Invitations.Archiver.Tests.Fixture;
 using FluentAssertions;
 using Marten;
 using Microsoft.Extensions.DependencyInjection;
+// ReSharper disable ReplaceWithSingleCallToSingleOrDefault
 
 // ReSharper disable ReplaceWithSingleCallToSingle
 
