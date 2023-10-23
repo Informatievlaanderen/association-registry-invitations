@@ -306,7 +306,7 @@ jobs:
       - name: Publish via docker run
         shell: bash
         run: |
-          docker run --network host --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 /bin/sh .github/build-scripts/publish-archiver.sh AssociationRegistry.Invitations.Archiver
+          docker run --network host --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 /bin/sh .github/build-scripts/publish.sh AssociationRegistry.Invitations.Archiver
 
       - name: Build image
         shell: bash
