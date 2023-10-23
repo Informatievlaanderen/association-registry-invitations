@@ -106,7 +106,7 @@ jobs:
 
   build-api:
     if: github.repository_owner == 'Informatievlaanderen'
-    name: Run Tests
+    name: Run Api Tests
     runs-on: ubuntu-latest
     
     steps:
@@ -154,7 +154,7 @@ jobs:
   
   build-archiver:
     if: github.repository_owner == 'Informatievlaanderen'
-    name: Run Tests
+    name: Run Archiver Tests
     runs-on: ubuntu-latest
 
     steps:
