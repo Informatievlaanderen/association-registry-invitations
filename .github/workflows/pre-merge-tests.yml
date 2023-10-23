@@ -122,12 +122,7 @@ jobs:
           
       - name: Restore paket packages
         id: cache-paket-restore
-        uses: actions/cache/restore@v3
-        with:
-          path: |
-            packages
-            .paket/Paket.Restore.targets
-          key: ${{ runner.os }}-paket-${{ hashFiles('paket.lock', '.paket/Paket.Restore.targets') }}
+        uses: informatievlaanderen/build-pipeline/cache-paket
 
       - name: Create testresults directory
         run: mkdir -p testresults
@@ -136,15 +131,6 @@ jobs:
         shell: bash
         run: |
           docker run --network host --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 /bin/sh .github/build-scripts/run-tests-docker.sh
-      
-      - name: Save packages
-        id: cache-paket-save
-        uses: actions/cache/save@v3
-        with:
-          path: |
-            packages
-            .paket/Paket.Restore.targets
-          key: ${{ steps.cache-paket-restore.outputs.cache-primary-key }}
 
       - name: Archive code coverage results
         if: ${{ always() }}
