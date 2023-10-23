@@ -10,20 +10,20 @@ jobs:
 
   analyze-code:
     name: Analyze Code
-    uses: Informatievlaanderen/build-pipeline/.github/workflows/analyze-code.yml@main
+    uses: informatievlaanderen/build-pipeline/.github/workflows/analyze-code.yml@main
     with:
       registry: association-registry-invitations
     secrets: inherit
 
   set-release-version:
     name: Decide Next Version
-    uses: Informatievlaanderen/build-pipeline/.github/workflows/set-release-version.yml@main
+    uses: informatievlaanderen/build-pipeline/.github/workflows/set-release-version.yml@main
     secrets: inherit
   
   build-invitations-api:
     name: Build Invitations Api
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'Informatievlaanderen'
+    if: github.repository_owner == 'informatievlaanderen'
     needs: [ set-release-version ]
     steps:
       - name: Check version
@@ -127,7 +127,7 @@ jobs:
   build-invitations-archiver:
     name: Build Invitations Archiver
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'Informatievlaanderen'
+    if: github.repository_owner == 'informatievlaanderen'
     needs: [ set-release-version ]
     steps:
       - name: Check version
@@ -211,7 +211,7 @@ jobs:
           docker logs db
 
   release:
-    if: github.repository_owner == 'Informatievlaanderen'
+    if: github.repository_owner == 'informatievlaanderen'
     name: Semantic Release
     runs-on: ubuntu-latest
     needs: 
