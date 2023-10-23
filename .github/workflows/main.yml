@@ -254,6 +254,7 @@ jobs:
         run: |
           docker logs db
 
+
   build-invitations-archiver:
     name: Build Invitations Archiver
     runs-on: ubuntu-latest
@@ -340,11 +341,14 @@ jobs:
         run: |
           docker logs db
 
+
   release:
     if: github.repository_owner == 'Informatievlaanderen'
     name: Semantic Release
     runs-on: ubuntu-latest
-    needs: [ build-invitations-api ]
+    needs: 
+      - build-invitations-api
+      - build-invitations-archiver
 
     outputs:
       version: ${{ steps.set-version.outputs.version }}
@@ -506,6 +510,13 @@ jobs:
     needs: [ release ]
     name: Push images to Test
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        services:
+          [
+            'invitations-api',
+            'invitations-archiver',
+          ]
     steps:
       - name: Configure AWS credentials (Test)
         if: needs.release.outputs.version != 'none'
@@ -522,19 +533,19 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v3
         with:
-          name: invitations-api
+          name: ${{matrix.services}}
           path: ~/
 
       - name: Load image
         shell: bash
-        run: docker image load -i ~/invitations-api.tar
+        run: docker image load -i ~/${{matrix.services}}.tar
 
       - name: Push docker images to ECR Test
         if: needs.release.outputs.version != 'none'
         shell: bash
         run: |
           echo $SEMVER
-          docker push $BUILD_DOCKER_REGISTRY/association-registry/invitations-api:$SEMVER
+          docker push $BUILD_DOCKER_REGISTRY/association-registry/${{matrix.services}}:$SEMVER
         env:
           BUILD_DOCKER_REGISTRY: ${{ secrets.VBR_BUILD_DOCKER_REGISTRY_TST }}
           SEMVER: ${{ needs.release.outputs.version }}
@@ -545,6 +556,13 @@ jobs:
     needs: [ release ]
     name: Push images to Staging
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        services:
+          [
+            'invitations-api',
+            'invitations-archiver',
+          ]
     steps:
       - name: Configure AWS credentials (Staging)
         if: needs.release.outputs.version != 'none'
@@ -561,29 +579,32 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v3
         with:
-          name: invitations-api
+          name: ${{matrix.services}}
           path: ~/
 
       - name: Load image
         shell: bash
-        run: docker image load -i ~/invitations-api.tar
+        run: docker image load -i ~/${{matrix.services}}.tar
 
       - name: Push docker images to ECR Staging
         if: needs.release.outputs.version != 'none'
         shell: bash
         run: |
           echo $SEMVER
-          docker tag $BUILD_DOCKER_REGISTRY_TST/association-registry/invitations-api:$SEMVER $BUILD_DOCKER_REGISTRY/association-registry/invitations-api:$SEMVER
-          docker push $BUILD_DOCKER_REGISTRY/association-registry/invitations-api:$SEMVER
+          docker tag $BUILD_DOCKER_REGISTRY_TST/association-registry/${{matrix.services}}:$SEMVER $BUILD_DOCKER_REGISTRY/association-registry/${{matrix.services}}:$SEMVER
+          docker push $BUILD_DOCKER_REGISTRY/association-registry/${{matrix.services}}:$SEMVER
         env:
           BUILD_DOCKER_REGISTRY_TST: ${{ secrets.VBR_BUILD_DOCKER_REGISTRY_TST }}
           BUILD_DOCKER_REGISTRY: ${{ secrets.VBR_BUILD_DOCKER_REGISTRY }}
           SEMVER: ${{ needs.release.outputs.version }}
           WORKSPACE: ${{ github.workspace }}
-
+          
   deploy_test:
     if: needs.release.outputs.version != 'none'
-    needs: [ set-release-version, push_images_to_test, release ]
+    needs: 
+      - set-release-version
+      - push_images_to_test
+      - release
     name: Deploy to Test
     runs-on: ubuntu-latest
     strategy:
@@ -591,6 +612,7 @@ jobs:
         services:
           [
             'association-registry-invitations-api',
+            'association-registry-invitations-archiver',
           ]
     steps:
       - name: debug_output
@@ -618,3 +640,4 @@ jobs:
           echo build-uuid: ${{ steps.awscurl-polling-action.outputs.build-uuid }}
           echo Status: ${{ steps.awscurl-polling-action.outputs.status }}
           echo ${{ steps.awscurl-polling-action.outputs.final-message }}
+
