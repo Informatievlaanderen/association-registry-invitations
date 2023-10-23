@@ -16,6 +16,8 @@ nuget Microsoft.AspNetCore.TestHost 6.0.3
 nuget Microsoft.AspNetCore.Mvc.NewtonsoftJson < 7.0
 nuget Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer
 nuget Microsoft.Extensions.DependencyInjection
+nuget Microsoft.Extensions.Hosting
+nuget Microsoft.Extensions.Configuration
 
 nuget FluentAssertions
 nuget Marten

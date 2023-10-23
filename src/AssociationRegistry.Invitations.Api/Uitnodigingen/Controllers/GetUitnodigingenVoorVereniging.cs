@@ -1,7 +1,6 @@
 ﻿using AssociationRegistry.Invitations.Api.Infrastructure;
 using AssociationRegistry.Invitations.Api.Infrastructure.Swagger;
 using AssociationRegistry.Invitations.Api.Uitnodigingen.Mapping;
-using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
 using AssociationRegistry.Invitations.Api.Uitnodigingen.Queries;
 using AssociationRegistry.Invitations.Api.Uitnodigingen.Responses;
 using Marten;
@@ -9,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Filters;
 using Uitgenodigde = AssociationRegistry.Invitations.Api.Uitnodigingen.Responses.Uitgenodigde;
 using Uitnodiger = AssociationRegistry.Invitations.Api.Uitnodigingen.Responses.Uitnodiger;
-using Uitnodiging = AssociationRegistry.Invitations.Api.Uitnodigingen.Models.Uitnodiging;
+using Uitnodiging = AssociationRegistry.Invitations.Api.Uitnodigingen;
 
 namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Controllers;
 
@@ -66,14 +65,14 @@ internal class UitnodigingenResponseExamples : IExamplesProvider<UitnodigingenRe
                     UitnodigingId = Guid.NewGuid(),
                     VCode = "V0000001",
                     Boodschap = "Boodschap voor uitgenodigde",
-                    Uitgenodigde = new Uitgenodigde()
+                    Uitgenodigde = new Responses.Uitgenodigde()
                     {
                         Voornaam = "John",
                         Achternaam = "Doe",
                         Email = "john.doe@example.com",
                         Insz = "00000000001"
                     },
-                    Uitnodiger = new Uitnodiger()
+                    Uitnodiger = new Responses.Uitnodiger()
                     {
                         VertegenwoordigerId = 12345
                     },
@@ -86,14 +85,14 @@ internal class UitnodigingenResponseExamples : IExamplesProvider<UitnodigingenRe
                     UitnodigingId = Guid.NewGuid(),
                     VCode = "V0000001",
                     Boodschap = "Boodschap voor uitgenodigde",
-                    Uitgenodigde = new Uitgenodigde()
+                    Uitgenodigde = new Responses.Uitgenodigde()
                     {
                         Voornaam = "Jane",
                         Achternaam = "Smith",
                         Email = "jane.smith@example.com",
                         Insz = "00000000002"
                     },
-                    Uitnodiger = new Uitnodiger()
+                    Uitnodiger = new Responses.Uitnodiger()
                     {
                         VertegenwoordigerId = 12345
                     },

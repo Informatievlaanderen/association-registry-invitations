@@ -1,8 +1,4 @@
-using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
-using AssociationRegistry.Invitations.Api.Uitnodigingen.Requests;
 using AutoFixture;
-using Uitgenodigde = AssociationRegistry.Invitations.Api.Uitnodigingen.Requests.Uitgenodigde;
-using Uitnodiger = AssociationRegistry.Invitations.Api.Uitnodigingen.Requests.Uitnodiger;
 
 namespace AssociationRegistry.Invitations.Archiver.Tests.Autofixture;
 
@@ -11,11 +7,10 @@ public static class AutofixtureCustomizations
     public static IFixture CustomizeAll(this IFixture fixture)
     {
         return fixture
-            .CustomizeTestInsz()
-            .CustomizeTestVCode()
-            .CustomizeUitgenodigde()
-            .CustomizeUitnodiging()
-            .CustomizeUitnodigingsRequest();
+                .CustomizeTestInsz()
+                .CustomizeTestVCode()
+                .CustomizeUitgenodigde()
+                .CustomizeUitnodiging();
     }
     
     public static IFixture CustomizeTestInsz(this IFixture fixture)
@@ -66,27 +61,6 @@ public static class AutofixtureCustomizations
         return fixture;
     }
     
-    public static IFixture CustomizeUitnodigingsRequest(this IFixture fixture)
-    {
-        fixture.Customize<UitnodigingsRequest>(
-            composerTransformation: composer => composer.FromFactory(
-                    factory: () =>
-                    {
-                        var randomCode = new Random().Next(0, 9999999);
-                        return new UitnodigingsRequest()
-                        {
-                            Uitgenodigde = fixture.Create<Uitgenodigde>(),
-                            Boodschap = fixture.Create<string>(),
-                            VCode = fixture.Create<TestVCode>(),
-                            Uitnodiger = fixture.Create<Uitnodiger>(),
-                        };
-                    })
-                .OmitAutoProperties()
-        );
-
-        return fixture;
-    }
-    
     public static IFixture CustomizeUitnodiging(this IFixture fixture)
     {
         fixture.Customize<Uitnodiging>(
@@ -96,10 +70,10 @@ public static class AutofixtureCustomizations
                         var randomCode = new Random().Next(0, 9999999);
                         return new Uitnodiging()
                         {
-                            Uitgenodigde = fixture.Create<AssociationRegistry.Invitations.Api.Uitnodigingen.Models.Uitgenodigde>(),
+                            Uitgenodigde = fixture.Create<Uitgenodigde>(),
                             Boodschap = fixture.Create<string>(),
                             VCode = fixture.Create<TestVCode>(),
-                            Uitnodiger = fixture.Create<AssociationRegistry.Invitations.Api.Uitnodigingen.Models.Uitnodiger>(),
+                            Uitnodiger = fixture.Create<Uitnodiger>(),
                             Status = UitnodigingsStatus.All[value % UitnodigingsStatus.All.Length]
                         };
                     })

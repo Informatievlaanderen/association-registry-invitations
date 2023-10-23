@@ -1,4 +1,4 @@
-namespace AssociationRegistry.Invitations.Api.Infrastructure.Utilities;
+namespace AssociationRegistry.Invitations.Utilities;
 
 public class Throw<TException> where TException : Exception
 {

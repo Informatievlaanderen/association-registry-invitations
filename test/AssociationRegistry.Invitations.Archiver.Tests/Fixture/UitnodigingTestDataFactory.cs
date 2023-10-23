@@ -1,6 +1,4 @@
-﻿using AssociationRegistry.Invitations.Api.Infrastructure.Extensions;
-using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
-using AssociationRegistry.Invitations.Archiver.Tests.Autofixture;
+﻿using AssociationRegistry.Invitations.Archiver.Tests.Autofixture;
 using AutoFixture;
 using NodaTime;
 

@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
-namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
+namespace AssociationRegistry.Invitations;
 
 public record UitnodigingsStatus
 {

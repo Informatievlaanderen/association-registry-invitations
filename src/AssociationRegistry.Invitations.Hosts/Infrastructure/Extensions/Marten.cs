@@ -1,13 +1,13 @@
 ﻿using AssociationRegistry.Invitations.Api.Infrastructure.ConfigurationBindings;
-using AssociationRegistry.Invitations.Api.Infrastructure.Json;
-using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
 using JasperFx.CodeGeneration;
 using Marten;
 using Marten.Services;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Weasel.Core;
 
-namespace AssociationRegistry.Invitations.Api.Infrastructure.Extensions;
+namespace AssociationRegistry.Invitations.Hosts.Infrastructure.Extensions;
 
 public static class Marten
 {

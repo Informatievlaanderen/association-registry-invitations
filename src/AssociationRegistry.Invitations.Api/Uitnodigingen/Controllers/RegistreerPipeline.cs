@@ -1,4 +1,3 @@
-using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
 using AssociationRegistry.Invitations.Api.Uitnodigingen.Queries;
 using AssociationRegistry.Invitations.Api.Uitnodigingen.Requests;
 using AssociationRegistry.Invitations.Api.Uitnodigingen.Validators;

@@ -1,4 +1,3 @@
-using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Controllers;

@@ -8,7 +8,7 @@ using AssociationRegistry.Invitations.Api.Infrastructure.Extensions;
 using AssociationRegistry.Invitations.Api.Infrastructure.Filters;
 using AssociationRegistry.Invitations.Api.Infrastructure.Localization;
 using AssociationRegistry.Invitations.Api.Infrastructure.Swagger;
-using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
+using AssociationRegistry.Invitations.Hosts.Infrastructure.Extensions;
 using Be.Vlaanderen.Basisregisters.AspNetCore.Swagger;
 using Destructurama;
 using IdentityModel.AspNetCore.OAuth2Introspection;

@@ -1,6 +1,4 @@
-﻿using AssociationRegistry.Invitations.Api.Infrastructure.Extensions;
-using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
-using AssociationRegistry.Invitations.Archiver.Tests.Fixture;
+﻿using AssociationRegistry.Invitations.Archiver.Tests.Fixture;
 using FluentAssertions;
 using Marten;
 using Microsoft.Extensions.DependencyInjection;

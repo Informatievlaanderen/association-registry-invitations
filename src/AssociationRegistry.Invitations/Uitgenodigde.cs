@@ -1,6 +1,4 @@
-using AssociationRegistry.Invitations.Api.Infrastructure.Utilities;
-
-namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
+namespace AssociationRegistry.Invitations;
 
 public class Uitgenodigde
 {

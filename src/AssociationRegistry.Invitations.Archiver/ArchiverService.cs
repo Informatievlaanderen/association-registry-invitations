@@ -1,5 +1,4 @@
-﻿using AssociationRegistry.Invitations.Api.Uitnodigingen.Models;
-using Marten;
+﻿using Marten;
 using Microsoft.Extensions.Hosting;
 using NodaTime;
 

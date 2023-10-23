@@ -23,4 +23,4 @@ OpenTelemetry.Instrumentation.Runtime
 NpgSql.OpenTelemetry
 
 Destructurama.JsonNet
-
+Microsoft.Extensions.Hosting
