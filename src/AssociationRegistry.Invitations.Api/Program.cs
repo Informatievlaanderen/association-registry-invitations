@@ -41,8 +41,6 @@ namespace AssociationRegistry.Invitations.Api;
 
 public class Program
 {
-    private const string AdminGlobalPolicyName = "Admin Global";
-
     public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(
@@ -74,10 +72,7 @@ public class Program
             .ConfigureDevelopmentEnvironment()
             .UseCors(StartupConstants.AllowSpecificOrigin);
 
-        // Deze volgorde is belangrijk ! DKW
-        ConfigureExceptionHandler(app);
         ConfigureMiddleware(app);
-
 
         ConfigureHealtChecks(app);
         ConfigureRequestLocalization(app);
@@ -147,56 +142,7 @@ public class Program
 
         app.UseHealthChecks(path: "/health", healthCheckOptions);
     }
-
-    private static void ConfigureExceptionHandler(WebApplication app)
-    {
-        // var problemDetailsHelper = app.Services.GetRequiredService<ProblemDetailsHelper>();
-        var logger = app.Services.GetRequiredService<ILoggerFactory>().CreateLogger<ApiExceptionHandler>();
-
-        // var exceptionHandler = new ExceptionHandler(
-        //     logger,
-        //     Array.Empty<ApiProblemDetailsExceptionMapping>(),
-        //     new IExceptionHandler[]
-        //     {
-        //         new BadHttpRequestExceptionHandler(problemDetailsHelper),
-        //         new CouldNotParseRequestExceptionHandler(problemDetailsHelper),
-        //         new JsonReaderExceptionHandler(problemDetailsHelper),
-        //     },
-        //     problemDetailsHelper);
-        //
-        // app.UseExceptionHandler404Allowed(
-        //     b =>
-        //     {
-        //         b.UseCors(StartupConstants.AllowSpecificOrigin);
-        //
-        //         b.UseMiddleware<ProblemDetailsMiddleware>();
-        //
-        //         ConfigureMiddleware(b);
-        //
-        //         var requestLocalizationOptions = app.Services
-        //                                             .GetRequiredService<IOptions<RequestLocalizationOptions>>()
-        //                                             .Value;
-        //
-        //         b.UseRequestLocalization(requestLocalizationOptions);
-        //
-        //         b.Run(
-        //             async context =>
-        //             {
-        //                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-        //                 context.Response.ContentType = MediaTypeNames.Application.Json;
-        //
-        //                 var error = context.Features.Get<IExceptionHandlerFeature>();
-        //                 var exception = error?.Error;
-        //
-        //                 // Errors happening in the Apply() stuff result in an InvocationException due to the dynamic stuff.
-        //                 if (exception is TargetInvocationException && exception.InnerException != null)
-        //                     exception = exception.InnerException;
-        //
-        //                 await exceptionHandler.HandleException(exception!, context);
-        //             });
-        //     });
-    }
-
+    
     private static void LoadConfiguration(WebApplicationBuilder builder, params string[] args)
     {
         builder.Configuration
@@ -213,21 +159,8 @@ public class Program
     private static void ConfigureMiddleware(IApplicationBuilder app)
     {
         app
-            // .UseMiddleware<EnableRequestRewindMiddleware>()
-            // .UseMiddleware<CorrelationIdMiddleware>()
-            // .UseMiddleware<AddCorrelationIdToLogContextMiddleware>()
             .UseMiddleware<AddHttpSecurityHeadersMiddleware>()
-            // .UseMiddleware<AddRemoteIpAddressMiddleware>(AddRemoteIpAddressMiddleware.UrnBasisregistersVlaanderenIp)
             .UseMiddleware<AddVersionHeaderMiddleware>(AddVersionHeaderMiddleware.HeaderName)
-            // .UseMiddleware<AddNoCacheHeadersMiddleware>()
-            // .UseMiddleware<DefaultResponseCompressionQualityMiddleware>(
-            //      new Dictionary<string, double>
-            //      {
-            //          { "br", 1.0 },
-            //          { "gzip", 0.9 },
-            //      })
-            // .UseMiddleware<UnexpectedAggregateVersionMiddleware>()
-            // .UseMiddleware<InitiatorHeaderMiddleware>()
             .UseResponseCompression();
     }
 
@@ -235,29 +168,14 @@ public class Program
     {
         // var elasticSearchOptionsSection = builder.Configuration.GetElasticSearchOptionsSection();
         var postgreSqlOptionsSection = builder.Configuration.GetPostgreSqlOptionsSection();
-        // var magdaOptionsSection = builder.Configuration.GetMagdaOptionsSection();
-        // var magdaTemporaryVertegenwoordigersSection = builder.Configuration.GetMagdaTemporaryVertegenwoordigersSection();
         var appSettings = builder.Configuration.Get<AppSettings>();
 
         builder.Services
             .AddSingleton<UitnodigingsStatusHandler>()
             .AddSingleton(postgreSqlOptionsSection)
-            // .AddSingleton(magdaOptionsSection)
             .AddSingleton(appSettings)
-            // .AddSingleton(magdaTemporaryVertegenwoordigersSection)
-            // .AddSingleton<IVCodeService, SequenceVCodeService>()
-            // .AddScoped<ICorrelationIdProvider, CorrelationIdProvider>()
-            // .AddScoped<InitiatorProvider>()
-            // .AddScoped<ICommandMetadataProvider, CommandMetadataProvider>()
             .AddSingleton<IClock>(SystemClock.Instance)
-            // .AddTransient<IEventStore, EventStore>()
-            // .AddTransient<IVerenigingsRepository, VerenigingsRepository>()
-            // .AddTransient<IDuplicateVerenigingDetectionService, SearchDuplicateVerenigingDetectionService>()
-            // .AddTransient<IMagdaGeefVerenigingService, MagdaGeefVerenigingService>()
-            // .AddTransient<IMagdaFacade, MagdaFacade>()
-            // .AddTransient<IMagdaCallReferenceRepository, MagdaCallReferenceRepository>()
             .AddMarten(postgreSqlOptionsSection)
-            // .AddElasticSearch(elasticSearchOptionsSection)
             .AddOpenTelemetryServices()
             .AddHttpContextAccessor()
             .AddControllers();
@@ -281,8 +199,6 @@ public class Program
                 {
                     cfg.RespectBrowserAcceptHeader = false;
                     cfg.ReturnHttpNotAcceptable = true;
-
-                    // cfg.Filters.Add(new LoggingFilterFactory(StartupConstants.HttpMethodsAsString));
 
                     cfg.Filters.Add<OperationCancelledExceptionFilter>();
 
@@ -318,10 +234,6 @@ public class Program
                     opt.SerializerSettings.Converters.Add(
                         new StringEnumConverter(new DefaultNamingStrategy(), allowIntegerValues: false));
 
-                    // opt.SerializerSettings.Converters.Add(new NullOrEmptyDateOnlyJsonConvertor());
-                    // opt.SerializerSettings.Converters.Add(new NullableNullOrEmptyDateOnlyJsonConvertor());
-                    // opt.SerializerSettings.Converters.Add(new NullableDateOnlyJsonConvertor(WellknownFormats.DateOnly));
-                    // opt.SerializerSettings.Converters.Add(new DateOnlyJsonConvertor(WellknownFormats.DateOnly));
                     opt.SerializerSettings.NullValueHandling = NullValueHandling.Include;
                     opt.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 })
@@ -358,10 +270,6 @@ public class Program
                             .RequireClaim(Security.ClaimTypes.Scope, Security.Scopes.Uitnodigingen)
                             .Build());
 
-        // builder.Services
-        // .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly())
-        // .AddDatabaseDeveloperPageExceptionFilter();
-
         builder.Services.AddHealthChecks();
 
 
@@ -389,7 +297,6 @@ public class Program
                 cfg =>
                 {
                     cfg.ReportApiVersions = true;
-                    // cfg.ErrorResponses = new ProblemDetailsResponseProvider();
                 })
             .AddEndpointsApiExplorer()
             .AddResponseCompression(
@@ -489,10 +396,6 @@ public class Program
     private static void ConfigureJsonSerializerSettings()
     {
         var jsonSerializerSettings = JsonSerializerSettingsProvider.CreateSerializerSettings().ConfigureDefaultForApi();
-        // jsonSerializerSettings.Converters.Add(new NullOrEmptyDateOnlyJsonConvertor());
-        // jsonSerializerSettings.Converters.Add(new NullableNullOrEmptyDateOnlyJsonConvertor());
-        // jsonSerializerSettings.Converters.Add(new NullableDateOnlyJsonConvertor(WellknownFormats.DateOnly));
-        // jsonSerializerSettings.Converters.Add(new DateOnlyJsonConvertor(WellknownFormats.DateOnly));
         jsonSerializerSettings.NullValueHandling = NullValueHandling.Include;
         jsonSerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 
