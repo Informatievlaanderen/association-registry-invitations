@@ -24,27 +24,8 @@ jobs:
     name: Set Release Version
     runs-on: ubuntu-latest
     needs: [ decide-release-version ]
-    steps:
-      - name: Check version
-        shell: bash
-        run: echo $SEMVER
-        env:
-          SEMVER: ${{ env.RELEASE_VERSION }}
-                    
-      - name: Set Release Version
-        id: set-version
-        run: |
-          echo ${{ env.RELEASE_VERSION }} > semver
-          echo $(cat semver)
-          echo ::set-output name=version::$(cat semver)
-          echo RELEASE_VERSION=$(cat semver) >> $GITHUB_ENV
-        shell: bash
-
-      - name: Check version
-        shell: bash
-        run: echo $SEMVER
-        env:
-          SEMVER: ${{ env.RELEASE_VERSION }}
+    outputs:
+      version: ${{ env.RELEASE_VERSION }}
   
   build-invitations-api:
     if: github.repository_owner == 'informatievlaanderen' && needs.set-release-version.outputs.version != 'none'
