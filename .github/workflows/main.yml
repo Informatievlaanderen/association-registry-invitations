@@ -26,6 +26,12 @@ jobs:
     needs: [ decide-release-version ]
     outputs:
       version: ${{ env.RELEASE_VERSION }}
+    steps:
+      - name: Check version
+        shell: bash
+        run: echo $SEMVER
+        env:
+          SEMVER: ${{ needs.set-release-version.outputs.version }}
   
   build-invitations-api:
     if: github.repository_owner == 'informatievlaanderen' && needs.set-release-version.outputs.version != 'none'
