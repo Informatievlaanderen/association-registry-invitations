@@ -131,7 +131,7 @@ jobs:
       - name: Run tests via docker run
         shell: bash
         run: |
-          docker run --network host --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 /bin/sh .github/build-scripts/run-api-tests-docker.sh
+          docker run --network host --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 /bin/sh .github/build-scripts/run-tests-docker.sh AssociationRegistry.Invitations.Api.Tests
 
       - name: Archive code coverage results
         if: ${{ always() }}
@@ -179,7 +179,7 @@ jobs:
       - name: Run tests via docker run
         shell: bash
         run: |
-          docker run --network host --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 /bin/sh .github/build-scripts/run-archiver-tests-docker.sh
+          docker run --network host --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 /bin/sh .github/build-scripts/run-tests-docker.sh AssociationRegistry.Invitations.Archiver.Tests
 
       - name: Archive code coverage results
         if: ${{ always() }}
