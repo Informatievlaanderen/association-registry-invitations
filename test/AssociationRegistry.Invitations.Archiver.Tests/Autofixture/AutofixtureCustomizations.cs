@@ -48,7 +48,7 @@ public static class AutofixtureCustomizations
     {
         fixture.Customize<Uitgenodigde>(
             composerTransformation: composer => composer.FromFactory(
-                    factory: () => new Uitgenodigde()
+                    factory: () => new Uitgenodigde
                     {
                         Email = "test@example.com",
                         Insz = fixture.Create<TestInsz>(),
@@ -68,7 +68,7 @@ public static class AutofixtureCustomizations
                     factory: value =>
                     {
                         var randomCode = new Random().Next(0, 9999999);
-                        return new Uitnodiging()
+                        return new Uitnodiging
                         {
                             Uitgenodigde = fixture.Create<Uitgenodigde>(),
                             Boodschap = fixture.Create<string>(),
