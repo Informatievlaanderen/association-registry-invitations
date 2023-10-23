@@ -46,9 +46,9 @@ public static class AutofixtureCustomizations
     
     public static IFixture CustomizeUitgenodigde(this IFixture fixture)
     {
-        fixture.Customize<Uitgenodigde>(
+        fixture.Customize<AssociationRegistry.Invitations.Api.Uitnodigingen.Requests.Uitgenodigde>(
             composerTransformation: composer => composer.FromFactory(
-                    factory: () => new Uitgenodigde()
+                    factory: () => new AssociationRegistry.Invitations.Api.Uitnodigingen.Requests.Uitgenodigde()
                     {
                         Email = "test@example.com",
                         Insz = fixture.Create<TestInsz>(),
