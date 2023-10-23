@@ -22,10 +22,10 @@ public static class Program
 
     public static void ConfigureDefaultServices(HostBuilderContext context, IServiceCollection services) {
         var postgreSqlOptionsSection = context.Configuration.GetPostgreSqlOptionsSection();
-        var archiverOptions = context.Configuration.Get<ArchiverOptions>();
+        var archiverOptions = context.Configuration.Get<AppSettings>();
 
         services
-            .AddSingleton<ArchiverOptions>(archiverOptions)
+            .AddSingleton<AppSettings>(archiverOptions)
             .AddSingleton(postgreSqlOptionsSection)
             .AddMarten(postgreSqlOptionsSection)
             .AddHostedService<ArchiverService>();

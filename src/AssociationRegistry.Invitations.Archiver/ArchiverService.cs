@@ -9,9 +9,9 @@ public class ArchiverService : BackgroundService
 {
     private readonly IDocumentStore _store;
     private readonly IClock _clock;
-    private readonly ArchiverOptions.BewaartijdenOptions _options;
+    private readonly AppSettings.BewaartijdenOptions _options;
 
-    public ArchiverService(IDocumentStore store, IClock clock, ArchiverOptions options)
+    public ArchiverService(IDocumentStore store, IClock clock, AppSettings options)
     {
         _store = store;
         _clock = clock;
