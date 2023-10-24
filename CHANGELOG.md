@@ -1,3 +1,37 @@
+# [1.16.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.15.0...v1.16.0) (2023-10-24)
+
+
+### Bug Fixes
+
+* add docker file and init.sh script ([d92b72f](https://github.com/informatievlaanderen/association-registry-invitations/commit/d92b72fa8b5ebdd163c6bc3c6b9b0690990f0a62))
+* catch environment variable RELEASE_VERSION ([8ca5a27](https://github.com/informatievlaanderen/association-registry-invitations/commit/8ca5a2727c2f514bbb2992716b3332f06e8fe756))
+* direct output straight for RELEASE_VERSION ([302222b](https://github.com/informatievlaanderen/association-registry-invitations/commit/302222b5b6a6ead7961f8a1c206ef955b62ab870))
+* incorrect output veriable from linked workflow ([0c7d01b](https://github.com/informatievlaanderen/association-registry-invitations/commit/0c7d01bfe0fbf05d06279481f96435356dfe8e60))
+* lowercase username for linked workflows ([4c90961](https://github.com/informatievlaanderen/association-registry-invitations/commit/4c909610b5176f7f7129c8b492c07067615cfba6))
+* OR-1804 added archiver tests in pre-merge script ([d996081](https://github.com/informatievlaanderen/association-registry-invitations/commit/d9960810ace9895b4acb6a6719ce10459039108b))
+* or-1804 call script with params ([8108ba1](https://github.com/informatievlaanderen/association-registry-invitations/commit/8108ba18d7abec14f1e406068e78544993e14098))
+* or-1804 clean up and small namespace fixes ([56fc769](https://github.com/informatievlaanderen/association-registry-invitations/commit/56fc769d7b5802709c8e29cc1e01d69aa2808a93))
+* or-1804 don't rely on api proj in a console app ([4a6ad79](https://github.com/informatievlaanderen/association-registry-invitations/commit/4a6ad7963c25b8229d0fdd09e2c6f82984bb7e1c))
+* OR-1804 make some updates on main pipeline ([6b6322e](https://github.com/informatievlaanderen/association-registry-invitations/commit/6b6322e83981c0f1873f6c4fc4a25f2cc6ea8c33))
+* or-1804 only keep main ([9d00248](https://github.com/informatievlaanderen/association-registry-invitations/commit/9d00248c6a98588c2f9a26cfa0fe3863c40df282))
+* or-1804 reference file ([69b7fa2](https://github.com/informatievlaanderen/association-registry-invitations/commit/69b7fa2c5b12dac5a18d30a60d50e159ad9f78a2))
+* or-1804 reference full path of action ([26929fa](https://github.com/informatievlaanderen/association-registry-invitations/commit/26929fad31638598cd0c0fa9073d91309cc9a7cc))
+* OR-1804 rename ArchiverOptions to AppSettings ([1fa3b65](https://github.com/informatievlaanderen/association-registry-invitations/commit/1fa3b65f076c0aa6c4678e1fe3d011d66e789e8b))
+* OR-1804 rename description for test scripts ([8678286](https://github.com/informatievlaanderen/association-registry-invitations/commit/8678286bc6ee12339ae3ed27504c6f46f71b9698))
+* OR-1804 SonarCloud bugfixes and fair warnings ([6a82281](https://github.com/informatievlaanderen/association-registry-invitations/commit/6a82281a7e095a98f375f483826e4dbd429de84c))
+* OR-1804 update main pipeline to include the archiver ([c52ec95](https://github.com/informatievlaanderen/association-registry-invitations/commit/c52ec95fd23ac7de10d31cadb5296750ea7c165d))
+* OR-1804 update main pipeline to include the archiver publish ([f2cc6eb](https://github.com/informatievlaanderen/association-registry-invitations/commit/f2cc6eb05936c0d2523acbea4031c3cdc6591846))
+* revert to set-release-version inside main workflow ([449651c](https://github.com/informatievlaanderen/association-registry-invitations/commit/449651c37834fc98fe43756d44c8adebdee5c314))
+* use environment variables to transpose from reusable workflow ([6b21171](https://github.com/informatievlaanderen/association-registry-invitations/commit/6b2117127f97ec681773add9f029f9d299c89609))
+* use environment variables to transpose from reusable workflow ([aa16fbe](https://github.com/informatievlaanderen/association-registry-invitations/commit/aa16fbe94ad1b5f999a601630421851ff4fc7675))
+
+
+### Features
+
+* OR-1804 Implementation and tests for archiver ([a7a85db](https://github.com/informatievlaanderen/association-registry-invitations/commit/a7a85dbae8a373f974a2dc80db719f4d55194338))
+* or-1804 initial setup ([342d0dd](https://github.com/informatievlaanderen/association-registry-invitations/commit/342d0ddf39b5949e5d853580871c00c43aca7389))
+* or-1804 parse archival period from string ([6c89a91](https://github.com/informatievlaanderen/association-registry-invitations/commit/6c89a919736d662609be9a3e951fed1932a0a9c9))
+
 # [1.15.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.14.4...v1.15.0) (2023-10-16)
 
 
