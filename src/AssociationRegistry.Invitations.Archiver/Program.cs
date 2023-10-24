@@ -19,7 +19,7 @@ public static class Program
             .ConfigureServices(ConfigureDefaultServices)
             .Build();
 
-        await host.RunAsync();
+        await host.StartAsync();
     }
 
     public static void ConfigureDefaultServices(HostBuilderContext context, IServiceCollection services) {
