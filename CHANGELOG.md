@@ -1,3 +1,10 @@
+## [1.16.1](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.16.0...v1.16.1) (2023-10-24)
+
+
+### Bug Fixes
+
+* OR-1804 add missing dependencies inside container ([fd48a81](https://github.com/informatievlaanderen/association-registry-invitations/commit/fd48a81335f8bd663b925f6192ab431cb97e66fd))
+
 # [1.16.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.15.0...v1.16.0) (2023-10-24)
 
 
