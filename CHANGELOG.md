@@ -1,3 +1,10 @@
+## [1.16.2](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.16.1...v1.16.2) (2023-10-24)
+
+
+### Bug Fixes
+
+* OR-1804 use StartAsync instead of RunAsync ([0d3caa8](https://github.com/informatievlaanderen/association-registry-invitations/commit/0d3caa82cf7cdc0eb1c06673d2d211177adcae39))
+
 ## [1.16.1](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.16.0...v1.16.1) (2023-10-24)
 
 
