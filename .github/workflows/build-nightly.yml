@@ -38,7 +38,7 @@ jobs:
         ports:
           - 21433:21433
       acm:
-        image: ghcr.io/informatievlaanderen/acmidm:1.253.0
+        image: ghcr.io/informatievlaanderen/acmidm:1.311.2
         ports:
           - 5050:80
       wiremock:
