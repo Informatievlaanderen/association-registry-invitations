@@ -47,7 +47,7 @@ public class TrekUitnodigingInController : ApiController
             .BadRequestIfReedsVerwerkt(Resources.IntrekkenOnmogelijk)
             .Handle(async () =>
             {
-                await _handler.SetStatus(uitnodiging, UitnodigingsStatus.Ingetrokken, cancellationToken);
+                await _handler.SetStatus(uitnodiging!, UitnodigingsStatus.Ingetrokken, cancellationToken);
 
                 return Accepted();
 

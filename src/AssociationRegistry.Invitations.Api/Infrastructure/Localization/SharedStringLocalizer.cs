@@ -7,8 +7,7 @@ public class SharedStringLocalizer<T> : IStringLocalizer
 {
     private readonly IStringLocalizer _primaryStringLocalizer;
 
-    private readonly Lazy<IStringLocalizer<T>> _sharedStringLocalizer
-        = new Lazy<IStringLocalizer<T>>(() => GlobalStringLocalizer.Instance.GetLocalizer<T>());
+    private readonly Lazy<IStringLocalizer<T>> _sharedStringLocalizer = new(() => GlobalStringLocalizer.Instance.GetLocalizer<T>());
 
     public SharedStringLocalizer(IStringLocalizer primaryStringLocalizer) => _primaryStringLocalizer = primaryStringLocalizer;
 
