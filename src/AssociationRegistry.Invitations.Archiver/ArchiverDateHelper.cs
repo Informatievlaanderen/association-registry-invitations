@@ -29,7 +29,7 @@ public static class ArchiverDateHelper
             'h' => Duration.FromHours(value),
             'd' => Duration.FromDays(value),
             'w' => Duration.FromDays(value * 7),
-            _ => throw new FormatException("Invalid format.")
+            _ => throw new FormatException("Invalid format."),
         };
     }
 }

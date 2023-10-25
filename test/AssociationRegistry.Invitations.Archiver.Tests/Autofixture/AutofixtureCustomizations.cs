@@ -53,7 +53,7 @@ public static class AutofixtureCustomizations
                         Email = "test@example.com",
                         Insz = fixture.Create<TestInsz>(),
                         Achternaam = fixture.Create<string>(),
-                        Voornaam = fixture.Create<string>()
+                        Voornaam = fixture.Create<string>(),
                     })
                 .OmitAutoProperties()
         );
@@ -74,7 +74,7 @@ public static class AutofixtureCustomizations
                             Boodschap = fixture.Create<string>(),
                             VCode = fixture.Create<TestVCode>(),
                             Uitnodiger = fixture.Create<Uitnodiger>(),
-                            Status = UitnodigingsStatus.All[value % UitnodigingsStatus.All.Length]
+                            Status = UitnodigingsStatus.All[value % UitnodigingsStatus.All.Length],
                         };
                     })
                 .OmitAutoProperties()

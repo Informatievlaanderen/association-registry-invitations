@@ -20,7 +20,7 @@ public class UitnodigingTestDataFactory
         var uitnodiging = _autoFixture.Create<Uitnodiging>() with
         {
             DatumRegistratie = date.ToDateTimeOffset(),
-            DatumLaatsteAanpassing = date.ToDateTimeOffset()
+            DatumLaatsteAanpassing = date.ToDateTimeOffset(),
         };
 
         Date = date;
@@ -30,7 +30,7 @@ public class UitnodigingTestDataFactory
             Aanvaard = uitnodiging with { Status = UitnodigingsStatus.Aanvaard },
             Geweigerd = uitnodiging with { Status = UitnodigingsStatus.Geweigerd },
             Ingetrokken = uitnodiging with { Status = UitnodigingsStatus.Ingetrokken },
-            Verlopen = uitnodiging with { Status = UitnodigingsStatus.Verlopen }
+            Verlopen = uitnodiging with { Status = UitnodigingsStatus.Verlopen },
         };
         OverTijdUitnodigingen = new Uitnodigingen
         {
@@ -38,7 +38,7 @@ public class UitnodigingTestDataFactory
             Aanvaard = NietOverTijdUitnodigingen.Aanvaard with { DatumLaatsteAanpassing = ArchiverDateHelper.CalculateArchivalStartDate(options.Bewaartijden.Aanvaard, date).ToDateTimeOffset() },
             Geweigerd = NietOverTijdUitnodigingen.Geweigerd with { DatumLaatsteAanpassing  = ArchiverDateHelper.CalculateArchivalStartDate(options.Bewaartijden.Geweigerd, date).ToDateTimeOffset() },
             Ingetrokken = NietOverTijdUitnodigingen.Ingetrokken with { DatumLaatsteAanpassing  = ArchiverDateHelper.CalculateArchivalStartDate(options.Bewaartijden.Geweigerd, date).ToDateTimeOffset() },
-            Verlopen = NietOverTijdUitnodigingen.Verlopen with { DatumLaatsteAanpassing  = ArchiverDateHelper.CalculateArchivalStartDate(options.Bewaartijden.Verlopen, date).ToDateTimeOffset() }
+            Verlopen = NietOverTijdUitnodigingen.Verlopen with { DatumLaatsteAanpassing  = ArchiverDateHelper.CalculateArchivalStartDate(options.Bewaartijden.Verlopen, date).ToDateTimeOffset() },
         };
     }
 
@@ -55,7 +55,7 @@ public class UitnodigingTestDataFactory
             OverTijdUitnodigingen.Aanvaard,
             OverTijdUitnodigingen.Geweigerd,
             OverTijdUitnodigingen.Ingetrokken,
-            OverTijdUitnodigingen.Verlopen
+            OverTijdUitnodigingen.Verlopen,
         };
     }
 }

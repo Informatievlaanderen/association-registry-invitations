@@ -15,15 +15,13 @@ public static class RegistreerPipeline
             {
                 Failure = controller =>
                 {
+                    foreach (var error in result.Errors)
                     {
-                        foreach (var error in result.Errors)
-                        {
-                            controller.ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-                        }
-
-                        return Task.FromResult(controller.ValidationProblem(controller.ModelState));
+                        controller.ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
                     }
-                }
+
+                    return Task.FromResult(controller.ValidationProblem(controller.ModelState));
+                },
             };
 
         return new Either<UitnodigingsRequest> { Input = source! };
@@ -46,7 +44,7 @@ public static class RegistreerPipeline
                 {
                     controller.ModelState.AddModelError("Uitnodiging", "Deze persoon is reeds uitgenodigd.");
                     return Task.FromResult(controller.ValidationProblem(controller.ModelState));
-                }
+                },
             };
         }
         

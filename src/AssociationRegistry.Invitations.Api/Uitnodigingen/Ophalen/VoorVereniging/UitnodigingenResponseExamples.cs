@@ -19,15 +19,15 @@ internal class UitnodigingenResponseExamples : IExamplesProvider<UitnodigingenRe
                         Voornaam = "John",
                         Achternaam = "Doe",
                         Email = "john.doe@example.com",
-                        Insz = "00000000001"
+                        Insz = "00000000001",
                     },
                     Uitnodiger = new Uitnodiger
                     {
-                        VertegenwoordigerId = 12345
+                        VertegenwoordigerId = 12345,
                     },
                     Status = UitnodigingsStatus.All[Random.Shared.Next(0, UitnodigingsStatus.All.Length - 1)],
                     DatumRegistratie = DateTime.Today.AddDays(-1).ToLongDateString(),
-                    DatumLaatsteAanpassing = DateTime.Today.ToLongDateString()
+                    DatumLaatsteAanpassing = DateTime.Today.ToLongDateString(),
                 },
                 new Uitnodiging
                 {
@@ -39,16 +39,16 @@ internal class UitnodigingenResponseExamples : IExamplesProvider<UitnodigingenRe
                         Voornaam = "Jane",
                         Achternaam = "Smith",
                         Email = "jane.smith@example.com",
-                        Insz = "00000000002"
+                        Insz = "00000000002",
                     },
                     Uitnodiger = new Uitnodiger
                     {
-                        VertegenwoordigerId = 12345
+                        VertegenwoordigerId = 12345,
                     },
                     Status = UitnodigingsStatus.All[Random.Shared.Next(0, UitnodigingsStatus.All.Length - 1)],
                     DatumRegistratie = DateTime.Today.AddDays(-1).ToLongDateString(),
-                    DatumLaatsteAanpassing = DateTime.Today.ToLongDateString()
-                }
-            }
+                    DatumLaatsteAanpassing = DateTime.Today.ToLongDateString(),
+                },
+            },
         };
 }
