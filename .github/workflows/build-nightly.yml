@@ -87,7 +87,7 @@ jobs:
       semver: ${{ needs.set-release-version.outputs.version }}
     secrets: inherit
 
-  build-archiver:
+  build-invitations-archiver:
     if: github.repository_owner == 'Informatievlaanderen' && needs.set-release-version.outputs.version != 'none'
     name: Build Invitations Archiver
     needs: [ test, set-release-version ]
@@ -114,7 +114,7 @@ jobs:
         uses: slackapi/slack-github-action@v1.21.0
         with:
           channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
-          slack-message: ":thumbsup: Nightly build succeeded: \n
+          slack-message: ":thumbsup: VR+ Nightly build succeeded: \n
           ${{github.event.head_commit.url }} \n
           ${{format('{0}: {1}', 'test', needs.test.result) }}\n
           ${{format('{0}: {1}', 'build-invitations-api', needs.build-invitations-api.result) }}\n
@@ -140,7 +140,7 @@ jobs:
           # See also: https://api.slack.com/methods/chat.postMessage#channels
           channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
           # For posting a simple plain text message
-          slack-message: ":thumbsdown: Nightly build failed some checks: \n
+          slack-message: ":thumbsdown: VR+ Nightly build failed some checks: \n
           ${{github.event.head_commit.url }} \n
           ${{format('{0}: {1}', 'test', needs.test.result) }}\n
           ${{format('{0}: {1}', 'build-invitations-api', needs.build-invitations-api.result) }}\n
