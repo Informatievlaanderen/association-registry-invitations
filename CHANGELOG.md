@@ -1,3 +1,16 @@
+# [1.17.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.16.2...v1.17.0) (2023-10-25)
+
+
+### Bug Fixes
+
+* or-1804 group by functionality ([cfc6f63](https://github.com/informatievlaanderen/association-registry-invitations/commit/cfc6f6394e1175fcbd4b0eab73fb91fb3fac3425))
+* or-1804 set datumLaatsteAanpassing on registration ([4189d16](https://github.com/informatievlaanderen/association-registry-invitations/commit/4189d16a4c77746395350830793ccf13027b45af))
+
+
+### Features
+
+* or-1804 refactor and force build ([a7a005f](https://github.com/informatievlaanderen/association-registry-invitations/commit/a7a005f2aa3d5ff81bc3ff23c739f2bd26d6a8cb))
+
 ## [1.16.2](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.16.1...v1.16.2) (2023-10-24)
 
 
