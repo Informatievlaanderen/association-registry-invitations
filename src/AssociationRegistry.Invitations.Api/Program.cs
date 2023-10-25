@@ -60,7 +60,7 @@ public class Program
         ConfigureJsonSerializerSettings();
         ConfigureAppDomainExceptions();
 
-        ConfigereKestrel(builder);
+        ConfigureKestrel(builder);
         ConfigureLogger(builder);
         ConfigureWebHost(builder);
         ConfigureServices(builder);
@@ -167,7 +167,6 @@ public class Program
 
     private static void ConfigureServices(WebApplicationBuilder builder)
     {
-        // var elasticSearchOptionsSection = builder.Configuration.GetElasticSearchOptionsSection();
         var postgreSqlOptionsSection = builder.Configuration.GetPostgreSqlOptionsSection();
         var appSettings = builder.Configuration.Get<AppSettings>();
 
@@ -363,16 +362,7 @@ public class Program
             .AddOpenTelemetry();
     }
 
-    private static void RunWithLock<T>(IWebHostBuilder webHostBuilder) where T : class
-    {
-        var webHost = webHostBuilder.Build();
-        var services = webHost.Services;
-        var logger = services.GetRequiredService<ILogger<T>>();
-
-        webHost.Run();
-    }
-
-    private static void ConfigereKestrel(WebApplicationBuilder builder)
+    private static void ConfigureKestrel(WebApplicationBuilder builder)
     {
         builder.WebHost.ConfigureKestrel(
             options =>
