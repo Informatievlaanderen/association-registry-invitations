@@ -248,6 +248,8 @@ jobs:
     needs: 
       - build-invitations-api
       - build-invitations-archiver
+    outputs:
+      version: ${{ steps.set-version.outputs.version }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -296,8 +298,18 @@ jobs:
           GIT_COMMITTER_EMAIL: ${{ secrets.VBR_GIT_EMAIL }}
           BUILD_DOCKER_REGISTRY: ${{ secrets.VBR_BUILD_DOCKER_REGISTRY_TST }}
 
+
+      - name: Set Release Version
+        id: set-version
+        run: |
+          [ ! -f semver ] && echo none > semver
+          echo $(cat semver)
+          echo ::set-output name=version::$(cat semver)
+          echo RELEASE_VERSION=$(cat semver) >> $GITHUB_ENV
+        shell: bash
+
   publish_to_atlassian:
-    if: needs.set-release-version.outputs.version != 'none'
+    if: needs.release.outputs.version != 'none'
     needs: 
       - set-release-version
       - release
