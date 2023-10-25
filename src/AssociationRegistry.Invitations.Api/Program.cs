@@ -499,7 +499,7 @@ public class StartupConfigureOptions
             HttpMethod.Put,
             HttpMethod.Patch,
             HttpMethod.Delete,
-            HttpMethod.Options
+            HttpMethod.Options,
         }.Select(x => x.Method).ToArray();
 
         public string ProblemDetailsTypeNamespaceOverride { get; set; } = string.Empty;

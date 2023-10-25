@@ -39,7 +39,7 @@ public class ArchiverService : BackgroundService
             .Select(uitnodiging => uitnodiging with
             {
                 Status = UitnodigingsStatus.Verlopen,
-                DatumLaatsteAanpassing = _clock.GetCurrentInstant().ToDateTimeOffset()
+                DatumLaatsteAanpassing = _clock.GetCurrentInstant().ToDateTimeOffset(),
             });
         session.Store(uitnodigingen);
     }

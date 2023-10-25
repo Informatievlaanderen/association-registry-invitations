@@ -7,6 +7,6 @@ internal class RegistratieResponseExamples : IExamplesProvider<RegistratieRespon
     public RegistratieResponse GetExamples()
         => new()
         {
-            UitnodigingId = Guid.NewGuid()
+            UitnodigingId = Guid.NewGuid(),
         };
 }

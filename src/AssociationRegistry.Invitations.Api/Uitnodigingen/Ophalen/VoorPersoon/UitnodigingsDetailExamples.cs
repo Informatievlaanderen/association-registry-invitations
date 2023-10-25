@@ -24,14 +24,14 @@ internal class UitnodigingsDetailExamples : IExamplesProvider<UitnodigingsDetail
             DatumLaatsteAanpassing = _clock.GetCurrentInstant().AsFormattedString(),
             Uitnodiger = new UitnodigingsDetail.UitnodigerDetail
             {
-                VertegenwoordigerId = 12345
+                VertegenwoordigerId = 12345,
             },
             Uitgenodigde = new UitnodigingsDetail.UitgenodigdeDetail
             {
                 Voornaam = "John",
                 Achternaam = "Doe",
                 Email = "john.doe@example.com",
-                Insz = "00000000000"
-            }
+                Insz = "00000000000",
+            },
         };
 }

@@ -30,7 +30,7 @@ public static class StatusWijzigingPipeline
                 {
                     controller.ModelState.AddModelError("Uitnodiging", foutboodschap);
                     return Task.FromResult(controller.ValidationProblem(controller.ModelState));
-                }
+                },
             };
         }
         

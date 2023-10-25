@@ -129,7 +129,7 @@ public class AddVersionHeaderMiddleware
 public enum FrameOptionsDirectives
 {
     Deny,
-    SameOrigin
+    SameOrigin,
 }
 
 public class AddCorrelationIdToResponseMiddleware
