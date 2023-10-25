@@ -473,17 +473,17 @@ public class StartupConfigureOptions
         return this;
     }
 
-    public CorsOptions Cors { get; } = new CorsOptions();
+    public CorsOptions Cors { get; } = new();
 
     public class CorsOptions
     {
-        public string[] Origins { get; set; } = null;
-        public string[] Methods { get; set; } = null;
-        public string[] Headers { get; set; } = null;
-        public string[] ExposedHeaders { get; set; } = null;
+        public string[] Origins { get; set; } = Array.Empty<string>();
+        public string[] Methods { get; set; } = Array.Empty<string>();
+        public string[] Headers { get; set; } = Array.Empty<string>();
+        public string[] ExposedHeaders { get; set; } = Array.Empty<string>();
     }
 
-    public ServerOptions Server { get; } = new ServerOptions();
+    public ServerOptions Server { get; } = new();
 
     public class ServerOptions
     {
@@ -505,20 +505,20 @@ public class StartupConfigureOptions
         public string ProblemDetailsTypeNamespaceOverride { get; set; } = string.Empty;
     }
 
-    public SwaggerOptions Swagger { get; } = new SwaggerOptions();
+    public SwaggerOptions Swagger { get; } = new();
 
     public class SwaggerOptions
     {
         /// <summary>
         /// Function which returns global metadata to be included in the Swagger output.
         /// </summary>
-        public Func<IApiVersionDescriptionProvider, ApiVersionDescription, OpenApiInfo> ApiInfo { get; set; }
+        public Func<IApiVersionDescriptionProvider, ApiVersionDescription, OpenApiInfo> ApiInfo { get; set; } = null!;
 
         /// <summary>
         /// Inject human-friendly descriptions for Operations, Parameters and Schemas based on XML Comment files.
         /// A list of absolute paths to the files that contains XML Comments.
         /// </summary>
-        public string[] XmlCommentPaths { get; set; } = null;
+        public string[] XmlCommentPaths { get; set; } = Array.Empty<string>();
 
         /// <summary>
         /// Easily add additional header parameters to each request.
@@ -532,7 +532,7 @@ public class StartupConfigureOptions
         public IEnumerable<Server> Servers { get; set; } = new List<Server>();
 
 
-        public MiddlewareHookOptions MiddlewareHooks { get; } = new MiddlewareHookOptions();
+        public MiddlewareHookOptions MiddlewareHooks { get; } = new();
 
         public class MiddlewareHookOptions
         {
@@ -540,11 +540,11 @@ public class StartupConfigureOptions
         }
     }
 
-    public LocalizationOptions Localization { get; } = new LocalizationOptions();
+    public LocalizationOptions Localization { get; } = new();
 
     public class LocalizationOptions
     {
-        public CultureInfo DefaultCulture { get; set; } = null;
-        public CultureInfo[] SupportedCultures { get; set; } = null;
+        public CultureInfo? DefaultCulture { get; set; }
+        public CultureInfo[] SupportedCultures { get; set; } = Array.Empty<CultureInfo>();
     }
 }

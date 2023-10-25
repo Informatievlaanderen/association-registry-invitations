@@ -46,7 +46,7 @@ public class WeigerUitnodiging : ApiController
             .BadRequestIfReedsVerwerkt(Resources.WeigerenOnmogelijk)
             .Handle(async () =>
             {
-                await _handler.SetStatus(uitnodiging, UitnodigingsStatus.Geweigerd, cancellationToken);
+                await _handler.SetStatus(uitnodiging!, UitnodigingsStatus.Geweigerd, cancellationToken);
 
                 return Accepted();
 

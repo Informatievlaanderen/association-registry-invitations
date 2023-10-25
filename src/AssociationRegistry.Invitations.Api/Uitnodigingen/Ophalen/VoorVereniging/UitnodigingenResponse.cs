@@ -5,19 +5,19 @@ namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Ophalen.VoorVerenigi
 
 public class UitnodigingenResponse
 {
-    public Uitnodiging[] Uitnodigingen { get; set; }
+    public Uitnodiging[] Uitnodigingen { get; set; } = Array.Empty<Uitnodiging>();
 }
 
 public class Uitnodiging
 {
     public Guid UitnodigingId { get; set; }
-    public string VCode { get; set; }
-    public string Boodschap { get; set; }
-    public string Status { get; set; }
-    public string DatumRegistratie { get; set; }
-    public string DatumLaatsteAanpassing { get; set; }
-    public Uitnodiger Uitnodiger { get; set; }
-    public Uitgenodigde Uitgenodigde { get; set; }
+    public string VCode { get; set; } = null!;
+    public string Boodschap { get; set; } = null!;
+    public string Status { get; set; } = null!;
+    public string DatumRegistratie { get; set; } = null!;
+    public string DatumLaatsteAanpassing { get; set; } = null!;
+    public Uitnodiger Uitnodiger { get; set; } = null!;
+    public Uitgenodigde Uitgenodigde { get; set; } = null!;
 }
 
 public class Uitnodiger
@@ -27,11 +27,11 @@ public class Uitnodiger
 
 public class Uitgenodigde
 {
-    public string Insz { get; set; }
-    public string Voornaam { get; set; }
-    public string Achternaam { get; set; }
+    public string Insz { get; set; } = null!;
+    public string Voornaam { get; set; } = null!;
+    public string Achternaam { get; set; } = null!;
     
     [JsonProperty("e-mail")]
     [JsonPropertyName("e-mail")]
-    public string Email { get; set; }
+    public string Email { get; set; } = null!;
 }

@@ -4,7 +4,7 @@ namespace AssociationRegistry.Invitations.Api.Infrastructure.Localization;
 
 public class GlobalStringLocalizer
 {
-    private readonly object _lock = new object();
+    private readonly object _lock = new();
     private readonly IServiceProvider _serviceProvider;
     private readonly IDictionary<Type, IStringLocalizer> _localizers = new Dictionary<Type, IStringLocalizer>();
 
@@ -19,7 +19,7 @@ public class GlobalStringLocalizer
         lock (_lock)
         {
             if (!_localizers.ContainsKey(type))
-                _localizers.Add(type, _serviceProvider.GetService<IStringLocalizer<T>>());
+                _localizers.Add(type, _serviceProvider.GetRequiredService<IStringLocalizer<T>>());
         }
 
         return (IStringLocalizer<T>)_localizers[type];

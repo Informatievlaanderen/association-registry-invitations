@@ -120,7 +120,7 @@ public class AddVersionHeaderMiddleware
 
     public Task Invoke(HttpContext context)
     {
-        var version = Assembly.GetEntryAssembly().GetName().Version.ToString();
+        var version = Assembly.GetEntryAssembly()!.GetName().Version!.ToString();
         context.Response.Headers.Add(_headerName, version);
         return _next(context);
     }

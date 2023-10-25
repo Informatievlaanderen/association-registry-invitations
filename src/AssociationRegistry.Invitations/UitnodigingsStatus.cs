@@ -2,14 +2,17 @@
 
 namespace AssociationRegistry.Invitations;
 
+using System.Collections.Immutable;
+
 public record UitnodigingsStatus
 {
-    public static UitnodigingsStatus WachtOpAntwoord = new("Wacht op antwoord");
-    public static UitnodigingsStatus Aanvaard = new("Aanvaard");
-    public static UitnodigingsStatus Geweigerd = new("Geweigerd");
-    public static UitnodigingsStatus Ingetrokken = new("Ingetrokken");
-    public static UitnodigingsStatus Verlopen = new("Verlopen");
-    public static UitnodigingsStatus[] All = { WachtOpAntwoord, Aanvaard, Geweigerd, Ingetrokken, Verlopen };
+    public static readonly UitnodigingsStatus WachtOpAntwoord = new("Wacht op antwoord");
+    public static readonly UitnodigingsStatus Aanvaard = new("Aanvaard");
+    public static readonly UitnodigingsStatus Geweigerd = new("Geweigerd");
+    public static readonly UitnodigingsStatus Ingetrokken = new("Ingetrokken");
+    public static readonly UitnodigingsStatus Verlopen = new("Verlopen");
+    public static readonly ImmutableArray<UitnodigingsStatus> All = new[]{ WachtOpAntwoord, Aanvaard, Geweigerd, Ingetrokken, Verlopen }
+       .ToImmutableArray();
 
     [JsonConstructor]
     private UitnodigingsStatus(string status)
