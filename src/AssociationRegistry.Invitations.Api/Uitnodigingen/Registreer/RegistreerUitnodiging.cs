@@ -49,9 +49,12 @@ public class RegistreerUitnodiging : ApiController
             .BadRequestIfUitnodidingReedsBestaand(lightweightSession, cancellationToken))
             .Handle(async () =>
             {
+                var datumRegistratie = _clock.GetCurrentInstant().ToDateTimeOffset();
+                
                 var uitnodiging = ToModel(request);
                 uitnodiging.Status = UitnodigingsStatus.WachtOpAntwoord;
-                uitnodiging.DatumRegistratie = _clock.GetCurrentInstant().ToDateTimeOffset();
+                uitnodiging.DatumRegistratie = datumRegistratie;
+                uitnodiging.DatumLaatsteAanpassing = datumRegistratie;
                 lightweightSession.Store(uitnodiging);
                 await lightweightSession.SaveChangesAsync(cancellationToken);
 

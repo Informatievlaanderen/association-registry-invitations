@@ -42,8 +42,10 @@ public class GegevenEenRegistratie : IClassFixture<GegevenEenRegistratie.Setup>
         uitnodiging["status"]!.Value<string>().Should().Be(UitnodigingsStatus.WachtOpAntwoord.Status);
         uitnodiging["datumRegistratie"]!.Value<string>().Should()
             .Be(_setup.UitnodigingGeregistreerdOp.AsFormattedString());
+        uitnodiging["datumLaatsteAanpassing"]!.Value<string>().Should()
+                                        .Be(_setup.UitnodigingGeregistreerdOp.AsFormattedString());
         uitnodiging["uitnodiger"]!["vertegenwoordigerId"]!.Value<int>().Should()
-            .Be(_setup.Uitnodiging.Uitnodiger.VertegenwoordigerId);
+                                                          .Be(_setup.Uitnodiging.Uitnodiger.VertegenwoordigerId);
         uitnodiging["uitgenodigde"]!["insz"]!.Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Insz);
         uitnodiging["uitgenodigde"]!["achternaam"]!.Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Achternaam);
         uitnodiging["uitgenodigde"]!["voornaam"]!.Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Voornaam);
