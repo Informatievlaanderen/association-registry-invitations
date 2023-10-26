@@ -5,6 +5,8 @@ using NodaTime;
 namespace AssociationRegistry.Invitations.Archiver;
 
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Serilog;
 
 public class ArchiverService : BackgroundService
 {
@@ -23,6 +25,8 @@ public class ArchiverService : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        LogBewaartijden(_logger, _options);
+        
         var session = _store.LightweightSession();
         
         ArchiveerWachtOpAntwoord(session);
@@ -39,41 +43,87 @@ public class ArchiverService : BackgroundService
         await session.SaveChangesAsync(stoppingToken);
     }
 
+    private static void LogBewaartijden(ILogger<ArchiverService> logger, AppSettings.BewaartijdenOptions options)
+    {
+        logger.LogInformation(JsonConvert.SerializeObject(options));
+    }
+
     private void ArchiveerWachtOpAntwoord(IDocumentSession session)
     {
+        var archivalStartDate = ArchiverDateHelper
+                            .CalculateArchivalStartDate(
+                                 _options.WachtOpAntwoord, _clock.GetCurrentInstant())
+                            .ToDateTimeOffset();
+
+        _logger.LogInformation("Beginnen met archiveren van uitnodigingen met status 'WachtOpAntwoord' die ouder zijn dan {StartDate}", archivalStartDate);
+        
         var uitnodigingen = session
-            .Query<Uitnodiging>()
-            .Where(u =>
-                u.Status.Status == UitnodigingsStatus.WachtOpAntwoord.Status &&
-                u.DatumLaatsteAanpassing <= ArchiverDateHelper.CalculateArchivalStartDate(_options.WachtOpAntwoord, _clock.GetCurrentInstant()).ToDateTimeOffset())
-            .ToList()
-            .Select(uitnodiging => uitnodiging with
-            {
-                Status = UitnodigingsStatus.Verlopen,
-                DatumLaatsteAanpassing = _clock.GetCurrentInstant().ToDateTimeOffset(),
-            });
+                           .Query<Uitnodiging>()
+                           .Where(u => u.Status.Status == UitnodigingsStatus.WachtOpAntwoord.Status &&
+                                       u.DatumLaatsteAanpassing <= archivalStartDate)
+                           .ToList()
+                           .Select(uitnodiging => uitnodiging with
+                            {
+                                Status = UitnodigingsStatus.Verlopen,
+                                DatumLaatsteAanpassing = _clock.GetCurrentInstant().ToDateTimeOffset(),
+                            });
 
         _logger.LogInformation($"Er werden {uitnodigingen.Count()} uitnodigingen gevonden die van WachtOpAntwoord naar Verlopen moeten veranderen.");
         session.Store(uitnodigingen);
     }
 
-    private void ArchiveerAanvaard(IDocumentSession session) =>
-        session.DeleteWhere<Uitnodiging>(u =>
-            u.Status.Status == UitnodigingsStatus.Aanvaard.Status &&
-            u.DatumLaatsteAanpassing <= ArchiverDateHelper.CalculateArchivalStartDate(_options.Aanvaard, _clock.GetCurrentInstant()).ToDateTimeOffset());
+    private void ArchiveerAanvaard(IDocumentSession session)
+    {
+        var archivalStartDate = ArchiverDateHelper
+                               .CalculateArchivalStartDate(
+                                    _options.Aanvaard, _clock.GetCurrentInstant())
+                               .ToDateTimeOffset();
+        
+        _logger.LogInformation("Beginnen met archiveren van uitnodigingen met status 'Aanvaard' die ouder zijn dan {StartDate}", archivalStartDate);
+        
+        session.DeleteWhere<Uitnodiging>(u => u.Status.Status == UitnodigingsStatus.Aanvaard.Status &&
+                                              u.DatumLaatsteAanpassing <= archivalStartDate);
+    }
 
-    private void ArchiveerGeweigerd(IDocumentSession session) =>
-        session.DeleteWhere<Uitnodiging>(u =>
-            u.Status.Status == UitnodigingsStatus.Geweigerd.Status &&
-            u.DatumLaatsteAanpassing <= ArchiverDateHelper.CalculateArchivalStartDate(_options.Geweigerd, _clock.GetCurrentInstant()).ToDateTimeOffset());
+    private void ArchiveerGeweigerd(IDocumentSession session)
+    {
+        var archivalStartDate = ArchiverDateHelper
+                               .CalculateArchivalStartDate(
+                                    _options.Geweigerd, _clock.GetCurrentInstant())
+                               .ToDateTimeOffset();
+        
+        _logger.LogInformation("Beginnen met archiveren van uitnodigingen met status 'Geweigerd' die ouder zijn dan {StartDate}", archivalStartDate);
 
-    private void ArchiveerIngetrokken(IDocumentSession session) =>
         session.DeleteWhere<Uitnodiging>(u =>
-            u.Status.Status == UitnodigingsStatus.Ingetrokken.Status &&
-            u.DatumLaatsteAanpassing <= ArchiverDateHelper.CalculateArchivalStartDate(_options.Ingetrokken, _clock.GetCurrentInstant()).ToDateTimeOffset());
+                                             u.Status.Status == UitnodigingsStatus.Geweigerd.Status &&
+                                             u.DatumLaatsteAanpassing <= archivalStartDate);
+    }
 
-    private void ArchiveerVerlopen(IDocumentSession session) =>
+    private void ArchiveerIngetrokken(IDocumentSession session)
+    {
+        var archivalStartDate = ArchiverDateHelper
+                               .CalculateArchivalStartDate(
+                                    _options.Ingetrokken, _clock.GetCurrentInstant())
+                               .ToDateTimeOffset();
+        
+        _logger.LogInformation("Beginnen met archiveren van uitnodigingen met status 'Ingetrokken' die ouder zijn dan {StartDate}", archivalStartDate);
+        
         session.DeleteWhere<Uitnodiging>(u =>
-            u.Status.Status == UitnodigingsStatus.Verlopen.Status &&
-            u.DatumLaatsteAanpassing <= ArchiverDateHelper.CalculateArchivalStartDate(_options.Verlopen, _clock.GetCurrentInstant()).ToDateTimeOffset());
+                                             u.Status.Status == UitnodigingsStatus.Ingetrokken.Status &&
+                                             u.DatumLaatsteAanpassing <= archivalStartDate);
+    }
+
+    private void ArchiveerVerlopen(IDocumentSession session)
+    {
+        var archivalStartDate = ArchiverDateHelper
+                               .CalculateArchivalStartDate(
+                                    _options.Verlopen, _clock.GetCurrentInstant())
+                               .ToDateTimeOffset();
+        
+        _logger.LogInformation("Beginnen met archiveren van uitnodigingen met status 'Verlopen' die ouder zijn dan {StartDate}", archivalStartDate);
+
+        session.DeleteWhere<Uitnodiging>(u =>
+                                             u.Status.Status == UitnodigingsStatus.Verlopen.Status &&
+                                             u.DatumLaatsteAanpassing <= archivalStartDate);
+    }
 }
