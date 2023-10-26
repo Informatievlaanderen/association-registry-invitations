@@ -50,31 +50,23 @@ public class ArchiverService : BackgroundService
 
     private void ArchiveerWachtOpAntwoord(IDocumentSession session)
     {
-        var archivalStartDate = ArchiverDateHelper
-                               .CalculateArchivalStartDate(
-                                    _options.WachtOpAntwoord, _clock.GetCurrentInstant())
-                               .ToDateTimeOffset();
-        var uitnodigingenWachtOpAntwoord = session
-                                             .Query<Uitnodiging>()
-                                             .Where(u => u.Status.Status == UitnodigingsStatus.WachtOpAntwoord.Status)
-                                             .ToList();
-        var uitnodigingenVerlopen = uitnodigingenWachtOpAntwoord
-                                   .Where(u => u.DatumLaatsteAanpassing.UtcDateTime < archivalStartDate.UtcDateTime)
-                                   .Select(uitnodiging => uitnodiging with
-                                    {
-                                        Status = UitnodigingsStatus.Verlopen,
-                                        DatumLaatsteAanpassing = _clock.GetCurrentInstant().ToDateTimeOffset().UtcDateTime,
-                                    })
-                                   .ToList();
+        var archivalStartDate = ArchiverDateHelper.CalculateArchivalStartDate(_options.WachtOpAntwoord, _clock.GetCurrentInstant())
+                                                  .ToDateTimeOffset();
 
-        _logger.LogInformation("Beginnen met archiveren van uitnodigingen met status 'WachtOpAntwoord' die ouder zijn dan {StartDate}", archivalStartDate.UtcDateTime);
-        foreach (var uitnodiging in uitnodigingenWachtOpAntwoord)
-        {
-            _logger.LogInformation("Uitnodiging {UitnodigingId} heeft DatumRegistratie {DatumRegistratie} en DatumLaatsteAanpassing {DatumLaatsteAanpassing} : klaar voor archiveren {WhereResult}", uitnodiging.Id, uitnodiging.DatumRegistratie.UtcDateTime, uitnodiging.DatumLaatsteAanpassing.UtcDateTime, uitnodiging.DatumLaatsteAanpassing.UtcDateTime < archivalStartDate.UtcDateTime);
-        }
-        _logger.LogInformation($"Er werden {uitnodigingenVerlopen.Count()} uitnodigingen gevonden die van WachtOpAntwoord naar Verlopen moeten veranderen.");
+        var uitnodigingen = session
+                           .Query<Uitnodiging>()
+                           .Where(u =>
+                                      u.Status.Status == UitnodigingsStatus.WachtOpAntwoord.Status &&
+                                      u.DatumLaatsteAanpassing.UtcDateTime < archivalStartDate.UtcDateTime)
+                           .ToList()
+                           .Select(uitnodiging => uitnodiging with
+                            {
+                                Status = UitnodigingsStatus.Verlopen,
+                                DatumLaatsteAanpassing = _clock.GetCurrentInstant().ToDateTimeOffset().UtcDateTime,
+                            });
 
-        session.Store(uitnodigingenVerlopen.ToArray());
+        _logger.LogInformation("Beginnen met archiveren van {UitnodigingenAantal} uitnodigingen met status 'WachtOpAntwoord' die ouder zijn dan {StartDate}", uitnodigingen.Count(), archivalStartDate.UtcDateTime);
+        session.Store(uitnodigingen);
     }
 
     private void ArchiveerAanvaard(IDocumentSession session)
