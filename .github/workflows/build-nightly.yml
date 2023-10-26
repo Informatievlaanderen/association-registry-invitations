@@ -188,8 +188,8 @@ jobs:
     name: Notify Slack of Success
     runs-on: ubuntu-latest
     needs:
-      - build-api
-      - build-archiver
+      - build-invitations-api
+      - build-invitations-archiver
     steps:
       - name: Post to Slack
         id: slack
@@ -209,8 +209,8 @@ jobs:
     name: Notify Slack of Failure
     runs-on: ubuntu-latest
     needs:
-      - build-api
-      - build-archiver
+      - build-invitations-api
+      - build-invitations-archiver
     steps:
       - name: Post to Slack
         id: slack
