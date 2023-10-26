@@ -188,7 +188,6 @@ jobs:
     name: Notify Slack of Success
     runs-on: ubuntu-latest
     needs:
-      - test
       - build-api
       - build-archiver
     steps:
@@ -199,7 +198,6 @@ jobs:
           channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
           slack-message: ":thumbsup: VR+ Nightly build succeeded: \n
           ${{github.event.head_commit.url }} \n
-          ${{format('{0}: {1}', 'test', needs.test.result) }}\n
           ${{format('{0}: {1}', 'build-invitations-api', needs.build-invitations-api.result) }}\n
           ${{format('{0}: {1}', 'build-invitations-archiver', needs.build-invitations-archiver.result) }}\n
           ${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
@@ -211,7 +209,6 @@ jobs:
     name: Notify Slack of Failure
     runs-on: ubuntu-latest
     needs:
-      - test
       - build-api
       - build-archiver
     steps:
@@ -225,7 +222,6 @@ jobs:
           # For posting a simple plain text message
           slack-message: ":thumbsdown: VR+ Nightly build failed some checks: \n
           ${{github.event.head_commit.url }} \n
-          ${{format('{0}: {1}', 'test', needs.test.result) }}\n
           ${{format('{0}: {1}', 'build-invitations-api', needs.build-invitations-api.result) }}\n
           ${{format('{0}: {1}', 'build-invitations-archiver', needs.build-invitations-archiver.result) }}\n
           ${{ github.event.pull_request.html_url || github.event.head_commit.url }}"

@@ -7,7 +7,9 @@ using Serilog.Debugging;
 
 namespace AssociationRegistry.Invitations.Archiver;
 
+using Destructurama;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using System.Diagnostics;
 
 public static class Program
@@ -17,11 +19,8 @@ public static class Program
         SelfLog.Enable(Console.WriteLine);
 
         var host = Host.CreateDefaultBuilder()
-                       .ConfigureLogging(configure =>
-                        {
-                            configure.AddConsole();
-                        })
-                       .ConfigureServices(ConfigureDefaultServices)
+                       .ConfigureServices(ConfigureServices)
+                       .ConfigureLogging(ConfigureLogger)
                        .Build();
 
         var sw = Stopwatch.StartNew();
@@ -32,7 +31,7 @@ public static class Program
         logger.LogInformation($"Het archiveren van uitnodigingen werd voltooid in {sw.ElapsedMilliseconds} ms.");
     }
 
-    public static void ConfigureDefaultServices(HostBuilderContext context, IServiceCollection services)
+    public static void ConfigureServices(HostBuilderContext context, IServiceCollection services)
     {
         var postgreSqlOptionsSection = context.Configuration.GetPostgreSqlOptionsSection();
         var archiverOptions = context.Configuration.Get<AppSettings>();
@@ -43,5 +42,25 @@ public static class Program
            .AddMarten(postgreSqlOptionsSection)
            .AddSingleton<IClock>(SystemClock.Instance)
            .AddHostedService<ArchiverService>();
+    }
+
+    public static void ConfigureLogger(HostBuilderContext context, ILoggingBuilder builder)
+    {
+        var loggerConfig =
+            new LoggerConfiguration()
+               .ReadFrom.Configuration(context.Configuration)
+               .Enrich.FromLogContext()
+               .Enrich.WithMachineName()
+               .Enrich.WithThreadId()
+               .Enrich.WithEnvironmentUserName()
+               .Destructure.JsonNetTypes();
+
+        var logger = loggerConfig.CreateLogger();
+
+        Log.Logger = logger;
+
+        builder
+            //.AddSerilog(logger)
+           .AddOpenTelemetry();
     }
 }
