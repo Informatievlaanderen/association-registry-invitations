@@ -1,3 +1,11 @@
+## [1.18.2](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.18.1...v1.18.2) (2023-10-26)
+
+
+### Bug Fixes
+
+* OR-1804 logger cleanup ([a5edb1b](https://github.com/informatievlaanderen/association-registry-invitations/commit/a5edb1bfeba70616bfe5f529d4581bf30cdcbd88))
+* OR-1804 remove UTC from datetime offset ([99b56de](https://github.com/informatievlaanderen/association-registry-invitations/commit/99b56ded774900ffb8a0f54e7ce13c70c0fda37f))
+
 ## [1.18.1](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.18.0...v1.18.1) (2023-10-26)
 
 
