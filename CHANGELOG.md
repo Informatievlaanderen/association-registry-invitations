@@ -1,3 +1,10 @@
+# [1.18.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.17.3...v1.18.0) (2023-10-26)
+
+
+### Features
+
+* or-1804 add more logging wrt start date ([14498ad](https://github.com/informatievlaanderen/association-registry-invitations/commit/14498ad49a48df317c10b63ed4cd18c53ef6084c))
+
 ## [1.17.3](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.17.2...v1.17.3) (2023-10-26)
 
 
