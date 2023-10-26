@@ -1,3 +1,10 @@
+## [1.17.2](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.17.1...v1.17.2) (2023-10-26)
+
+
+### Bug Fixes
+
+* OR-1956 fix nightly plus add some logging ([84c3d0a](https://github.com/informatievlaanderen/association-registry-invitations/commit/84c3d0a98b297a28d9ec8568f94bfe3a5c407cb7))
+
 ## [1.17.1](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.17.0...v1.17.1) (2023-10-25)
 
 
