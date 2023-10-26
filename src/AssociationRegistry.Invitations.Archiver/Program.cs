@@ -19,6 +19,10 @@ public static class Program
         SelfLog.Enable(Console.WriteLine);
 
         var host = Host.CreateDefaultBuilder()
+                       .ConfigureAppConfiguration(builder =>
+                                                      builder.AddJsonFile($"appsettings.{Environment.MachineName.ToLowerInvariant()}.json",
+                                                                          optional: true,
+                                                                          reloadOnChange: false))
                        .ConfigureServices(ConfigureServices)
                        .ConfigureLogging(ConfigureLogger)
                        .Build();
