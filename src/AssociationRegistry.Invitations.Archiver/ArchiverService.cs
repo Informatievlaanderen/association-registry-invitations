@@ -57,12 +57,12 @@ public class ArchiverService : BackgroundService
                            .Query<Uitnodiging>()
                            .Where(u =>
                                       u.Status.Status == UitnodigingsStatus.WachtOpAntwoord.Status &&
-                                      u.DatumLaatsteAanpassing.UtcDateTime < archivalStartDate.UtcDateTime)
+                                      u.DatumLaatsteAanpassing < archivalStartDate)
                            .ToList()
                            .Select(uitnodiging => uitnodiging with
                             {
                                 Status = UitnodigingsStatus.Verlopen,
-                                DatumLaatsteAanpassing = _clock.GetCurrentInstant().ToDateTimeOffset().UtcDateTime,
+                                DatumLaatsteAanpassing = _clock.GetCurrentInstant().ToDateTimeOffset(),
                             });
 
         _logger.LogInformation("Beginnen met archiveren van {UitnodigingenAantal} uitnodigingen met status 'WachtOpAntwoord' die ouder zijn dan {StartDate}", uitnodigingen.Count(), archivalStartDate.UtcDateTime);
