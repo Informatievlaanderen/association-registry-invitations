@@ -23,82 +23,165 @@ jobs:
           echo RELEASE_VERSION=$(cat semver) >> $GITHUB_ENV
         shell: bash
 
-  test:
-    if: github.repository_owner == 'Informatievlaanderen'
-    name: Test
+  build-invitations-api:
+    if: github.repository_owner == 'informatievlaanderen' && needs.set-release-version.outputs.version != 'none'
+    name: Build Invitations Api
     runs-on: ubuntu-latest
     needs: [ set-release-version ]
-    services:
-      sqlserver:
-        image: mcr.microsoft.com/mssql/server:latest
-        env:
-          ACCEPT_EULA: Y
-          SA_PASSWORD: E@syP@ssw0rd
-          MSSQL_TCP_PORT: 21433
-        ports:
-          - 21433:21433
-      acm:
-        image: ghcr.io/informatievlaanderen/acmidm:1.253.0
-        ports:
-          - 5050:80
-      wiremock:
-        image: ghcr.io/informatievlaanderen/wiremock:main
-        ports:
-          - 8080:8080
-      opensearch:
-        image: opensearchproject/opensearch:1.1.0
-        env:
-          discovery.type: single-node
-          DISABLE_SECURITY_PLUGIN: true
-        ports:
-          - 9200:9200
-          - 9600:9600
-
-    outputs:
-      version: ${{ steps.set-version.outputs.version }}
-      test: "test"
-
     steps:
+      - name: Check version
+        shell: bash
+        run: echo $SEMVER
+        env:
+          SEMVER: ${{ needs.set-release-version.outputs.version }}
 
       - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Setup .NET Core
-        uses: ./.github/actions/setup-dotnet
+        uses: actions/checkout@v4
 
       - name: Parse repository name
         run: echo REPOSITORY_NAME=$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}' | sed -e "s/:refs//") >> $GITHUB_ENV
         shell: bash
 
-      - name: Test Solution
+      - name: Run dependencies
         shell: bash
-        run: ./build.sh Test_Solution
+        run: |
+          docker compose up -d
 
-  build-invitations-api:
-    if: github.repository_owner == 'informatievlaanderen' && needs.set-release-version.outputs.version != 'none'
-    name: Build Invitations Api
-    needs: [ test, set-release-version ]
-    uses: ./.github/workflows/build-image.yml
-    with:
-      build-target: Containerize_Api
-      build-project: OrganisationRegistry.Api
-      image-file: api.tar
-      image-name: api
-      semver: ${{ needs.set-release-version.outputs.version }}
-    secrets: inherit
+      - name: Restore paket packages
+        id: cache-paket-restore
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            packages
+            .paket/Paket.Restore.targets
+          key: ${{ runner.os }}-paket-${{ hashFiles('paket.lock', '.paket/Paket.Restore.targets') }}
+
+      - name: Create testresults directory
+        run: mkdir -p testresults
+
+      - name: Test via docker run
+        shell: bash
+        run: |
+          docker run --network host --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 /bin/sh .github/build-scripts/run-tests-docker.sh AssociationRegistry.Invitations.Api.Tests
+
+      - name: Set solution info
+        shell: bash
+        run: |
+          docker run --network host -e CI_BUILD_NUMBER -e GIT_HASH --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 /bin/sh .github/build-scripts/set-solution-info.sh
+        env:
+          CI_BUILD_NUMBER: ${{ needs.set-release-version.outputs.version }}
+
+      - name: Publish via docker run
+        shell: bash
+        run: |
+          docker run --network host --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 /bin/sh .github/build-scripts/publish.sh AssociationRegistry.Invitations.Api
+
+      - name: Build image
+        shell: bash
+        run: |
+          .github/build-scripts/build-docker.sh AssociationRegistry.Invitations.Api invitations-api
+        env:
+          BUILD_DOCKER_REGISTRY: ${{ secrets.VBR_BUILD_DOCKER_REGISTRY_TST }}
+          CI_BUILD_NUMBER: ${{ needs.set-release-version.outputs.version }}
+
+      - name: Show images
+        shell: bash
+        run: docker images
+
+      - name: Shows logs ACM container
+        if: ${{ failure() }}
+        shell: bash
+        run: |
+          docker logs acm
+
+      - name: Shows logs elasticsearch container
+        if: ${{ failure() }}
+        shell: bash
+        run: |
+          docker logs elasticsearch
+
+      - name: Shows logs wiremock container
+        if: ${{ failure() }}
+        shell: bash
+        run: |
+          docker logs wiremock
+
+      - name: Shows logs db container
+        if: ${{ failure() }}
+        shell: bash
+        run: |
+          docker logs db
 
   build-invitations-archiver:
-    if: github.repository_owner == 'Informatievlaanderen' && needs.set-release-version.outputs.version != 'none'
+    if: github.repository_owner == 'informatievlaanderen' && needs.set-release-version.outputs.version != 'none'
     name: Build Invitations Archiver
-    needs: [ test, set-release-version ]
-    uses: ./.github/workflows/build-image.yml
-    with:
-      build-target: Containerize_Archiver
-      build-project: OrganisationRegistry.Archiver
-      image-file: archiver.tar
-      image-name: archiver
-      semver: ${{ needs.set-release-version.outputs.version }}
-    secrets: inherit
+    runs-on: ubuntu-latest
+    needs: [ set-release-version ]
+    steps:
+      - name: Check version
+        shell: bash
+        run: echo $SEMVER
+        env:
+          SEMVER: ${{ needs.set-release-version.outputs.version }}
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Parse repository name
+        run: echo REPOSITORY_NAME=$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}' | sed -e "s/:refs//") >> $GITHUB_ENV
+        shell: bash
+
+      - name: Run dependencies
+        shell: bash
+        run: |
+          docker compose up -d db
+
+      - name: Restore paket packages
+        id: cache-paket-restore
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            packages
+            .paket/Paket.Restore.targets
+          key: ${{ runner.os }}-paket-${{ hashFiles('paket.lock', '.paket/Paket.Restore.targets') }}
+
+      - name: Create testresults directory
+        run: mkdir -p testresults
+
+      - name: Test via docker run
+        shell: bash
+        run: |
+          docker run --network host --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 /bin/sh .github/build-scripts/run-tests-docker.sh AssociationRegistry.Invitations.Archiver.Tests
+
+      - name: Set solution info
+        shell: bash
+        run: |
+          docker run --network host -e CI_BUILD_NUMBER -e GIT_HASH --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 /bin/sh .github/build-scripts/set-solution-info.sh
+        env:
+          CI_BUILD_NUMBER: ${{ needs.set-release-version.outputs.version }}
+
+      - name: Publish via docker run
+        shell: bash
+        run: |
+          docker run --network host --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 /bin/sh .github/build-scripts/publish.sh AssociationRegistry.Invitations.Archiver
+
+      - name: Build image
+        shell: bash
+        run: |
+          .github/build-scripts/build-docker.sh AssociationRegistry.Invitations.Archiver invitations-archiver
+        env:
+          BUILD_DOCKER_REGISTRY: ${{ secrets.VBR_BUILD_DOCKER_REGISTRY_TST }}
+          CI_BUILD_NUMBER: ${{ needs.set-release-version.outputs.version }}
+
+      - name: Show images
+        shell: bash
+        run: docker images
+
+      - name: Shows logs db container
+        if: ${{ failure() }}
+        shell: bash
+        run: |
+          docker logs db
 
   notify-success:
     if: ${{ success() }}

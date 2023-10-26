@@ -4,27 +4,38 @@ using NodaTime;
 
 namespace AssociationRegistry.Invitations.Archiver;
 
+using Microsoft.Extensions.Logging;
+
 public class ArchiverService : BackgroundService
 {
     private readonly IDocumentStore _store;
     private readonly IClock _clock;
+    private readonly ILogger<ArchiverService> _logger;
     private readonly AppSettings.BewaartijdenOptions _options;
 
-    public ArchiverService(IDocumentStore store, IClock clock, AppSettings options)
+    public ArchiverService(IDocumentStore store, IClock clock, AppSettings options, ILogger<ArchiverService> logger)
     {
         _store = store;
         _clock = clock;
+        _logger = logger;
         _options = options.Bewaartijden;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         var session = _store.LightweightSession();
+        
         ArchiveerWachtOpAntwoord(session);
+        _logger.LogInformation($"{nameof(ArchiveerWachtOpAntwoord)} voltooid.");
         ArchiveerAanvaard(session);
+        _logger.LogInformation($"{nameof(ArchiveerAanvaard)} voltooid.");
         ArchiveerGeweigerd(session);
+        _logger.LogInformation($"{nameof(ArchiveerGeweigerd)} voltooid.");
         ArchiveerIngetrokken(session);
+        _logger.LogInformation($"{nameof(ArchiveerIngetrokken)} voltooid.");
         ArchiveerVerlopen(session);
+        _logger.LogInformation($"{nameof(ArchiveerVerlopen)} voltooid.");
+
         await session.SaveChangesAsync(stoppingToken);
     }
 
@@ -41,6 +52,8 @@ public class ArchiverService : BackgroundService
                 Status = UitnodigingsStatus.Verlopen,
                 DatumLaatsteAanpassing = _clock.GetCurrentInstant().ToDateTimeOffset(),
             });
+
+        _logger.LogInformation($"Er werden {uitnodigingen.Count()} uitnodigingen gevonden die van WachtOpAntwoord naar Verlopen moeten veranderen.");
         session.Store(uitnodigingen);
     }
 
