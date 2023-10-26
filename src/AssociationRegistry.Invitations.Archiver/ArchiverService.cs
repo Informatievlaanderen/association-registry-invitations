@@ -74,7 +74,7 @@ public class ArchiverService : BackgroundService
         }
         _logger.LogInformation($"Er werden {uitnodigingenVerlopen.Count()} uitnodigingen gevonden die van WachtOpAntwoord naar Verlopen moeten veranderen.");
 
-        session.Store(uitnodigingenVerlopen);
+        session.Store(uitnodigingenVerlopen.ToArray());
     }
 
     private void ArchiveerAanvaard(IDocumentSession session)
