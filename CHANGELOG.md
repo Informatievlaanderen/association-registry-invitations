@@ -1,3 +1,11 @@
+## [1.18.1](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.18.0...v1.18.1) (2023-10-26)
+
+
+### Bug Fixes
+
+* OR-1804 add logging to obtain DateTime formatter ([fbfeafc](https://github.com/informatievlaanderen/association-registry-invitations/commit/fbfeafc13474a6f4c140f7617bb6826700a83672))
+* OR-1804 use array instead of enumerable to store objects ([e94b031](https://github.com/informatievlaanderen/association-registry-invitations/commit/e94b03101ba3ec2f807e7f85f28be83fb5420a0c))
+
 # [1.18.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.17.3...v1.18.0) (2023-10-26)
 
 
