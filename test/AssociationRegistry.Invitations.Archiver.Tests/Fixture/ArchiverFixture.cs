@@ -25,17 +25,17 @@ public class ArchiverFixture : IAsyncLifetime
     public ArchiverFixture()
     {
         var config = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.testrunner.json").Build();
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.testrunner.json").Build();
 
         var postgreSqlOptionsSection = config.GetPostgreSqlOptionsSection();
         var archiverOptions = config.Get<AppSettings>();
 
         _autoFixture = new AutoFixture.Fixture()
-            .CustomizeAll();
+           .CustomizeAll();
 
         WaitFor.Postgres.ToBecomeAvailable(new NullLogger<ArchiverFixture>(),
-            GetConnectionString(postgreSqlOptionsSection, RootDatabase));
+                                           GetConnectionString(postgreSqlOptionsSection, RootDatabase));
 
         DropCreateDatabase(postgreSqlOptionsSection);
 
@@ -44,16 +44,20 @@ public class ArchiverFixture : IAsyncLifetime
         TestDataFactory = new UitnodigingTestDataFactory(SystemClock.Instance.GetCurrentInstant(), archiverOptions);
 
         Application = Host.CreateDefaultBuilder()
-            .ConfigureAppConfiguration(builder => builder.AddJsonFile("appsettings.testrunner.json").Build())
-            .ConfigureServices((context, services) =>
-            {
-                Program.ConfigureDefaultServices(context, services);
-                services
-                    .AddSingleton<IClock>(Clock)
-                    .InitializeMartenWith(new UitnodigingTestData(TestDataFactory));
-            })
-            .Build();
-        
+                          .ConfigureAppConfiguration(builder => builder.AddJsonFile("appsettings.testrunner.json").Build())
+                          .ConfigureServices((context, services) =>
+                           {
+                               Program.ConfigureServices(context, services);
+
+                               services
+                                  .AddSingleton<IClock>(Clock)
+                                  .InitializeMartenWith(new UitnodigingTestData(TestDataFactory));
+                           })
+                          .ConfigureLogging((context, builder) =>
+                           {
+                               Program.ConfigureLogger(context, builder);
+                           })
+                          .Build();
     }
 
     public async Task InitializeAsync()
@@ -77,11 +81,14 @@ public class ArchiverFixture : IAsyncLifetime
         try
         {
             connection.Open();
+
             // Ensure connections to DB are killed - there seems to be a lingering idle session after AssertDatabaseMatchesConfiguration(), even after store disposal
             cmd.CommandText +=
                 $"DROP DATABASE IF EXISTS \"{postgreSqlOptionsSection.Database}\" WITH (FORCE);";
+
             cmd.CommandText +=
                 $"CREATE DATABASE {postgreSqlOptionsSection.Database} WITH OWNER = {postgreSqlOptionsSection.Username};";
+
             cmd.ExecuteNonQuery();
         }
         catch (PostgresException ex)
