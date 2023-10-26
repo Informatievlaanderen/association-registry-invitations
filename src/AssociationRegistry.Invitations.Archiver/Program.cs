@@ -11,12 +11,14 @@ using Destructurama;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using System.Diagnostics;
+using System.Globalization;
 
 public static class Program
 {
     public static async Task Main(string[] args)
     {
         SelfLog.Enable(Console.WriteLine);
+        
 
         var host = Host.CreateDefaultBuilder()
                        .ConfigureAppConfiguration(builder =>
