@@ -9,6 +9,7 @@ on:
 
 jobs:
   deployment:
+    environment: test_ik4
     runs-on: ubuntu-latest
     strategy:
       matrix:
