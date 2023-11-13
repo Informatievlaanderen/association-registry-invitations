@@ -1,3 +1,16 @@
+# [1.19.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.18.3...v1.19.0) (2023-11-13)
+
+
+### Bug Fixes
+
+* use correct needs ([45a48f6](https://github.com/informatievlaanderen/association-registry-invitations/commit/45a48f692d324db8724ff799a4b653e7fde18fb3))
+
+
+### Features
+
+* auto-deploy to ik4 tst ([eda1e58](https://github.com/informatievlaanderen/association-registry-invitations/commit/eda1e587b895cef8fa5a113f7e2bba67f6d9cb3a))
+* push images to tst ik4 ([c9791ab](https://github.com/informatievlaanderen/association-registry-invitations/commit/c9791ab17c1c7ea78ebeea3464115990594cfc53))
+
 ## [1.18.3](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.18.2...v1.18.3) (2023-11-13)
 
 
