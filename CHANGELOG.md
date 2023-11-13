@@ -1,3 +1,10 @@
+## [1.18.3](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.18.2...v1.18.3) (2023-11-13)
+
+
+### Bug Fixes
+
+* OR-1804 incorrect needs identifiers for nightly build ([6eca749](https://github.com/informatievlaanderen/association-registry-invitations/commit/6eca7492398870d3cf4e8eb9c0420b9066a67765))
+
 ## [1.18.2](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.18.1...v1.18.2) (2023-10-26)
 
 
