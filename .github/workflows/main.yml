@@ -422,7 +422,7 @@ jobs:
           WORKSPACE: ${{ github.workspace }}
           
   push_images_to_test_ik4:
-    if: needs.release.outputs.version != 'none'
+    if: needs.set-release-version.outputs.version != 'none'
     needs: [ release ]
     name: Push images to Test (IK4)
     runs-on: ubuntu-latest
