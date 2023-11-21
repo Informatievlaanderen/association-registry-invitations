@@ -63,12 +63,41 @@ jobs:
         env:
           SEMVER: ${{ needs.set-release-version.outputs.version }}
 
+      - name: Display disk space
+        run: |
+          df -h
+
+      - name: Delete huge unnecessary tools folder
+        run: rm -rf /opt/hostedtoolcache
+
+      - name: Display disk space
+        run: |
+          df -h
+
       - name: Checkout Code
         uses: actions/checkout@v4
         
       - name: Parse repository name
         run: echo REPOSITORY_NAME=$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}' | sed -e "s/:refs//") >> $GITHUB_ENV
         shell: bash
+
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ secrets.VBR_DOTNET_VERSION }}
+
+      - name: .NET version
+        shell: bash
+        run: dotnet --info
+
+      - name: Clean
+        run: dotnet nuget locals all --clear
+
+      - name: Restore dotnet tools
+        shell: bash
+        run: |
+          dotnet tool restore
 
       - name: Run dependencies
         shell: bash
