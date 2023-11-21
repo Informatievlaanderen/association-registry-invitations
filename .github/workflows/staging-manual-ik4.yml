@@ -1,4 +1,4 @@
-name: Manual Deploy To Test (IK4)
+name: Manual Deploy To Staging (IK4)
 
 on:
   workflow_dispatch:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   deployment:
-    environment: 'test_ik4'
+    environment: 'staging_ik4'
     runs-on: 'ubuntu-latest'
     strategy:
       matrix:
@@ -25,7 +25,7 @@ jobs:
           STATUS_URL: ${{ secrets.VBR_AWS_BUILD_STATUS_API }}/${{matrix.services}}
         uses: informatievlaanderen/awscurl-polling-action/polling-action@main
         with:
-          environment: 'test'
+          environment: 'staging'
           version: ${{ github.event.inputs.version }}
           status-url: $STATUS_URL
           deploy-url: $BUILD_URL
