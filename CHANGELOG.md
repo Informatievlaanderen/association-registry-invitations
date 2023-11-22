@@ -1,3 +1,10 @@
+## [1.19.3](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.19.2...v1.19.3) (2023-11-22)
+
+
+### Bug Fixes
+
+* OR-1983 split services and scheduled tasks deployments ([d83dfbd](https://github.com/informatievlaanderen/association-registry-invitations/commit/d83dfbdfec8e6b10d3949c8fbeeb2e7a8a73762b))
+
 ## [1.19.2](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.19.1...v1.19.2) (2023-11-22)
 
 
