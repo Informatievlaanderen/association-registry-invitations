@@ -1,3 +1,13 @@
+## [1.19.1](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.19.0...v1.19.1) (2023-11-22)
+
+
+### Bug Fixes
+
+* OR-1983 add dotnet tool restore into pipeline for main ([0acd139](https://github.com/informatievlaanderen/association-registry-invitations/commit/0acd139972ec919e3a143a75e17223c9e8ced500))
+* OR-1983 add quotes and staging workflow ([dbf69a1](https://github.com/informatievlaanderen/association-registry-invitations/commit/dbf69a128ec9a82b5f61ee5706334c97b10c17b0))
+* OR-1983 add update code for dotnet tool ([5b62562](https://github.com/informatievlaanderen/association-registry-invitations/commit/5b62562808827919d9ada897facb6686fc968da9))
+* OR-1983 incorrect environment name ([5018540](https://github.com/informatievlaanderen/association-registry-invitations/commit/501854002e150deca9ac0ca9250777a129e8c1a7))
+
 # [1.19.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.18.3...v1.19.0) (2023-11-13)
 
 
