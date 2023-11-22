@@ -597,6 +597,7 @@ jobs:
           echo Status: ${{ steps.awscurl-polling-action.outputs.status }}
           echo ${{ steps.awscurl-polling-action.outputs.final-message }}
 
+
   deploy_test_ik4:
     if: needs.release.outputs.version != 'none'
     needs: [ set-release-version, push_images_to_test_ik4, release ]

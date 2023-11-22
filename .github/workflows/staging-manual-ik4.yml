@@ -15,8 +15,8 @@ jobs:
       matrix:
         services:
           [
-            'invitations-api',
-            'invitations-archiver'
+            'uitnodigingenapi',
+            'uitnodigingenarchiver'
           ]
     steps:
       - name: CD
