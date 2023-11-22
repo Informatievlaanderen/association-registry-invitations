@@ -184,6 +184,7 @@ jobs:
         run: |
           docker logs db
 
+
   build-invitations-archiver:
     if: github.repository_owner == 'informatievlaanderen' && needs.set-release-version.outputs.version != 'none'
     name: Build Invitations Archiver
@@ -270,6 +271,7 @@ jobs:
         run: |
           docker logs db
 
+  
   release:
     if: needs.set-release-version.outputs.version != 'none'
     name: Semantic Release
@@ -450,10 +452,11 @@ jobs:
           SEMVER: ${{ needs.set-release-version.outputs.version }}
           WORKSPACE: ${{ github.workspace }}
           
-  push_images_to_test_ik4:
+  
+  push_images_to_devops_ik4:
     if: needs.set-release-version.outputs.version != 'none'
     needs: [ release ]
-    name: Push images to Test (IK4)
+    name: Push images to DevOps (IK4)
     runs-on: ubuntu-latest
     steps:
       - name: Configure AWS credentials (Test)
@@ -464,7 +467,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.VBR_AWS_BUILD_USER_SECRET_ACCESS_KEY_IK4 }}
           aws-region: ${{ secrets.VBR_AWS_REGION_PRD }}
 
-      - name: Login to Amazon ECR (Test)
+      - name: Login to Amazon ECR (DevOps)
         if: needs.release.outputs.version != 'none'
         uses: aws-actions/amazon-ecr-login@v1.5.3
 
@@ -488,7 +491,7 @@ jobs:
         shell: bash
         run: docker image load -i ~/invitations-archiver.tar
 
-      - name: Push docker images to ECR Test
+      - name: Push docker images to ECR DevOps
         if: needs.release.outputs.version != 'none'
         shell: bash
         run: |
@@ -503,7 +506,6 @@ jobs:
           BUILD_DOCKER_REGISTRY_TST: ${{ secrets.VBR_BUILD_DOCKER_REGISTRY_TST }}
           SEMVER: ${{ needs.release.outputs.version }}
           WORKSPACE: ${{ github.workspace }}
-
 
   push_images_to_staging:
     if: needs.set-release-version.outputs.version != 'none'
@@ -555,6 +557,7 @@ jobs:
           SEMVER: ${{ needs.set-release-version.outputs.version }}
           WORKSPACE: ${{ github.workspace }}
           
+  
   deploy_test:
     if: needs.set-release-version.outputs.version != 'none'
     needs: 
@@ -598,6 +601,7 @@ jobs:
           echo ${{ steps.awscurl-polling-action.outputs.final-message }}
 
 
+ 
   deploy_test_services_ik4:
     if: needs.release.outputs.version != 'none'
     needs: [ set-release-version, push_images_to_test_ik4, release ]
