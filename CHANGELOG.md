@@ -1,3 +1,10 @@
+## [1.19.2](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.19.1...v1.19.2) (2023-11-22)
+
+
+### Bug Fixes
+
+* OR-1983 update main workflow and manual IK4 deployment workflows ([f2d744a](https://github.com/informatievlaanderen/association-registry-invitations/commit/f2d744ab210945d9a7074f91cff3040f6188fc6a))
+
 ## [1.19.1](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.19.0...v1.19.1) (2023-11-22)
 
 
