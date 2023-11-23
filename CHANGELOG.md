@@ -1,3 +1,11 @@
+## [1.19.4](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.19.3...v1.19.4) (2023-11-22)
+
+
+### Bug Fixes
+
+* OR-1983 syntax error in needs for main.yml ([e3889dd](https://github.com/informatievlaanderen/association-registry-invitations/commit/e3889ddaf876ed42788337738e917f5ae1c12302))
+* OR-1983 updated manual deploy for staging and test (IK4) ([68cfa83](https://github.com/informatievlaanderen/association-registry-invitations/commit/68cfa8369993d00cf6a79e41e3e5043b9272cb29))
+
 ## [1.19.3](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.19.2...v1.19.3) (2023-11-22)
 
 

@@ -61,7 +61,11 @@ jobs:
       - name: Output version to deploy
         shell: bash
         run: |
+<<<<<<< HEAD
           echo ${{ inputs.version }}
+=======
+          echo ${{ input.version }}
+>>>>>>> main
       - name: CD
         env:
           BUILD_URL: ${{ secrets.VBR_AWS_BUILD_API }}/${{matrix.services}}
