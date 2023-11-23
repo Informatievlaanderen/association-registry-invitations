@@ -1,3 +1,10 @@
+## [1.19.5](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.19.4...v1.19.5) (2023-11-23)
+
+
+### Bug Fixes
+
+* add production manual deploy workflow ([e692576](https://github.com/informatievlaanderen/association-registry-invitations/commit/e69257699c1baa41e86fc0c3043cc007d222571c))
+
 ## [1.19.4](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.19.3...v1.19.4) (2023-11-22)
 
 
