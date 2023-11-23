@@ -1,4 +1,4 @@
-name: Manual Deploy To Test (IK4)
+name: Manual Deploy To Production (IK4)
 
 on:
   workflow_dispatch:
@@ -10,9 +10,8 @@ on:
 jobs:
 
   deploy_services_ik4:
-    if: needs.release.outputs.version != 'none'
-    name: Deploy services to Test (IK4)
-    environment: 'test_ik4'
+    name: Deploy services to Production (IK4)
+    environment: 'production_ik4'
     runs-on: 'ubuntu-latest'
     strategy:
       matrix:
@@ -24,15 +23,15 @@ jobs:
       - name: Output version to deploy
         shell: bash
         run: |
-          echo ${{ needs.release.outputs.version }}
+          echo ${{ inputs.version }}
       - name: CD
         env:
           BUILD_URL: ${{ secrets.VBR_AWS_BUILD_API }}/${{matrix.services}}
           STATUS_URL: ${{ secrets.VBR_AWS_BUILD_STATUS_API }}/${{matrix.services}}
         uses: informatievlaanderen/awscurl-polling-action/polling-action@main
         with:
-          environment: 'test'
-          version: ${{ needs.release.outputs.version }}
+          environment: 'prd'
+          version: ${{ inputs.version }}
           status-url: $STATUS_URL
           deploy-url: $BUILD_URL
           access-key: ${{ secrets.VBR_AWS_BUILD_USER_ACCESS_KEY_ID_IK4 }}
@@ -49,8 +48,8 @@ jobs:
           echo ${{ steps.awscurl-polling-action.outputs.final-message }}
 
   deploy_scheduled_tasks_ik4:
-    name: Deploy scheduled tasks to Test (IK4)
-    environment: 'test_ik4'
+    name: Deploy scheduled tasks to Production (IK4)
+    environment: 'production_ik4'
     runs-on: 'ubuntu-latest'
     strategy:
       matrix:
@@ -62,15 +61,15 @@ jobs:
       - name: Output version to deploy
         shell: bash
         run: |
-          echo ${{ needs.release.outputs.version }}
+          echo ${{ input.version }}
       - name: CD
         env:
           BUILD_URL: ${{ secrets.VBR_AWS_BUILD_API }}/${{matrix.services}}
           STATUS_URL: ${{ secrets.VBR_AWS_BUILD_STATUS_API }}/${{matrix.services}}
         uses: informatievlaanderen/awscurl-polling-action/polling-action@main
         with:
-          environment: 'test'
-          version: ${{ needs.release.outputs.version }}
+          environment: 'prd'
+          version: ${{ inputs.version }}
           status-url: $STATUS_URL
           deploy-url: $BUILD_URL
           access-key: ${{ secrets.VBR_AWS_BUILD_USER_ACCESS_KEY_ID_IK4 }}
