@@ -1,3 +1,10 @@
+## [1.19.6](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.19.5...v1.19.6) (2023-11-23)
+
+
+### Bug Fixes
+
+* workflows for manual deployment ([0e187e5](https://github.com/informatievlaanderen/association-registry-invitations/commit/0e187e55055acbf90f848644c03b98cc7761aa50))
+
 ## [1.19.5](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.19.4...v1.19.5) (2023-11-23)
 
 
