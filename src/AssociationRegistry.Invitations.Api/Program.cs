@@ -40,6 +40,11 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace AssociationRegistry.Invitations.Api;
 
+using OpenTelemetry.Exporter;
+using OpenTelemetry.Logs;
+using OpenTelemetry.Resources;
+using OpenTelemetry = Infrastructure.Extensions.OpenTelemetry;
+
 public class Program
 {
     public static async Task Main(string[] args)
@@ -61,9 +66,9 @@ public class Program
         ConfigureAppDomainExceptions();
 
         ConfigureKestrel(builder);
-        ConfigureLogger(builder);
         ConfigureWebHost(builder);
         ConfigureServices(builder);
+        ConfigureLogger(builder);
 
         var app = builder.Build();
 
@@ -356,10 +361,23 @@ public class Program
         var logger = loggerConfig.CreateLogger();
 
         Log.Logger = logger;
+        
+        builder.Logging.AddOpenTelemetry(options =>
+        {
+            var resourceBuilder = ResourceBuilder.CreateDefault();
+            OpenTelemetry.ConfigureResource()(resourceBuilder);
+            options.SetResourceBuilder(resourceBuilder);
+            options.IncludeScopes = true;
+            options.IncludeFormattedMessage = true;
+            options.ParseStateValues = true;
 
-        builder.Logging
-            //.AddSerilog(logger)
-            .AddOpenTelemetry();
+            options.AddOtlpExporter((exporterOptions, _)  =>
+            {
+                exporterOptions.Protocol = OtlpExportProtocol.Grpc;
+                exporterOptions.Endpoint = new Uri(OpenTelemetry.CollectorUrl);
+            });
+        });
+
     }
 
     private static void ConfigureKestrel(WebApplicationBuilder builder)
