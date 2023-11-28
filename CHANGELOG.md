@@ -1,3 +1,10 @@
+## [1.19.8](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.19.7...v1.19.8) (2023-11-28)
+
+
+### Bug Fixes
+
+* OR-1934 update usage of otel to standards ([7e18313](https://github.com/informatievlaanderen/association-registry-invitations/commit/7e183132c3fcdab93315ddf08ccd36d18ebeeb33))
+
 ## [1.19.7](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.19.6...v1.19.7) (2023-11-23)
 
 
