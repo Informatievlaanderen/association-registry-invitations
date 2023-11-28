@@ -1,3 +1,10 @@
+## [1.19.9](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.19.8...v1.19.9) (2023-11-28)
+
+
+### Bug Fixes
+
+* OR-1934 add otel to archiver ([7ac7765](https://github.com/informatievlaanderen/association-registry-invitations/commit/7ac77650b7dcae32ceeefb53566c5797c378e0a1))
+
 ## [1.19.8](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.19.7...v1.19.8) (2023-11-28)
 
 
