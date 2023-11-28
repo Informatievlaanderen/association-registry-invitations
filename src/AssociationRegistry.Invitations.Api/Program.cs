@@ -377,7 +377,6 @@ public class Program
                 exporterOptions.Endpoint = new Uri(OpenTelemetry.CollectorUrl);
             });
         });
-
     }
 
     private static void ConfigureKestrel(WebApplicationBuilder builder)

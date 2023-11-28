@@ -8,10 +8,12 @@ using Serilog.Debugging;
 namespace AssociationRegistry.Invitations.Archiver;
 
 using Destructurama;
+using global::OpenTelemetry.Exporter;
+using global::OpenTelemetry.Logs;
+using global::OpenTelemetry.Resources;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using System.Diagnostics;
-using System.Globalization;
 
 public static class Program
 {
@@ -43,6 +45,7 @@ public static class Program
         var archiverOptions = context.Configuration.Get<AppSettings>();
 
         services
+           .AddOpenTelemetryServices()
            .AddSingleton<AppSettings>(archiverOptions)
            .AddSingleton(postgreSqlOptionsSection)
            .AddMarten(postgreSqlOptionsSection)
@@ -64,9 +67,21 @@ public static class Program
         var logger = loggerConfig.CreateLogger();
 
         Log.Logger = logger;
+        
+        builder.AddOpenTelemetry(options =>
+        {
+            var resourceBuilder = ResourceBuilder.CreateDefault();
+            OpenTelemetry.ConfigureResource()(resourceBuilder);
+            options.SetResourceBuilder(resourceBuilder);
+            options.IncludeScopes = true;
+            options.IncludeFormattedMessage = true;
+            options.ParseStateValues = true;
 
-        builder
-            //.AddSerilog(logger)
-           .AddOpenTelemetry();
+            options.AddOtlpExporter((exporterOptions, _)  =>
+            {
+                exporterOptions.Protocol = OtlpExportProtocol.Grpc;
+                exporterOptions.Endpoint = new Uri(OpenTelemetry.CollectorUrl);
+            });
+        });
     }
 }
