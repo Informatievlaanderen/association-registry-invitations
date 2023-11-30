@@ -40,6 +40,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace AssociationRegistry.Invitations.Api;
 
+using Aanvragen.StatusWijziging;
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Resources;
@@ -148,7 +149,7 @@ public class Program
 
         app.UseHealthChecks(path: "/health", healthCheckOptions);
     }
-    
+
     private static void LoadConfiguration(WebApplicationBuilder builder, params string[] args)
     {
         builder.Configuration
@@ -173,10 +174,11 @@ public class Program
     private static void ConfigureServices(WebApplicationBuilder builder)
     {
         var postgreSqlOptionsSection = builder.Configuration.GetPostgreSqlOptionsSection();
-        var appSettings = builder.Configuration.Get<AppSettings>();
+        var appSettings = builder.Configuration.Get<AppSettings>()!;
 
         builder.Services
             .AddSingleton<UitnodigingsStatusHandler>()
+            .AddSingleton<AanvraagStatusHandler>()
             .AddSingleton(postgreSqlOptionsSection)
             .AddSingleton(appSettings)
             .AddSingleton<IClock>(SystemClock.Instance)
@@ -361,7 +363,7 @@ public class Program
         var logger = loggerConfig.CreateLogger();
 
         Log.Logger = logger;
-        
+
         builder.Logging.AddOpenTelemetry(options =>
         {
             var resourceBuilder = ResourceBuilder.CreateDefault();

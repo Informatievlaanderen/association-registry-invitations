@@ -18,38 +18,38 @@ using Npgsql;
 
 namespace AssociationRegistry.Invitations.Api.Tests.Fixture;
 
+using Aanvragen.Registreer;
+
 public class UitnodigingenApiFixture : IAsyncLifetime
 {
     private const string RootDatabase = @"postgres";
-
     private readonly WebApplicationFactory<Program> _application;
     private readonly IFixture? _autoFixture;
-
     public Clients Clients { get; }
     public ClockWithHistory Clock { get; }
-    public List<Guid> VerwerkteUitnodigingIds { get; } = new();
+    public List<Guid> VerwerkteUitnodigingsIds { get; } = new();
+    public List<Guid> VerwerkteAanvraagIds { get; } = new();
 
     public UitnodigingenApiFixture()
     {
         var config = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.testrunner.json").Build();
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.testrunner.json").Build();
 
         var postgreSqlOptionsSection = config.GetPostgreSqlOptionsSection();
-        
-        _autoFixture = new AutoFixture.Fixture()
-            .CustomizeAll();
 
+        _autoFixture = new AutoFixture.Fixture()
+           .CustomizeAll();
 
         WaitFor.Postgres.ToBecomeAvailable(new NullLogger<UitnodigingenApiFixture>(),
-            GetConnectionString(postgreSqlOptionsSection, RootDatabase));
+                                           GetConnectionString(postgreSqlOptionsSection, RootDatabase));
 
         DropCreateDatabase(postgreSqlOptionsSection);
 
         Clock = new ClockWithHistory();
 
         _application = new WebApplicationFactory<Program>()
-            .WithWebHostBuilder(
+           .WithWebHostBuilder(
                 builder =>
                 {
                     builder.UseContentRoot(Directory.GetCurrentDirectory());
@@ -58,15 +58,19 @@ public class UitnodigingenApiFixture : IAsyncLifetime
 
         Clients = new Clients(
             config.GetSection(nameof(OAuth2IntrospectionOptions))
-                .Get<OAuth2IntrospectionOptions>()!,
+                  .Get<OAuth2IntrospectionOptions>()!,
             _application.CreateClient);
     }
 
     public async Task InitializeAsync()
     {
-        await CreateReedsVerwerkteUitnodiging(id => Clients.Authenticated.AanvaardUitnodiging(id));
-        await CreateReedsVerwerkteUitnodiging(id => Clients.Authenticated.WeigerUitnodiging(id));
-        await CreateReedsVerwerkteUitnodiging(id => Clients.Authenticated.TrekUitnodigingIn(id));
+        // await CreateReedsVerwerkteUitnodiging(id => Clients.Authenticated.AanvaardUitnodiging(id));
+        // await CreateReedsVerwerkteUitnodiging(id => Clients.Authenticated.WeigerUitnodiging(id));
+        // await CreateReedsVerwerkteUitnodiging(id => Clients.Authenticated.TrekUitnodigingIn(id));
+        //
+        // await CreateReedsVerwerkteAanvraag(id => Clients.Authenticated.AanvaardUitnodiging(id));
+        // await CreateReedsVerwerkteAanvraag(id => Clients.Authenticated.WeigerUitnodiging(id));
+        // await CreateReedsVerwerkteAanvraag(id => Clients.Authenticated.TrekUitnodigingIn(id));
     }
 
     public async Task DisposeAsync()
@@ -81,16 +85,28 @@ public class UitnodigingenApiFixture : IAsyncLifetime
     {
         var uitnodiging = _autoFixture.Create<UitnodigingsRequest>();
         uitnodiging.Uitgenodigde.Insz = _autoFixture.Create<TestInsz>();
-            
-        var response = await Clients.Authenticated.RegistreerUitnodiging(uitnodiging).EnsureSuccessOrThrow();
-        var content = await response.Content.ReadAsStringAsync();
-            
-        var uitnodigingId = Guid.Parse(JToken.Parse(content)["uitnodigingId"]!.Value<string>()!);
-        VerwerkteUitnodigingIds.Add(uitnodigingId);
+
+        var response = await Clients.Authenticated.RegistreerUitnodiging(uitnodiging).EnsureSuccessOrThrowForUitnodiging();
+
+        var uitnodigingId = await response.ParseIdFromUitnodigingResponse();
+        VerwerkteUitnodigingsIds.Add(uitnodigingId);
 
         await verwerkActie(uitnodigingId);
     }
-    
+
+    private async Task CreateReedsVerwerkteAanvraag(Func<Guid, Task> verwerkActie)
+    {
+        var uitnodiging = _autoFixture.Create<AanvraagRequest>();
+        uitnodiging.Aanvrager.Insz = _autoFixture.Create<TestInsz>();
+
+        var response = await Clients.Authenticated.RegistreerAanvraag(uitnodiging).EnsureSuccessOrThrowForAanvraag();
+
+        var uitnodigingId = await response.ParseIdFromAanvraagResponse();
+        VerwerkteAanvraagIds.Add(uitnodigingId);
+
+        await verwerkActie(uitnodigingId);
+    }
+
     public void ResetDatabase()
     {
         // var store = _application.Services.GetRequiredService<IDocumentStore>();
@@ -107,11 +123,14 @@ public class UitnodigingenApiFixture : IAsyncLifetime
         try
         {
             connection.Open();
+
             // Ensure connections to DB are killed - there seems to be a lingering idle session after AssertDatabaseMatchesConfiguration(), even after store disposal
             cmd.CommandText +=
                 $"DROP DATABASE IF EXISTS \"{postgreSqlOptionsSection.Database}\" WITH (FORCE);";
+
             cmd.CommandText +=
                 $"CREATE DATABASE {postgreSqlOptionsSection.Database} WITH OWNER = {postgreSqlOptionsSection.Username};";
+
             cmd.ExecuteNonQuery();
         }
         catch (PostgresException ex)

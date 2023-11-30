@@ -40,10 +40,10 @@ public class WeigerUitnodiging : ApiController
     public async Task<IActionResult> Post([FromRoute] Guid uitnodigingId, CancellationToken cancellationToken)
     {
         var uitnodiging = await _session.LoadAsync<Uitnodiging>(uitnodigingId, cancellationToken);
-        
+
         return await uitnodiging
             .BadRequestIfNietBestaand()
-            .BadRequestIfReedsVerwerkt(Resources.WeigerenOnmogelijk)
+            .BadRequestIfReedsVerwerkt(Resources.WeigerenUitnodigingOnmogelijk)
             .Handle(async () =>
             {
                 await _handler.SetStatus(uitnodiging!, UitnodigingsStatus.Geweigerd, cancellationToken);
@@ -53,4 +53,3 @@ public class WeigerUitnodiging : ApiController
             }, this);
     }
 }
-

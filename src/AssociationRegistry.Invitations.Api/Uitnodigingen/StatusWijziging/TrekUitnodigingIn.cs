@@ -44,7 +44,7 @@ public class TrekUitnodigingInController : ApiController
         
         return await uitnodiging
             .BadRequestIfNietBestaand()
-            .BadRequestIfReedsVerwerkt(Resources.IntrekkenOnmogelijk)
+            .BadRequestIfReedsVerwerkt(Resources.IntrekkenUitnodigingOnmogelijk)
             .Handle(async () =>
             {
                 await _handler.SetStatus(uitnodiging!, UitnodigingsStatus.Ingetrokken, cancellationToken);
@@ -54,4 +54,3 @@ public class TrekUitnodigingInController : ApiController
             }, this);
     }
 }
-

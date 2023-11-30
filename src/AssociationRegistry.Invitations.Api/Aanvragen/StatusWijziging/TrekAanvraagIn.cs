@@ -43,7 +43,7 @@ public class TrekAanvraagInController : ApiController
 
         return await aanvraag
                     .BadRequestIfNietBestaand()
-                    .BadRequestIfReedsVerwerkt(Resources.IntrekkenOnmogelijk)
+                    .BadRequestIfReedsVerwerkt(Resources.IntrekkenUitnodigingOnmogelijk)
                     .Handle(action: async () =>
                      {
                          await _handler.SetStatus(aanvraag!, AanvraagStatus.Ingetrokken, cancellationToken);
