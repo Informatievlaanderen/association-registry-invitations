@@ -44,7 +44,7 @@ public class AanvaardUitnodigingsController : ApiController
         
         return await uitnodiging
             .BadRequestIfNietBestaand()
-            .BadRequestIfReedsVerwerkt(Resources.AanvaardenOnmogelijk)
+            .BadRequestIfReedsVerwerkt(Resources.AanvaardenUitnodigingOnmogelijk)
             .Handle(async () =>
             {
                 await _handler.SetStatus(uitnodiging!, UitnodigingsStatus.Aanvaard, cancellationToken);
@@ -54,4 +54,3 @@ public class AanvaardUitnodigingsController : ApiController
             }, this);
     }
 }
-

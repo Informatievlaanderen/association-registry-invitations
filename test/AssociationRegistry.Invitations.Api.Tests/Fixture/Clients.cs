@@ -17,8 +17,8 @@ public class Clients : IDisposable
         _createClientFunc = createClientFunc;
     }
 
-    public HttpClient GetAuthenticatedHttpClient()
-        => CreateMachine2MachineClientFor(clientId: "vloketClient", Security.Scopes.Uitnodigingen, clientSecret: "secret").GetAwaiter().GetResult();
+    private HttpClient GetAuthenticatedHttpClient()
+        => CreateMachine2MachineClientFor(clientId: _oAuth2IntrospectionOptions.ClientId, Security.Scopes.Uitnodigingen, clientSecret: _oAuth2IntrospectionOptions.ClientSecret).GetAwaiter().GetResult();
 
     public UitnodigingenApiClient Authenticated
         => new(GetAuthenticatedHttpClient());

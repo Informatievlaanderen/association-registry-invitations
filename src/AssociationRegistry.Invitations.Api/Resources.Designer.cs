@@ -60,29 +60,56 @@ namespace AssociationRegistry.Invitations.Api {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Deze aanvraging kan niet meer aanvaard worden..
+        /// </summary>
+        public static string AanvaardenAanvraagOnmogelijk {
+            get {
+                return ResourceManager.GetString("AanvaardenAanvraagOnmogelijk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Deze uitnodiging kan niet meer aanvaard worden..
         /// </summary>
-        public static string AanvaardenOnmogelijk {
+        public static string AanvaardenUitnodigingOnmogelijk {
             get {
-                return ResourceManager.GetString("AanvaardenOnmogelijk", resourceCulture);
+                return ResourceManager.GetString("AanvaardenUitnodigingOnmogelijk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deze aanvraging kan niet meer ingetrokken worden..
+        /// </summary>
+        public static string IntrekkenAanvraagOnmogelijk {
+            get {
+                return ResourceManager.GetString("IntrekkenAanvraagOnmogelijk", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Deze uitnodiging kan niet meer ingetrokken worden..
         /// </summary>
-        public static string IntrekkenOnmogelijk {
+        public static string IntrekkenUitnodigingOnmogelijk {
             get {
-                return ResourceManager.GetString("IntrekkenOnmogelijk", resourceCulture);
+                return ResourceManager.GetString("IntrekkenUitnodigingOnmogelijk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deze aanvraging kan niet meer geweigerd worden..
+        /// </summary>
+        public static string WeigerenAanvraagOnmogelijk {
+            get {
+                return ResourceManager.GetString("WeigerenAanvraagOnmogelijk", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Deze uitnodiging kan niet meer geweigerd worden..
         /// </summary>
-        public static string WeigerenOnmogelijk {
+        public static string WeigerenUitnodigingOnmogelijk {
             get {
-                return ResourceManager.GetString("WeigerenOnmogelijk", resourceCulture);
+                return ResourceManager.GetString("WeigerenUitnodigingOnmogelijk", resourceCulture);
             }
         }
     }

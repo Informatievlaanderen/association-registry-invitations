@@ -43,7 +43,7 @@ public class WeigerAanvraagController : ApiController
 
         return await aanvraag
                     .BadRequestIfNietBestaand()
-                    .BadRequestIfReedsVerwerkt(Resources.WeigerenOnmogelijk)
+                    .BadRequestIfReedsVerwerkt(Resources.WeigerenUitnodigingOnmogelijk)
                     .Handle(action: async () =>
                      {
                          await _handler.SetStatus(aanvraag!, AanvraagStatus.Geweigerd, cancellationToken);
