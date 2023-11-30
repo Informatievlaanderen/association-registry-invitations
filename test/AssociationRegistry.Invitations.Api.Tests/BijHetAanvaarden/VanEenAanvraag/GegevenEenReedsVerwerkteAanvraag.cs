@@ -4,13 +4,13 @@ using Fixture;
 using Newtonsoft.Json.Linq;
 using System.Net;
 
-[Collection(UitnodigingenApiCollection.Name)]
+[Collection(TestApiCollection.Name)]
 public class GegevenEenReedsVerwerkteAanvraag
 {
-    private readonly UitnodigingenApiFixture _fixture;
-    private readonly UitnodigingenApiClient _client;
+    private readonly TestApiFixture _fixture;
+    private readonly TestApiClient _client;
 
-    public GegevenEenReedsVerwerkteAanvraag(UitnodigingenApiFixture fixture)
+    public GegevenEenReedsVerwerkteAanvraag(TestApiFixture fixture)
     {
         _fixture = fixture;
         _client = fixture.Clients.Authenticated;
@@ -22,7 +22,7 @@ public class GegevenEenReedsVerwerkteAanvraag
         foreach (var aanvraagId in _fixture.VerwerkteAanvraagIds)
         {
 
-            var response = await _client.AanvaardAanvraag(aanvraagId);
+            var response = await _client.Aanvragen.AanvaardAanvraag(aanvraagId, _client);
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
     }
@@ -32,7 +32,7 @@ public class GegevenEenReedsVerwerkteAanvraag
     {
         foreach (var aanvraagId in _fixture.VerwerkteAanvraagIds)
         {
-            var response = await _client.AanvaardAanvraag(aanvraagId);
+            var response = await _client.Aanvragen.AanvaardAanvraag(aanvraagId, _client);
 
             var content = await response.Content.ReadAsStringAsync();
             var token = JToken.Parse(content);

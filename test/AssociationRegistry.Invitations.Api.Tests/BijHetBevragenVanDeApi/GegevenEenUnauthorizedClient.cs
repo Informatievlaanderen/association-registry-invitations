@@ -3,12 +3,12 @@ using AssociationRegistry.Invitations.Api.Tests.Fixture;
 
 namespace AssociationRegistry.Invitations.Api.Tests.BijHetBevragenVanDeApi;
 
-[Collection(UitnodigingenApiCollection.Name)]
+[Collection(TestApiCollection.Name)]
 public class GivenAnUnauthorizedClient
 {
-    private readonly UitnodigingenApiClient _client;
+    private readonly TestApiClient _client;
 
-    public GivenAnUnauthorizedClient(UitnodigingenApiFixture fixture)
+    public GivenAnUnauthorizedClient(TestApiFixture fixture)
     {
         _client = fixture.Clients.Unauthorized;
     }
@@ -17,7 +17,7 @@ public class GivenAnUnauthorizedClient
     [Fact]
     public async Task Then_It_Returns_403_With_Unauthorized_Client()
     {
-        var response = await _client.GetUitnodigingsDetail("", Guid.NewGuid());
+        var response = await _client.Uitnodiging.GetUitnodigingsDetail("", Guid.NewGuid(), _client);
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }
     

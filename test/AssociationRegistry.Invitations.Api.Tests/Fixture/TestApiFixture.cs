@@ -19,8 +19,9 @@ using Npgsql;
 namespace AssociationRegistry.Invitations.Api.Tests.Fixture;
 
 using Aanvragen.Registreer;
+using Extensions;
 
-public class UitnodigingenApiFixture : IAsyncLifetime
+public class TestApiFixture : IAsyncLifetime
 {
     private const string RootDatabase = @"postgres";
     private readonly WebApplicationFactory<Program> _application;
@@ -30,7 +31,7 @@ public class UitnodigingenApiFixture : IAsyncLifetime
     public List<Guid> VerwerkteUitnodigingsIds { get; } = new();
     public List<Guid> VerwerkteAanvraagIds { get; } = new();
 
-    public UitnodigingenApiFixture()
+    public TestApiFixture()
     {
         var config = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())
@@ -41,7 +42,7 @@ public class UitnodigingenApiFixture : IAsyncLifetime
         _autoFixture = new AutoFixture.Fixture()
            .CustomizeAll();
 
-        WaitFor.Postgres.ToBecomeAvailable(new NullLogger<UitnodigingenApiFixture>(),
+        WaitFor.Postgres.ToBecomeAvailable(new NullLogger<TestApiFixture>(),
                                            GetConnectionString(postgreSqlOptionsSection, RootDatabase));
 
         DropCreateDatabase(postgreSqlOptionsSection);
@@ -86,7 +87,7 @@ public class UitnodigingenApiFixture : IAsyncLifetime
         var uitnodiging = _autoFixture.Create<UitnodigingsRequest>();
         uitnodiging.Uitgenodigde.Insz = _autoFixture.Create<TestInsz>();
 
-        var response = await Clients.Authenticated.RegistreerUitnodiging(uitnodiging).EnsureSuccessOrThrowForUitnodiging();
+        var response = await Clients.Authenticated.Uitnodiging.RegistreerUitnodiging(uitnodiging, Clients.Authenticated).EnsureSuccessOrThrowForUitnodiging();
 
         var uitnodigingId = await response.ParseIdFromUitnodigingResponse();
         VerwerkteUitnodigingsIds.Add(uitnodigingId);
@@ -99,7 +100,7 @@ public class UitnodigingenApiFixture : IAsyncLifetime
         var uitnodiging = _autoFixture.Create<AanvraagRequest>();
         uitnodiging.Aanvrager.Insz = _autoFixture.Create<TestInsz>();
 
-        var response = await Clients.Authenticated.RegistreerAanvraag(uitnodiging).EnsureSuccessOrThrowForAanvraag();
+        var response = await Clients.Authenticated.Aanvragen.RegistreerAanvraag(uitnodiging, Clients.Authenticated).EnsureSuccessOrThrowForAanvraag();
 
         var uitnodigingId = await response.ParseIdFromAanvraagResponse();
         VerwerkteAanvraagIds.Add(uitnodigingId);

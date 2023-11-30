@@ -2,18 +2,19 @@
 
 using Autofixture;
 using Fixture;
+using Fixture.Extensions;
 using Uitnodigingen.Registreer;
 using Newtonsoft.Json.Linq;
 using NodaTime;
 using System.Net;
 
-[Collection(UitnodigingenApiCollection.Name)]
+[Collection(TestApiCollection.Name)]
 public class GegevenEenOngeldigInsz : IClassFixture<GegevenEenOngeldigInsz.Setup>
 {
     private readonly Setup _setup;
-    private readonly UitnodigingenApiClient _client;
+    private readonly TestApiClient _client;
 
-    public GegevenEenOngeldigInsz(UitnodigingenApiFixture fixture, Setup setup)
+    public GegevenEenOngeldigInsz(TestApiFixture fixture, Setup setup)
     {
         _setup = setup;
         _client = fixture.Clients.Authenticated;
@@ -22,14 +23,14 @@ public class GegevenEenOngeldigInsz : IClassFixture<GegevenEenOngeldigInsz.Setup
     [Fact]
     public async Task DanIsDeResponse400()
     {
-        var response = await _client.GetUitnodigingsDetail("99.99.99-999.64", _setup.UitnodigingId);
+        var response = await _client.Uitnodiging.GetUitnodigingsDetail("99.99.99-999.64", _setup.UitnodigingId, _client);
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
     [Fact]
     public async Task DanBevatDeBodyEenError()
     {
-        var response = await _client.GetUitnodigingsDetail("99.99.99-999.64", _setup.UitnodigingId);
+        var response = await _client.Uitnodiging.GetUitnodigingsDetail("99.99.99-999.64", _setup.UitnodigingId, _client);
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);
         token["errors"]!.ToObject<Dictionary<string, string[]>>()
@@ -44,10 +45,10 @@ public class GegevenEenOngeldigInsz : IClassFixture<GegevenEenOngeldigInsz.Setup
         public Guid UitnodigingId { get; set; }
         public Instant UitnodigingGeregistreerdOp { get; set; }
 
-        private readonly UitnodigingenApiClient _client;
-        private UitnodigingenApiFixture _fixture;
+        private readonly TestApiClient _client;
+        private TestApiFixture _fixture;
 
-        public Setup(UitnodigingenApiFixture fixture)
+        public Setup(TestApiFixture fixture)
         {
             _fixture = fixture;
             _client = fixture.Clients.Authenticated;
@@ -63,8 +64,8 @@ public class GegevenEenOngeldigInsz : IClassFixture<GegevenEenOngeldigInsz.Setup
 
         public async Task InitializeAsync()
         {
-            var response = await _client.RegistreerUitnodiging(Uitnodiging)
-                .EnsureSuccessOrThrowForUitnodiging();
+            var response = await _client.Uitnodiging.RegistreerUitnodiging(Uitnodiging, _client)
+                                        .EnsureSuccessOrThrowForUitnodiging();
             
             UitnodigingId = await response.ParseIdFromUitnodigingResponse();
             UitnodigingGeregistreerdOp = _fixture.Clock.PreviousInstant;

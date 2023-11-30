@@ -3,15 +3,16 @@
 using Aanvragen.Registreer;
 using Autofixture;
 using Fixture;
+using Fixture.Extensions;
 using System.Net;
 
-[Collection(UitnodigingenApiCollection.Name)]
+[Collection(TestApiCollection.Name)]
 public class GegevenEenBestaandeAanvraag : IClassFixture<GegevenEenBestaandeAanvraag.Setup>
 {
     private readonly Setup _setup;
-    private readonly UitnodigingenApiClient _client;
+    private readonly TestApiClient _client;
 
-    public GegevenEenBestaandeAanvraag(UitnodigingenApiFixture fixture, Setup setup)
+    public GegevenEenBestaandeAanvraag(TestApiFixture fixture, Setup setup)
     {
         _setup = setup;
         _client = fixture.Clients.Authenticated;
@@ -20,7 +21,7 @@ public class GegevenEenBestaandeAanvraag : IClassFixture<GegevenEenBestaandeAanv
     [Fact]
     public async Task DanIsDeResponse202()
     {
-        var response = await _client.TrekAanvraagIn(_setup.AanvraagId);
+        var response = await _client.Aanvragen.TrekAanvraagIn(_setup.AanvraagId, _client);
         response.StatusCode.Should().Be(HttpStatusCode.Accepted);
     }
 
@@ -29,10 +30,10 @@ public class GegevenEenBestaandeAanvraag : IClassFixture<GegevenEenBestaandeAanv
         public AanvraagRequest Aanvraag { get; set; }
         public Guid AanvraagId { get; set; }
 
-        private readonly UitnodigingenApiClient _client;
-        private UitnodigingenApiFixture _fixture;
+        private readonly TestApiClient _client;
+        private TestApiFixture _fixture;
 
-        public Setup(UitnodigingenApiFixture fixture)
+        public Setup(TestApiFixture fixture)
         {
             _fixture = fixture;
             _client = fixture.Clients.Authenticated;
@@ -48,8 +49,8 @@ public class GegevenEenBestaandeAanvraag : IClassFixture<GegevenEenBestaandeAanv
 
         public async Task InitializeAsync()
         {
-            var response = await _client.RegistreerAanvraag(Aanvraag)
-                .EnsureSuccessOrThrowForAanvraag();
+            var response = await _client.Aanvragen.RegistreerAanvraag(Aanvraag, _client)
+                                        .EnsureSuccessOrThrowForAanvraag();
 
             AanvraagId = await response.ParseIdFromAanvraagResponse();
 

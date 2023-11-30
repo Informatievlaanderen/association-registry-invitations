@@ -60,7 +60,7 @@ namespace AssociationRegistry.Invitations.Api {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Deze aanvraging kan niet meer aanvaard worden..
+        ///   Looks up a localized string similar to Deze aanvraag kan niet meer aanvaard worden..
         /// </summary>
         public static string AanvaardenAanvraagOnmogelijk {
             get {
@@ -78,7 +78,7 @@ namespace AssociationRegistry.Invitations.Api {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Deze aanvraging kan niet meer ingetrokken worden..
+        ///   Looks up a localized string similar to Deze aanvraag kan niet meer ingetrokken worden..
         /// </summary>
         public static string IntrekkenAanvraagOnmogelijk {
             get {
@@ -96,7 +96,7 @@ namespace AssociationRegistry.Invitations.Api {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Deze aanvraging kan niet meer geweigerd worden..
+        ///   Looks up a localized string similar to Deze aanvraag kan niet meer geweigerd worden..
         /// </summary>
         public static string WeigerenAanvraagOnmogelijk {
             get {

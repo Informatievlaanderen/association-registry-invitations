@@ -1,4 +1,4 @@
-﻿namespace AssociationRegistry.Invitations.Api.Tests.BijHetOpvragen.VanAanvragingen.OpVCode;
+﻿namespace AssociationRegistry.Invitations.Api.Tests.BijHetOpvragen.VanAanvragen.OpVCode;
 
 using Aanvragen.Registreer;
 using Autofixture;
@@ -6,12 +6,12 @@ using Fixture;
 using Newtonsoft.Json.Linq;
 using System.Net;
 
-[Collection(UitnodigingenApiCollection.Name)]
+[Collection(TestApiCollection.Name)]
 public class GegevenEenOnbekendeVCode : IClassFixture<GegevenEenOnbekendeVCode.Setup>
 {
-    private readonly UitnodigingenApiClient _client;
+    private readonly TestApiClient _client;
 
-    public GegevenEenOnbekendeVCode(UitnodigingenApiFixture fixture, Setup setup)
+    public GegevenEenOnbekendeVCode(TestApiFixture fixture, Setup setup)
     {
         _client = fixture.Clients.Authenticated;
     }
@@ -20,19 +20,19 @@ public class GegevenEenOnbekendeVCode : IClassFixture<GegevenEenOnbekendeVCode.S
     [MemberData(nameof(Data))]
     public async Task DanIsDeResponse200(string onbekendeVcode)
     {
-        var response = await _client.GetAanvragingenOpVcode(onbekendeVcode);
+        var response = await _client.Aanvragen.GetAanvragenOpVcode(onbekendeVcode, _client);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
     [Theory]
     [MemberData(nameof(Data))]
-    public async Task DanBevatDeBodyDeGeenAanvragingen(string onbekendeVcode)
+    public async Task DanBevatDeBodyDeGeenAanvragen(string onbekendeVcode)
     {
-        var response = await _client.GetAanvragingenOpVcode(onbekendeVcode);
+        var response = await _client.Aanvragen.GetAanvragenOpVcode(onbekendeVcode, _client);
         var content = await response.Content.ReadAsStringAsync();
 
         var token = JToken.Parse(content);
-        token["aanvragingen"].Should()
+        token["aanvragen"].Should()
             .BeEmpty();
     }
 
@@ -47,17 +47,17 @@ public class GegevenEenOnbekendeVCode : IClassFixture<GegevenEenOnbekendeVCode.S
 
     public class Setup : IDisposable, IAsyncLifetime
     {
-        private readonly UitnodigingenApiClient _client;
-        private readonly UitnodigingenApiFixture _fixture;
-        private readonly IEnumerable<AanvraagRequest> _aanvragingen;
+        private readonly TestApiClient _client;
+        private readonly TestApiFixture _fixture;
+        private readonly IEnumerable<AanvraagRequest> _aanvragen;
 
-        public Setup(UitnodigingenApiFixture fixture)
+        public Setup(TestApiFixture fixture)
         {
             _fixture = fixture;
             _client = fixture.Clients.Authenticated;
 
 
-            _aanvragingen = new AutoFixture.Fixture().CustomizeAll()
+            _aanvragen = new AutoFixture.Fixture().CustomizeAll()
                 .CreateMany<AanvraagRequest>();
         }
 
@@ -68,9 +68,9 @@ public class GegevenEenOnbekendeVCode : IClassFixture<GegevenEenOnbekendeVCode.S
 
         public async Task InitializeAsync()
         {
-            foreach (var request in _aanvragingen)
+            foreach (var request in _aanvragen)
             {
-                await _client.RegistreerAanvraag(request).EnsureSuccessOrThrowForAanvraag();
+                await _client.Aanvragen.RegistreerAanvraag(request, _client).EnsureSuccessOrThrowForAanvraag();
             }
         }
 

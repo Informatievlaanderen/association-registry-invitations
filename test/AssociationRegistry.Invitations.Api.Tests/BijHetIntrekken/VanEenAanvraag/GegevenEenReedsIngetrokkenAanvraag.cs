@@ -3,16 +3,17 @@
 using Aanvragen.Registreer;
 using Autofixture;
 using Fixture;
+using Fixture.Extensions;
 using Newtonsoft.Json.Linq;
 using System.Net;
 
-[Collection(UitnodigingenApiCollection.Name)]
+[Collection(TestApiCollection.Name)]
 public class GegevenEenReedsIngetrokkenAanvraag : IClassFixture<GegevenEenReedsIngetrokkenAanvraag.Setup>
 {
     private readonly Setup _setup;
-    private readonly UitnodigingenApiClient _client;
+    private readonly TestApiClient _client;
 
-    public GegevenEenReedsIngetrokkenAanvraag(UitnodigingenApiFixture fixture, Setup setup)
+    public GegevenEenReedsIngetrokkenAanvraag(TestApiFixture fixture, Setup setup)
     {
         _setup = setup;
         _client = fixture.Clients.Authenticated;
@@ -20,7 +21,7 @@ public class GegevenEenReedsIngetrokkenAanvraag : IClassFixture<GegevenEenReedsI
     [Fact]
     public async Task DanIsDeResponse400()
     {
-        var response = await _client.TrekAanvraagIn(_setup.AanvraagId);
+        var response = await _client.Aanvragen.TrekAanvraagIn(_setup.AanvraagId, _client);
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
@@ -28,7 +29,7 @@ public class GegevenEenReedsIngetrokkenAanvraag : IClassFixture<GegevenEenReedsI
     [Fact]
     public async Task DanBevatDeBodyEenErrorMessage()
     {
-        var response = await _client.TrekAanvraagIn(_setup.AanvraagId);
+        var response = await _client.Aanvragen.TrekAanvraagIn(_setup.AanvraagId, _client);
 
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);
@@ -43,10 +44,10 @@ public class GegevenEenReedsIngetrokkenAanvraag : IClassFixture<GegevenEenReedsI
         public AanvraagRequest Aanvraag { get; set; }
         public Guid AanvraagId { get; set; }
 
-        private readonly UitnodigingenApiClient _client;
-        private UitnodigingenApiFixture _fixture;
+        private readonly TestApiClient _client;
+        private TestApiFixture _fixture;
 
-        public Setup(UitnodigingenApiFixture fixture)
+        public Setup(TestApiFixture fixture)
         {
             _fixture = fixture;
             _client = fixture.Clients.Authenticated;
@@ -62,12 +63,12 @@ public class GegevenEenReedsIngetrokkenAanvraag : IClassFixture<GegevenEenReedsI
 
         public async Task InitializeAsync()
         {
-            var response = await _client.RegistreerAanvraag(Aanvraag)
-                .EnsureSuccessOrThrowForAanvraag();
+            var response = await _client.Aanvragen.RegistreerAanvraag(Aanvraag, _client)
+                                        .EnsureSuccessOrThrowForAanvraag();
 
             AanvraagId = await response.ParseIdFromAanvraagResponse();
 
-            await _client.TrekAanvraagIn(AanvraagId);
+            await _client.Aanvragen.TrekAanvraagIn(AanvraagId, _client);
         }
 
         public Task DisposeAsync() => Task.CompletedTask;

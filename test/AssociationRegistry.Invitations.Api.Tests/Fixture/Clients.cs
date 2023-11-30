@@ -20,13 +20,13 @@ public class Clients : IDisposable
     private HttpClient GetAuthenticatedHttpClient()
         => CreateMachine2MachineClientFor(clientId: _oAuth2IntrospectionOptions.ClientId, Security.Scopes.Uitnodigingen, clientSecret: _oAuth2IntrospectionOptions.ClientSecret).GetAwaiter().GetResult();
 
-    public UitnodigingenApiClient Authenticated
+    public TestApiClient Authenticated
         => new(GetAuthenticatedHttpClient());
 
-    public UitnodigingenApiClient Unauthenticated
+    public TestApiClient Unauthenticated
         => new(_createClientFunc());
 
-    public UitnodigingenApiClient Unauthorized
+    public TestApiClient Unauthorized
         => new(CreateMachine2MachineClientFor(clientId: "vloketClient", scope: "vo_info", clientSecret: "secret").GetAwaiter().GetResult());
 
     public void Dispose()

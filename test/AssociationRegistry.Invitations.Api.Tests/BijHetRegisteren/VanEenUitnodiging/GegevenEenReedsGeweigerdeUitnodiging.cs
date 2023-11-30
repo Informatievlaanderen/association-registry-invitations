@@ -2,11 +2,12 @@
 
 using Autofixture;
 using Fixture;
+using Fixture.Extensions;
 using Uitnodigingen.Registreer;
 using Newtonsoft.Json.Linq;
 using System.Net;
 
-[Collection(UitnodigingenApiCollection.Name)]
+[Collection(TestApiCollection.Name)]
 public class GegevenEenReedsGeweigerdeUitnodiging : IClassFixture<GegevenEenReedsGeweigerdeUitnodiging.Setup>
 {
     private readonly Setup _setup;
@@ -35,11 +36,11 @@ public class GegevenEenReedsGeweigerdeUitnodiging : IClassFixture<GegevenEenReed
         public UitnodigingsRequest Uitnodiging { get; set; }
         public Guid UitnodigingId { get; set; }
 
-        private readonly UitnodigingenApiClient _client;
-        private UitnodigingenApiFixture _fixture;
+        private readonly TestApiClient _client;
+        private TestApiFixture _fixture;
         public HttpResponseMessage ActResponse { get; private set; }
 
-        public Setup(UitnodigingenApiFixture fixture)
+        public Setup(TestApiFixture fixture)
         {
             _fixture = fixture;
             _client = fixture.Clients.Authenticated;
@@ -55,17 +56,17 @@ public class GegevenEenReedsGeweigerdeUitnodiging : IClassFixture<GegevenEenReed
 
         public async Task InitializeAsync()
         {
-            var response = await _client.RegistreerUitnodiging(Uitnodiging).EnsureSuccessOrThrowForUitnodiging();
+            var response = await _client.Uitnodiging.RegistreerUitnodiging(Uitnodiging, _client).EnsureSuccessOrThrowForUitnodiging();
             
             UitnodigingId = await response.ParseIdFromUitnodigingResponse();
-            await _client.WeigerUitnodiging(UitnodigingId).EnsureSuccessOrThrowForUitnodiging();
+            await _client.Uitnodiging.WeigerUitnodiging(UitnodigingId, _client).EnsureSuccessOrThrowForUitnodiging();
             
             var request = new AutoFixture.Fixture()
                 .CustomizeAll()
                 .Create<UitnodigingsRequest>();
             request.VCode = Uitnodiging.VCode;
             request.Uitgenodigde.Insz = Uitnodiging.Uitgenodigde.Insz;
-            ActResponse = await _client.RegistreerUitnodiging(request);
+            ActResponse = await _client.Uitnodiging.RegistreerUitnodiging(request, _client);
         }
 
         public Task DisposeAsync() => Task.CompletedTask;

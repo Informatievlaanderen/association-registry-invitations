@@ -3,17 +3,18 @@
 using Aanvragen.Registreer;
 using Autofixture;
 using Fixture;
+using Fixture.Extensions;
 using Newtonsoft.Json.Linq;
 using NodaTime;
 using System.Net;
 
-[Collection(UitnodigingenApiCollection.Name)]
+[Collection(TestApiCollection.Name)]
 public class GegevenEenOngeldigInsz : IClassFixture<GegevenEenOngeldigInsz.Setup>
 {
     private readonly Setup _setup;
-    private readonly UitnodigingenApiClient _client;
+    private readonly TestApiClient _client;
 
-    public GegevenEenOngeldigInsz(UitnodigingenApiFixture fixture, Setup setup)
+    public GegevenEenOngeldigInsz(TestApiFixture fixture, Setup setup)
     {
         _setup = setup;
         _client = fixture.Clients.Authenticated;
@@ -22,20 +23,20 @@ public class GegevenEenOngeldigInsz : IClassFixture<GegevenEenOngeldigInsz.Setup
     [Fact]
     public async Task DanIsDeResponse400()
     {
-        var response = await _client.GetAanvraagDetail("99.99.99-999.64", _setup.AanvraagId);
+        var response = await _client.Aanvragen.GetAanvraagDetail("99.99.99-999.64", _setup.AanvraagId, _client);
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
     [Fact]
     public async Task DanBevatDeBodyEenError()
     {
-        var response = await _client.GetAanvraagDetail("99.99.99-999.64", _setup.AanvraagId);
+        var response = await _client.Aanvragen.GetAanvraagDetail("99.99.99-999.64", _setup.AanvraagId, _client);
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);
         token["errors"]!.ToObject<Dictionary<string, string[]>>()
             .Should().ContainKey("insz")
             .WhoseValue
-            .Should().ContainEquivalentOf("Deze aanvraag is niet voor deze persoon bestemd.");
+            .Should().ContainEquivalentOf("Deze aanvraag werd niet door deze persoon aangevraagd.");
     }
 
     public class Setup : IDisposable, IAsyncLifetime
@@ -44,10 +45,10 @@ public class GegevenEenOngeldigInsz : IClassFixture<GegevenEenOngeldigInsz.Setup
         public Guid AanvraagId { get; set; }
         public Instant AanvraagGeregistreerdOp { get; set; }
 
-        private readonly UitnodigingenApiClient _client;
-        private UitnodigingenApiFixture _fixture;
+        private readonly TestApiClient _client;
+        private TestApiFixture _fixture;
 
-        public Setup(UitnodigingenApiFixture fixture)
+        public Setup(TestApiFixture fixture)
         {
             _fixture = fixture;
             _client = fixture.Clients.Authenticated;
@@ -63,8 +64,8 @@ public class GegevenEenOngeldigInsz : IClassFixture<GegevenEenOngeldigInsz.Setup
 
         public async Task InitializeAsync()
         {
-            var response = await _client.RegistreerAanvraag(Aanvraag)
-                .EnsureSuccessOrThrowForAanvraag();
+            var response = await _client.Aanvragen.RegistreerAanvraag(Aanvraag, _client)
+                                        .EnsureSuccessOrThrowForAanvraag();
 
             AanvraagId = await response.ParseIdFromAanvraagResponse();
             AanvraagGeregistreerdOp = _fixture.Clock.PreviousInstant;

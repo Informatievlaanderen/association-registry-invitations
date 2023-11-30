@@ -4,18 +4,19 @@ using Aanvragen.Registreer;
 using Infrastructure.Extensions;
 using Autofixture;
 using Fixture;
+using Fixture.Extensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NodaTime;
 using System.Net;
 
-[Collection(UitnodigingenApiCollection.Name)]
+[Collection(TestApiCollection.Name)]
 public class GegevenEenIntreking : IClassFixture<GegevenEenIntreking.Setup>
 {
-    private readonly UitnodigingenApiClient _client;
+    private readonly TestApiClient _client;
     private readonly Setup _setup;
 
-    public GegevenEenIntreking(UitnodigingenApiFixture fixture, Setup setup)
+    public GegevenEenIntreking(TestApiFixture fixture, Setup setup)
     {
         _setup = setup;
         _client = fixture.Clients.Authenticated;
@@ -24,14 +25,14 @@ public class GegevenEenIntreking : IClassFixture<GegevenEenIntreking.Setup>
     [Fact]
     public async Task DanIsDeResponse200()
     {
-        var response = await _client.GetAanvraagDetail(_setup.Aanvraag.Aanvrager.Insz, _setup.AanvraagId);
+        var response = await _client.Aanvragen.GetAanvraagDetail(_setup.Aanvraag.Aanvrager.Insz, _setup.AanvraagId, _client);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
     [Fact]
-    public async Task DanBevatDeBodyDeGeregistreerdeUitnodiging()
+    public async Task DanBevatDeBodyDeGeregistreerdeAanvraag()
     {
-        var response = await _client.GetAanvraagDetail(_setup.Aanvraag.Aanvrager.Insz, _setup.AanvraagId);
+        var response = await _client.Aanvragen.GetAanvraagDetail(_setup.Aanvraag.Aanvrager.Insz, _setup.AanvraagId, _client);
         var content = await response.Content.ReadAsStringAsync();
 
         var aanvraag = JsonConvert.DeserializeObject<JObject>(content,
@@ -39,7 +40,7 @@ public class GegevenEenIntreking : IClassFixture<GegevenEenIntreking.Setup>
         aanvraag["aanvraagId"]!.Value<string>().Should().Be(_setup.AanvraagId.ToString());
         aanvraag["vCode"]!.Value<string>().Should().Be(_setup.Aanvraag.VCode);
         aanvraag["boodschap"]!.Value<string>().Should().Be(_setup.Aanvraag.Boodschap);
-        aanvraag["status"]!.Value<string>().Should().Be(UitnodigingsStatus.Ingetrokken.Status);
+        aanvraag["status"]!.Value<string>().Should().Be(AanvraagStatus.Ingetrokken.Status);
         aanvraag["datumRegistratie"]!.Value<string>().Should()
             .Be(_setup.AanvraagGeregistreerdOp.AsFormattedString());
         aanvraag["datumLaatsteAanpassing"]!.Value<string>().Should()
@@ -57,10 +58,10 @@ public class GegevenEenIntreking : IClassFixture<GegevenEenIntreking.Setup>
         public Instant AanvraagGeregistreerdOp { get; set; }
         public Instant AanvraagIngetrokkenOp { get; set; }
 
-        private readonly UitnodigingenApiClient _client;
-        private UitnodigingenApiFixture _fixture;
+        private readonly TestApiClient _client;
+        private TestApiFixture _fixture;
 
-        public Setup(UitnodigingenApiFixture fixture)
+        public Setup(TestApiFixture fixture)
         {
             _fixture = fixture;
             _client = fixture.Clients.Authenticated;
@@ -76,13 +77,13 @@ public class GegevenEenIntreking : IClassFixture<GegevenEenIntreking.Setup>
 
         public async Task InitializeAsync()
         {
-            var response = await _client.RegistreerAanvraag(Aanvraag)
-                .EnsureSuccessOrThrowForAanvraag();
+            var response = await _client.Aanvragen.RegistreerAanvraag(Aanvraag, _client)
+                                        .EnsureSuccessOrThrowForAanvraag();
 
             AanvraagId = await response.ParseIdFromAanvraagResponse();
             AanvraagGeregistreerdOp = _fixture.Clock.PreviousInstant;
 
-            await _client.TrekAanvraagIn(AanvraagId);
+            await _client.Aanvragen.TrekAanvraagIn(AanvraagId, _client);
 
             AanvraagIngetrokkenOp = _fixture.Clock.PreviousInstant;
         }

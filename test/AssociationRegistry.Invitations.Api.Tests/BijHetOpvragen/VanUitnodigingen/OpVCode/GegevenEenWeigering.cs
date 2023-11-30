@@ -3,19 +3,20 @@
 using Infrastructure.Extensions;
 using Autofixture;
 using Fixture;
+using Fixture.Extensions;
 using Uitnodigingen.Registreer;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NodaTime;
 using System.Net;
 
-[Collection(UitnodigingenApiCollection.Name)]
+[Collection(TestApiCollection.Name)]
 public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
 {
-    private readonly UitnodigingenApiClient _client;
+    private readonly TestApiClient _client;
     private readonly Setup _setup;
 
-    public GegevenEenWeigering(UitnodigingenApiFixture fixture, Setup setup)
+    public GegevenEenWeigering(TestApiFixture fixture, Setup setup)
     {
         _setup = setup;
         _client = fixture.Clients.Authenticated;
@@ -24,14 +25,14 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
     [Fact]
     public async Task DanIsDeResponse200()
     {
-        var response = await _client.GetUitnodigingenOpVcode(_setup.Uitnodiging.VCode);
+        var response = await _client.Uitnodiging.GetUitnodigingenOpVcode(_setup.Uitnodiging.VCode, _client);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
     [Fact]
     public async Task DanBevatDeBodyDeGeregistreerdeUitnodiging()
     {
-        var response = await _client.GetUitnodigingenOpVcode(_setup.Uitnodiging.VCode);
+        var response = await _client.Uitnodiging.GetUitnodigingenOpVcode(_setup.Uitnodiging.VCode, _client);
         var content = await response.Content.ReadAsStringAsync();
 
         var token = JsonConvert.DeserializeObject<JObject>(content,
@@ -55,10 +56,10 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
         public Guid UitnodigingId { get; set; }
         public Instant UitnodigingAanvaardOp { get; set; }
 
-        private readonly UitnodigingenApiClient _client;
-        private UitnodigingenApiFixture _fixture;
+        private readonly TestApiClient _client;
+        private TestApiFixture _fixture;
 
-        public Setup(UitnodigingenApiFixture fixture)
+        public Setup(TestApiFixture fixture)
         {
             _fixture = fixture;
             _client = fixture.Clients.Authenticated;
@@ -74,12 +75,12 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
 
         public async Task InitializeAsync()
         {
-            var response = await _client.RegistreerUitnodiging(Uitnodiging)
-                .EnsureSuccessOrThrowForUitnodiging();
+            var response = await _client.Uitnodiging.RegistreerUitnodiging(Uitnodiging, _client)
+                                        .EnsureSuccessOrThrowForUitnodiging();
             
             UitnodigingId = await response.ParseIdFromUitnodigingResponse();
             
-            await _client.WeigerUitnodiging(UitnodigingId);
+            await _client.Uitnodiging.WeigerUitnodiging(UitnodigingId, _client);
             
             UitnodigingAanvaardOp = _fixture.Clock.PreviousInstant;
         }

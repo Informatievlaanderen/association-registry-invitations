@@ -6,12 +6,12 @@ using Uitnodigingen.Registreer;
 using Newtonsoft.Json.Linq;
 using System.Net;
 
-[Collection(UitnodigingenApiCollection.Name)]
+[Collection(TestApiCollection.Name)]
 public class GegevenEenOnbekendeUitnodiginsId : IClassFixture<GegevenEenOnbekendeUitnodiginsId.Setup>
 {
-    private readonly UitnodigingenApiClient _client;
+    private readonly TestApiClient _client;
 
-    public GegevenEenOnbekendeUitnodiginsId(UitnodigingenApiFixture fixture, Setup setup)
+    public GegevenEenOnbekendeUitnodiginsId(TestApiFixture fixture, Setup setup)
     {
         _client = fixture.Clients.Authenticated;
     }
@@ -19,7 +19,7 @@ public class GegevenEenOnbekendeUitnodiginsId : IClassFixture<GegevenEenOnbekend
     [Fact]
     public async Task DanIsDeResponse400()
     {
-        var response = await _client.GetUitnodigingsDetail(new AutoFixture.Fixture().Create<string>(), Guid.NewGuid());
+        var response = await _client.Uitnodiging.GetUitnodigingsDetail(new AutoFixture.Fixture().Create<string>(), Guid.NewGuid(), _client);
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
@@ -27,7 +27,7 @@ public class GegevenEenOnbekendeUitnodiginsId : IClassFixture<GegevenEenOnbekend
 
     public async Task DanBevatDeBodyEenError()
     {
-        var response = await _client.GetUitnodigingsDetail(new AutoFixture.Fixture().Create<string>(), Guid.NewGuid());
+        var response = await _client.Uitnodiging.GetUitnodigingsDetail(new AutoFixture.Fixture().Create<string>(), Guid.NewGuid(), _client);
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);
         token["errors"]!.ToObject<Dictionary<string, string[]>>()
@@ -38,11 +38,11 @@ public class GegevenEenOnbekendeUitnodiginsId : IClassFixture<GegevenEenOnbekend
 
     public class Setup : IDisposable, IAsyncLifetime
     {
-        private readonly UitnodigingenApiClient _client;
-        private readonly UitnodigingenApiFixture _fixture;
+        private readonly TestApiClient _client;
+        private readonly TestApiFixture _fixture;
         private readonly IEnumerable<UitnodigingsRequest> _uitnodigingen;
 
-        public Setup(UitnodigingenApiFixture fixture)
+        public Setup(TestApiFixture fixture)
         {
             _fixture = fixture;
             _client = fixture.Clients.Authenticated;
@@ -61,7 +61,7 @@ public class GegevenEenOnbekendeUitnodiginsId : IClassFixture<GegevenEenOnbekend
         {
             foreach (var request in _uitnodigingen)
             {
-                await _client.RegistreerUitnodiging(request).EnsureSuccessOrThrowForUitnodiging();
+                await _client.Uitnodiging.RegistreerUitnodiging(request, _client).EnsureSuccessOrThrowForUitnodiging();
             }
         }
 

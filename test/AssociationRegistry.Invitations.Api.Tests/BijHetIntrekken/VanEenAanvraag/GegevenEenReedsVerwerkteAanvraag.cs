@@ -4,13 +4,13 @@ using Fixture;
 using Newtonsoft.Json.Linq;
 using System.Net;
 
-[Collection(UitnodigingenApiCollection.Name)]
+[Collection(TestApiCollection.Name)]
 public class GegevenEenReedsVerwerkteAanvraag
 {
-    private readonly UitnodigingenApiFixture _fixture;
-    private readonly UitnodigingenApiClient _client;
+    private readonly TestApiFixture _fixture;
+    private readonly TestApiClient _client;
 
-    public GegevenEenReedsVerwerkteAanvraag(UitnodigingenApiFixture fixture)
+    public GegevenEenReedsVerwerkteAanvraag(TestApiFixture fixture)
     {
         _fixture = fixture;
         _client = fixture.Clients.Authenticated;
@@ -19,9 +19,9 @@ public class GegevenEenReedsVerwerkteAanvraag
     [Fact]
     public async Task DanIsDeResponse400()
     {
-        foreach (var uitnodigingId in _fixture.VerwerkteAanvraagIds)
+        foreach (var aanvraagId in _fixture.VerwerkteAanvraagIds)
         {
-            var response = await _client.TrekAanvraagIn(uitnodigingId);
+            var response = await _client.Aanvragen.TrekAanvraagIn(aanvraagId, _client);
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
     }
@@ -29,9 +29,9 @@ public class GegevenEenReedsVerwerkteAanvraag
     [Fact]
     public async Task DanBevatDeBodyEenErrorMessage()
     {
-        foreach (var uitnodigingId in _fixture.VerwerkteAanvraagIds)
+        foreach (var aanvraagId in _fixture.VerwerkteAanvraagIds)
         {
-            var response = await _client.TrekAanvraagIn(uitnodigingId);
+            var response = await _client.Aanvragen.TrekAanvraagIn(aanvraagId, _client);
 
             var content = await response.Content.ReadAsStringAsync();
             var token = JToken.Parse(content);

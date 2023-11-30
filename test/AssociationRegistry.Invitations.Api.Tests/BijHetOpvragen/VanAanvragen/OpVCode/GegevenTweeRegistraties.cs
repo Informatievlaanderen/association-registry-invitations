@@ -1,21 +1,22 @@
-﻿namespace AssociationRegistry.Invitations.Api.Tests.BijHetOpvragen.VanAanvragingen.OpVCode;
+﻿namespace AssociationRegistry.Invitations.Api.Tests.BijHetOpvragen.VanAanvragen.OpVCode;
 
 using Aanvragen.Registreer;
 using Infrastructure.Extensions;
 using Autofixture;
 using Fixture;
+using Fixture.Extensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NodaTime;
 using System.Net;
 
-[Collection(UitnodigingenApiCollection.Name)]
+[Collection(TestApiCollection.Name)]
 public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Setup>
 {
-    private readonly UitnodigingenApiClient _client;
+    private readonly TestApiClient _client;
     private readonly Setup _setup;
 
-    public GegevenTweeRegistraties(UitnodigingenApiFixture fixture, Setup setup)
+    public GegevenTweeRegistraties(TestApiFixture fixture, Setup setup)
     {
         _setup = setup;
         _client = fixture.Clients.Authenticated;
@@ -24,24 +25,24 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
     [Fact]
     public async Task DanIsDeResponse200()
     {
-        var response = await _client.GetAanvragingenOpVcode("V0000001");
+        var response = await _client.Aanvragen.GetAanvragenOpVcode("V0000001", _client);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
     [Fact]
-    public async Task DanBevatDeBodyDeGeregistreerdeAanvragingen()
+    public async Task DanBevatDeBodyDeGeregistreerdeAanvragen()
     {
-        var response = await _client.GetAanvragingenOpVcode(_setup.VCode);
+        var response = await _client.Aanvragen.GetAanvragenOpVcode(_setup.VCode, _client);
         var content = await response.Content.ReadAsStringAsync();
 
         var token = JsonConvert.DeserializeObject<JObject>(content,
             new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
 
-        var aanvraag1 = token!["aanvragingen"].Should()
-            .ContainSingle(u => u["aanvraagid"]!.Value<string>() == _setup.AanvraagId1.ToString()).Subject;
+        var aanvraag1 = token!["aanvragen"].Should()
+            .ContainSingle(u => u["aanvraagId"]!.Value<string>() == _setup.AanvraagId1.ToString()).Subject;
         aanvraag1["vCode"]!.Value<string>().Should().Be(_setup.VCode);
         aanvraag1["boodschap"]!.Value<string>().Should().Be(_setup.Aanvraag1.Boodschap);
-        aanvraag1["status"]!.Value<string>().Should().Be(UitnodigingsStatus.WachtOpAntwoord.Status);
+        aanvraag1["status"]!.Value<string>().Should().Be(AanvraagStatus.WachtOpAntwoord.Status);
         aanvraag1["datumRegistratie"]!.Value<string>().Should()
             .Be(_setup.Aanvraag1AangemaaktOp.AsFormattedString());
         aanvraag1["aanvrager"]!["insz"]!.Value<string>().Should().Be(_setup.Aanvraag1.Aanvrager.Insz);
@@ -49,11 +50,11 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
         aanvraag1["aanvrager"]!["voornaam"]!.Value<string>().Should().Be(_setup.Aanvraag1.Aanvrager.Voornaam);
         aanvraag1["aanvrager"]!["e-mail"]!.Value<string>().Should().Be(_setup.Aanvraag1.Aanvrager.Email);
 
-        var aanvraag2 = token["uitnodigingen"].Should()
-            .ContainSingle(u => u["uitnodigingId"]!.Value<string>() == _setup.AanvraagId2.ToString()).Subject;
+        var aanvraag2 = token["aanvragen"].Should()
+            .ContainSingle(u => u["aanvraagId"]!.Value<string>() == _setup.AanvraagId2.ToString()).Subject;
         aanvraag2["vCode"]!.Value<string>().Should().Be(_setup.VCode);
         aanvraag2["boodschap"]!.Value<string>().Should().Be(_setup.Aanvraag2.Boodschap);
-        aanvraag2["status"]!.Value<string>().Should().Be(UitnodigingsStatus.WachtOpAntwoord.Status);
+        aanvraag2["status"]!.Value<string>().Should().Be(AanvraagStatus.WachtOpAntwoord.Status);
         aanvraag2["datumRegistratie"]!.Value<string>().Should()
             .Be(_setup.Aanvraag2AangemaaktOp.AsFormattedString());
         aanvraag2["aanvrager"]!["insz"]!.Value<string>().Should().Be(_setup.Aanvraag2.Aanvrager.Insz);
@@ -72,10 +73,10 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
         public Instant Aanvraag1AangemaaktOp { get; set; }
         public Instant Aanvraag2AangemaaktOp { get; set; }
 
-        private readonly UitnodigingenApiClient _client;
-        private UitnodigingenApiFixture _fixture;
+        private readonly TestApiClient _client;
+        private TestApiFixture _fixture;
 
-        public Setup(UitnodigingenApiFixture fixture)
+        public Setup(TestApiFixture fixture)
         {
             _fixture = fixture;
             _client = fixture.Clients.Authenticated;
@@ -107,7 +108,7 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
 
         private async Task<Guid> RegistreerAanvraag(AanvraagRequest aanvraagRequest)
         {
-            var response = await _client.RegistreerAanvraag(aanvraagRequest).EnsureSuccessOrThrowForUitnodiging();
+            var response = await _client.Aanvragen.RegistreerAanvraag(aanvraagRequest, _client).EnsureSuccessOrThrowForAanvraag();
             return await response.ParseIdFromAanvraagResponse();
         }
 

@@ -6,14 +6,14 @@ using Fixture;
 using Newtonsoft.Json.Linq;
 using System.Net;
 
-[Collection(UitnodigingenApiCollection.Name)]
+[Collection(TestApiCollection.Name)]
 public class GegevenEenGeldigeAanvraag : IDisposable
 {
-    private readonly UitnodigingenApiClient _client;
-    private readonly UitnodigingenApiFixture _fixture;
+    private readonly TestApiClient _client;
+    private readonly TestApiFixture _fixture;
     private readonly AanvraagRequest _request;
 
-    public GegevenEenGeldigeAanvraag(UitnodigingenApiFixture fixture)
+    public GegevenEenGeldigeAanvraag(TestApiFixture fixture)
     {
         _fixture = fixture;
         _client = fixture.Clients.Authenticated;
@@ -25,7 +25,7 @@ public class GegevenEenGeldigeAanvraag : IDisposable
     [Fact]
     public async Task DanIsDeResponse201()
     {
-        var response = await _client.RegistreerAanvraag(_request);
+        var response = await _client.Aanvragen.RegistreerAanvraag(_request, _client);
 
         response.StatusCode.Should().Be(HttpStatusCode.Created);
     }
@@ -33,7 +33,7 @@ public class GegevenEenGeldigeAanvraag : IDisposable
     [Fact]
     public async Task DanHeeftDeBodyEenIdDatEenGuidIs()
     {
-        var response = await _client.RegistreerAanvraag(_request);
+        var response = await _client.Aanvragen.RegistreerAanvraag(_request, _client);
 
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);

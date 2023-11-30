@@ -3,16 +3,17 @@
 using Aanvragen.Registreer;
 using Autofixture;
 using Fixture;
+using Fixture.Extensions;
 using Newtonsoft.Json.Linq;
 using System.Net;
 
-[Collection(UitnodigingenApiCollection.Name)]
+[Collection(TestApiCollection.Name)]
 public class GegevenEenBestaandeAanvraag : IClassFixture<GegevenEenBestaandeAanvraag.Setup>
 {
-    private readonly UitnodigingenApiClient _client;
+    private readonly TestApiClient _client;
     private readonly AanvraagRequest _request;
 
-    public GegevenEenBestaandeAanvraag(UitnodigingenApiFixture fixture, Setup setup)
+    public GegevenEenBestaandeAanvraag(TestApiFixture fixture, Setup setup)
     {
         _client = fixture.Clients.Authenticated;
         _request = setup.Aanvraag;
@@ -21,7 +22,7 @@ public class GegevenEenBestaandeAanvraag : IClassFixture<GegevenEenBestaandeAanv
     [Fact]
     public async Task DanIsDeResponse400()
     {
-        var response = await _client.RegistreerAanvraag(_request);
+        var response = await _client.Aanvragen.RegistreerAanvraag(_request, _client);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
@@ -29,14 +30,14 @@ public class GegevenEenBestaandeAanvraag : IClassFixture<GegevenEenBestaandeAanv
     [Fact]
     public async Task DanBevatDeBodyEenErrorMessage()
     {
-        var response = await _client.RegistreerAanvraag(_request);
+        var response = await _client.Aanvragen.RegistreerAanvraag(_request, _client);
 
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);
         token["errors"]!.ToObject<Dictionary<string, string[]>>()
             .Should().ContainKey("aanvraag")
             .WhoseValue
-            .Should().ContainEquivalentOf("Deze vereniging heeft reeds een aanvraag voor deze persoon ontvangen.");
+            .Should().ContainEquivalentOf("Deze aanvraag is reeds gekend.");
     }
 
     public class Setup : IDisposable, IAsyncLifetime
@@ -44,10 +45,10 @@ public class GegevenEenBestaandeAanvraag : IClassFixture<GegevenEenBestaandeAanv
         public AanvraagRequest Aanvraag { get; set; }
         public Guid AanvraagId { get; set; }
 
-        private readonly UitnodigingenApiClient _client;
-        private UitnodigingenApiFixture _fixture;
+        private readonly TestApiClient _client;
+        private TestApiFixture _fixture;
 
-        public Setup(UitnodigingenApiFixture fixture)
+        public Setup(TestApiFixture fixture)
         {
             _fixture = fixture;
             _client = fixture.Clients.Authenticated;
@@ -63,8 +64,8 @@ public class GegevenEenBestaandeAanvraag : IClassFixture<GegevenEenBestaandeAanv
 
         public async Task InitializeAsync()
         {
-            var response = await _client.RegistreerAanvraag(Aanvraag)
-                .EnsureSuccessOrThrowForAanvraag();
+            var response = await _client.Aanvragen.RegistreerAanvraag(Aanvraag, _client)
+                                        .EnsureSuccessOrThrowForAanvraag();
 
             AanvraagId = await response.ParseIdFromAanvraagResponse();
         }
