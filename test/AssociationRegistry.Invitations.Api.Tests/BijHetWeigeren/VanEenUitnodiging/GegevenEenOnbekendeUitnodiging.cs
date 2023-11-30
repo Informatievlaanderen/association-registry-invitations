@@ -19,14 +19,14 @@ public class GegevenEenOnbekendeUitnodiging : IDisposable
     [Fact]
     public async Task DanIsDeResponse400()
     {
-        var response = await _client.Uitnodiging.WeigerUitnodiging(Guid.NewGuid(), _client);
+        var response = await _client.Uitnodiging.WeigerUitnodiging(Guid.NewGuid());
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
     [Fact]
     public async Task DanBevatDeBodyEenErrorMessage()
     {
-        var response = await _client.Uitnodiging.WeigerUitnodiging(Guid.NewGuid(), _client);
+        var response = await _client.Uitnodiging.WeigerUitnodiging(Guid.NewGuid());
 
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);

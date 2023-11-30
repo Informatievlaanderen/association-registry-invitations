@@ -25,14 +25,14 @@ public class GegevenEenRegistratie : IClassFixture<GegevenEenRegistratie.Setup>
     [Fact]
     public async Task DanIsDeResponse200()
     {
-        var response = await _client.Aanvragen.GetAanvragenOpVcode(_setup.Aanvraag.VCode, _client);
+        var response = await _client.Aanvragen.GetAanvragenOpVcode(_setup.Aanvraag.VCode);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
     [Fact]
     public async Task DanBevatDeBodyDeGeregistreerdeAanvraag()
     {
-        var response = await _client.Aanvragen.GetAanvragenOpVcode(_setup.Aanvraag.VCode, _client);
+        var response = await _client.Aanvragen.GetAanvragenOpVcode(_setup.Aanvraag.VCode);
         var content = await response.Content.ReadAsStringAsync();
 
         var token = JsonConvert.DeserializeObject<JObject>(content,
@@ -74,7 +74,7 @@ public class GegevenEenRegistratie : IClassFixture<GegevenEenRegistratie.Setup>
 
         public async Task InitializeAsync()
         {
-            var response = await _client.Aanvragen.RegistreerAanvraag(Aanvraag, _client)
+            var response = await _client.Aanvragen.RegistreerAanvraag(Aanvraag)
                                         .EnsureSuccessOrThrowForAanvraag();
 
             AanvraagId = await response.ParseIdFromAanvraagResponse();

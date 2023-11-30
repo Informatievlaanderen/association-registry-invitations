@@ -8,6 +8,8 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Ophalen.VoorVereniging;
 
+using Queries;
+
 [ApiVersion("1.0")]
 [AdvertiseApiVersions("1.0")]
 [ApiRoute("")]
@@ -22,7 +24,7 @@ public class GetUitnodigingenVoorVereniging : ApiController
     }
 
     /// <summary>
-    /// Uitnodigingen ophalen voor vereniging 
+    /// Uitnodigingen ophalen voor vereniging
     /// </summary>
     /// <param name="vCode">De vCode van de vereniging waarvoor je de uitnodigingen wil ophalen</param>
     /// <param name="cancellationToken"></param>
@@ -36,17 +38,7 @@ public class GetUitnodigingenVoorVereniging : ApiController
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     [ProducesJson]
     public async Task<IActionResult> Get([FromRoute] string vCode, CancellationToken cancellationToken)
-    {
-        var uitnodigingen = await _session
-            .Query<Invitations.Uitnodiging>()
-            .MetVCode(vCode)
-            .ToListAsync(token: cancellationToken);
-
-        return Ok(new UitnodigingenResponse
-        {
-            Uitnodigingen = uitnodigingen.Select(ToResponse).ToArray(),
-        });
-    }
+        => Ok(await _session.GetUitnodigingen(vCode, cancellationToken));
 
     private static Uitnodiging ToResponse(Invitations.Uitnodiging model) =>
         new()

@@ -22,7 +22,7 @@ public class GegevenEenReedsVerwerkteUitnodiging
         foreach (var uitnodigingId in _fixture.VerwerkteUitnodigingsIds)
         {
 
-            var response = await _client.Uitnodiging.AanvaardUitnodiging(uitnodigingId, _client);
+            var response = await _client.Uitnodiging.AanvaardUitnodiging(uitnodigingId);
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
     }
@@ -32,7 +32,7 @@ public class GegevenEenReedsVerwerkteUitnodiging
     {
         foreach (var uitnodigingId in _fixture.VerwerkteUitnodigingsIds)
         {
-            var response = await _client.Uitnodiging.AanvaardUitnodiging(uitnodigingId, _client);
+            var response = await _client.Uitnodiging.AanvaardUitnodiging(uitnodigingId);
 
             var content = await response.Content.ReadAsStringAsync();
             var token = JToken.Parse(content);

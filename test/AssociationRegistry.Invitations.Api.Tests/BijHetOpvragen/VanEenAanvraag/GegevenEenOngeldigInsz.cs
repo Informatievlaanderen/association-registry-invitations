@@ -23,14 +23,14 @@ public class GegevenEenOngeldigInsz : IClassFixture<GegevenEenOngeldigInsz.Setup
     [Fact]
     public async Task DanIsDeResponse400()
     {
-        var response = await _client.Aanvragen.GetAanvraagDetail("99.99.99-999.64", _setup.AanvraagId, _client);
+        var response = await _client.Aanvragen.GetAanvraagDetail("99.99.99-999.64", _setup.AanvraagId);
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
     [Fact]
     public async Task DanBevatDeBodyEenError()
     {
-        var response = await _client.Aanvragen.GetAanvraagDetail("99.99.99-999.64", _setup.AanvraagId, _client);
+        var response = await _client.Aanvragen.GetAanvraagDetail("99.99.99-999.64", _setup.AanvraagId);
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);
         token["errors"]!.ToObject<Dictionary<string, string[]>>()
@@ -64,7 +64,7 @@ public class GegevenEenOngeldigInsz : IClassFixture<GegevenEenOngeldigInsz.Setup
 
         public async Task InitializeAsync()
         {
-            var response = await _client.Aanvragen.RegistreerAanvraag(Aanvraag, _client)
+            var response = await _client.Aanvragen.RegistreerAanvraag(Aanvraag)
                                         .EnsureSuccessOrThrowForAanvraag();
 
             AanvraagId = await response.ParseIdFromAanvraagResponse();

@@ -21,7 +21,7 @@ public class GegevenEenBestaandeUitnodiging : IClassFixture<GegevenEenBestaandeU
     [Fact]
     public async Task DanIsDeResponse202()
     {
-        var response = await _client.Aanvragen.WeigerAanvraag(_setup.AanvraagId, _client);
+        var response = await _client.Aanvragen.WeigerAanvraag(_setup.AanvraagId);
         response.StatusCode.Should().Be(HttpStatusCode.Accepted);
     }
 
@@ -49,7 +49,7 @@ public class GegevenEenBestaandeUitnodiging : IClassFixture<GegevenEenBestaandeU
 
         public async Task InitializeAsync()
         {
-            var response = await _client.Aanvragen.RegistreerAanvraag(Aanvraag, _client)
+            var response = await _client.Aanvragen.RegistreerAanvraag(Aanvraag)
                                         .EnsureSuccessOrThrowForAanvraag();
 
             AanvraagId = await response.ParseIdFromAanvraagResponse();

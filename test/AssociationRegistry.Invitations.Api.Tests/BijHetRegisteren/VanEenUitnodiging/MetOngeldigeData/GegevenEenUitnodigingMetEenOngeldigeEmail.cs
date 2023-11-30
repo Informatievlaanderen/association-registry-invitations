@@ -26,7 +26,7 @@ public class GegevenEenUitnodigingMetEenOngeldigeEmail : IDisposable
     [Fact]
     public async Task DanIsDeResponse400()
     {
-        var response = await _client.Uitnodiging.RegistreerUitnodiging(_request, _client);
+        var response = await _client.Uitnodiging.RegistreerUitnodiging(_request);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
@@ -34,7 +34,7 @@ public class GegevenEenUitnodigingMetEenOngeldigeEmail : IDisposable
     [Fact]
     public async Task DanBevatDeBodyEenErrorMessage()
     {
-        var response = await _client.Uitnodiging.RegistreerUitnodiging(_request, _client);
+        var response = await _client.Uitnodiging.RegistreerUitnodiging(_request);
 
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);

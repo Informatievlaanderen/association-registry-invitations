@@ -23,14 +23,14 @@ public class GegevenEenOngeldigInsz : IClassFixture<GegevenEenOngeldigInsz.Setup
     [Fact]
     public async Task DanIsDeResponse400()
     {
-        var response = await _client.Uitnodiging.GetUitnodigingsDetail("99.99.99-999.64", _setup.UitnodigingId, _client);
+        var response = await _client.Uitnodiging.GetUitnodigingsDetail("99.99.99-999.64", _setup.UitnodigingId);
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
     [Fact]
     public async Task DanBevatDeBodyEenError()
     {
-        var response = await _client.Uitnodiging.GetUitnodigingsDetail("99.99.99-999.64", _setup.UitnodigingId, _client);
+        var response = await _client.Uitnodiging.GetUitnodigingsDetail("99.99.99-999.64", _setup.UitnodigingId);
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);
         token["errors"]!.ToObject<Dictionary<string, string[]>>()
@@ -64,7 +64,7 @@ public class GegevenEenOngeldigInsz : IClassFixture<GegevenEenOngeldigInsz.Setup
 
         public async Task InitializeAsync()
         {
-            var response = await _client.Uitnodiging.RegistreerUitnodiging(Uitnodiging, _client)
+            var response = await _client.Uitnodiging.RegistreerUitnodiging(Uitnodiging)
                                         .EnsureSuccessOrThrowForUitnodiging();
             
             UitnodigingId = await response.ParseIdFromUitnodigingResponse();

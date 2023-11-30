@@ -31,7 +31,7 @@ public class GegevenEenUitnodigingMetEenOngeldigeVCode : IDisposable
     [MemberData(nameof(Data))]
     public async Task DanIsDeResponse400(string vCode)
     {
-        var response = await _client.Uitnodiging.RegistreerUitnodiging(_request(vCode), _client);
+        var response = await _client.Uitnodiging.RegistreerUitnodiging(_request(vCode));
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
@@ -40,7 +40,7 @@ public class GegevenEenUitnodigingMetEenOngeldigeVCode : IDisposable
     [MemberData(nameof(Data))]
     public async Task DanBevatDeBodyEenErrorMessage(string vCode)
     {
-        var response = await _client.Uitnodiging.RegistreerUitnodiging(_request(vCode), _client);
+        var response = await _client.Uitnodiging.RegistreerUitnodiging(_request(vCode));
 
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);

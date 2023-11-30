@@ -25,14 +25,14 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
     [Fact]
     public async Task DanIsDeResponse200()
     {
-        var response = await _client.Aanvragen.GetAanvraagDetail(_setup.Aanvraag.Aanvrager.Insz, _setup.AanvraagId, _client);
+        var response = await _client.Aanvragen.GetAanvraagDetail(_setup.Aanvraag.Aanvrager.Insz, _setup.AanvraagId);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
     [Fact]
     public async Task DanBevatDeBodyDeGeregistreerdeAanvraag()
     {
-        var response = await _client.Aanvragen.GetAanvraagDetail(_setup.Aanvraag.Aanvrager.Insz, _setup.AanvraagId, _client);
+        var response = await _client.Aanvragen.GetAanvraagDetail(_setup.Aanvraag.Aanvrager.Insz, _setup.AanvraagId);
         var content = await response.Content.ReadAsStringAsync();
 
         var aanvraag = JsonConvert.DeserializeObject<JObject>(content,
@@ -78,14 +78,14 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
 
         public async Task InitializeAsync()
         {
-            var response = await _client.Aanvragen.RegistreerAanvraag(Aanvraag, _client)
+            var response = await _client.Aanvragen.RegistreerAanvraag(Aanvraag)
                                         .EnsureSuccessOrThrowForAanvraag();
 
             AanvraagId = await response.ParseIdFromAanvraagResponse();
 
             AanvraagGeregistreerdOp = _fixture.Clock.PreviousInstant;
 
-            await _client.Aanvragen.WeigerAanvraag(AanvraagId, _client);
+            await _client.Aanvragen.WeigerAanvraag(AanvraagId);
 
             AanvraagGeweigerdOp = _fixture.Clock.PreviousInstant;
         }

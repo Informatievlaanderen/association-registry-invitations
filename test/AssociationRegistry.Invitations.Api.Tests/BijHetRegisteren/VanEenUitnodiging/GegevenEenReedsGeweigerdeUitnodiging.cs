@@ -56,17 +56,17 @@ public class GegevenEenReedsGeweigerdeUitnodiging : IClassFixture<GegevenEenReed
 
         public async Task InitializeAsync()
         {
-            var response = await _client.Uitnodiging.RegistreerUitnodiging(Uitnodiging, _client).EnsureSuccessOrThrowForUitnodiging();
+            var response = await _client.Uitnodiging.RegistreerUitnodiging(Uitnodiging).EnsureSuccessOrThrowForUitnodiging();
             
             UitnodigingId = await response.ParseIdFromUitnodigingResponse();
-            await _client.Uitnodiging.WeigerUitnodiging(UitnodigingId, _client).EnsureSuccessOrThrowForUitnodiging();
+            await _client.Uitnodiging.WeigerUitnodiging(UitnodigingId).EnsureSuccessOrThrowForUitnodiging();
             
             var request = new AutoFixture.Fixture()
                 .CustomizeAll()
                 .Create<UitnodigingsRequest>();
             request.VCode = Uitnodiging.VCode;
             request.Uitgenodigde.Insz = Uitnodiging.Uitgenodigde.Insz;
-            ActResponse = await _client.Uitnodiging.RegistreerUitnodiging(request, _client);
+            ActResponse = await _client.Uitnodiging.RegistreerUitnodiging(request);
         }
 
         public Task DisposeAsync() => Task.CompletedTask;

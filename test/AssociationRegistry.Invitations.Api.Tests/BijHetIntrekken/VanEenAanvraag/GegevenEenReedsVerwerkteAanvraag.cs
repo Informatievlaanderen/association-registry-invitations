@@ -21,7 +21,7 @@ public class GegevenEenReedsVerwerkteAanvraag
     {
         foreach (var aanvraagId in _fixture.VerwerkteAanvraagIds)
         {
-            var response = await _client.Aanvragen.TrekAanvraagIn(aanvraagId, _client);
+            var response = await _client.Aanvragen.TrekAanvraagIn(aanvraagId);
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
     }
@@ -31,7 +31,7 @@ public class GegevenEenReedsVerwerkteAanvraag
     {
         foreach (var aanvraagId in _fixture.VerwerkteAanvraagIds)
         {
-            var response = await _client.Aanvragen.TrekAanvraagIn(aanvraagId, _client);
+            var response = await _client.Aanvragen.TrekAanvraagIn(aanvraagId);
 
             var content = await response.Content.ReadAsStringAsync();
             var token = JToken.Parse(content);

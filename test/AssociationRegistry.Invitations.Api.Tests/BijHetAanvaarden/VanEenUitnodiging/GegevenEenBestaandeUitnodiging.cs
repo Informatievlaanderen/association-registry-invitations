@@ -21,7 +21,7 @@ public class GegevenEenBestaandeUitnodiging : IClassFixture<GegevenEenBestaandeU
     [Fact]
     public async Task DanIsDeResponse202()
     {
-        var response = await _client.Uitnodiging.AanvaardUitnodiging(_setup.UitnodigingId, _client);
+        var response = await _client.Uitnodiging.AanvaardUitnodiging(_setup.UitnodigingId);
         response.StatusCode.Should().Be(HttpStatusCode.Accepted);
     }
 
@@ -49,7 +49,7 @@ public class GegevenEenBestaandeUitnodiging : IClassFixture<GegevenEenBestaandeU
 
         public async Task InitializeAsync()
         {
-            var response = await _client.Uitnodiging.RegistreerUitnodiging(Uitnodiging, _client)
+            var response = await _client.Uitnodiging.RegistreerUitnodiging(Uitnodiging)
                                         .EnsureSuccessOrThrowForUitnodiging();
             
             UitnodigingId = await response.ParseIdFromUitnodigingResponse();

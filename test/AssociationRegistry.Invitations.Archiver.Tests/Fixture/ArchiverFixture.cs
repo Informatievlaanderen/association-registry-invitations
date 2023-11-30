@@ -1,9 +1,11 @@
-﻿using AssociationRegistry.Invitations.Api.Infrastructure.ConfigurationBindings;
-using AssociationRegistry.Invitations.Archiver.Tests.Autofixture;
-using AssociationRegistry.Invitations.Archiver.Tests.Fixture.Helpers;
-using AssociationRegistry.Invitations.Archiver.Tests.Fixture.Stubs;
-using AssociationRegistry.Invitations.Hosts.Infrastructure.Extensions;
+﻿namespace AssociationRegistry.Invitations.Archiver.Tests.Fixture;
+
+using Aanvragen;
+using Api.Infrastructure.ConfigurationBindings;
+using Autofixture;
 using AutoFixture;
+using Helpers;
+using Hosts.Infrastructure.Extensions;
 using Marten;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,15 +13,16 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging.Abstractions;
 using NodaTime;
 using Npgsql;
-
-namespace AssociationRegistry.Invitations.Archiver.Tests.Fixture;
+using Stubs;
+using Uitnodigingen;
 
 public class ArchiverFixture : IAsyncLifetime
 {
     private const string RootDatabase = @"postgres";
     private readonly IFixture? _autoFixture;
     public IHost Application { get; }
-    public UitnodigingTestDataFactory TestDataFactory { get; }
+    public UitnodigingTestDataFactory UitnodigingTestDataFactory { get; }
+    public AanvraagTestDataFactory AanvraagTestDataFactory { get; }
     public ClockWithHistory Clock { get; }
 
     public ArchiverFixture()
@@ -31,7 +34,7 @@ public class ArchiverFixture : IAsyncLifetime
         var postgreSqlOptionsSection = config.GetPostgreSqlOptionsSection();
         var archiverOptions = config.Get<AppSettings>();
 
-        _autoFixture = new AutoFixture.Fixture()
+        _autoFixture = new Fixture()
            .CustomizeAll();
 
         WaitFor.Postgres.ToBecomeAvailable(new NullLogger<ArchiverFixture>(),
@@ -41,7 +44,8 @@ public class ArchiverFixture : IAsyncLifetime
 
         Clock = new ClockWithHistory();
 
-        TestDataFactory = new UitnodigingTestDataFactory(SystemClock.Instance.GetCurrentInstant(), archiverOptions);
+        UitnodigingTestDataFactory = new UitnodigingTestDataFactory(SystemClock.Instance.GetCurrentInstant(), archiverOptions);
+        AanvraagTestDataFactory = new AanvraagTestDataFactory(SystemClock.Instance.GetCurrentInstant(), archiverOptions);
 
         Application = Host.CreateDefaultBuilder()
                           .ConfigureAppConfiguration(builder => builder.AddJsonFile("appsettings.testrunner.json").Build())
@@ -51,7 +55,10 @@ public class ArchiverFixture : IAsyncLifetime
 
                                services
                                   .AddSingleton<IClock>(Clock)
-                                  .InitializeMartenWith(new UitnodigingTestData(TestDataFactory));
+                                  .InitializeMartenWith(
+                                       new UitnodigingTestData(UitnodigingTestDataFactory),
+                                       new AanvraagTestData(AanvraagTestDataFactory)
+                                  );
                            })
                           .ConfigureLogging((context, builder) =>
                            {
@@ -70,6 +77,7 @@ public class ArchiverFixture : IAsyncLifetime
         var store = Application.Services.GetRequiredService<IDocumentStore>();
         var session = store.LightweightSession();
         session.DeleteWhere<Uitnodiging>(u => true);
+        session.DeleteWhere<Aanvraag>(u => true);
         await session.SaveChangesAsync();
     }
 
@@ -108,13 +116,4 @@ public class ArchiverFixture : IAsyncLifetime
            $"database={database ?? postgreSqlOptions.Database};" +
            $"password={postgreSqlOptions.Password};" +
            $"username={postgreSqlOptions.Username}";
-}
-
-public record Uitnodigingen
-{
-    public Uitnodiging WachtOpAntwoord { get; set; }
-    public Uitnodiging Aanvaard { get; set; }
-    public Uitnodiging Geweigerd { get; set; }
-    public Uitnodiging Ingetrokken { get; set; }
-    public Uitnodiging Verlopen { get; set; }
 }

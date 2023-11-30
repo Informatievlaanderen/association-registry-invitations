@@ -21,7 +21,7 @@ public class GegevenEenReedsVerwerkteUitnodiging
     {
         foreach (var id in _fixture.VerwerkteUitnodigingsIds)
         {
-            var response = await _client.Aanvragen.WeigerAanvraag(id, _client);
+            var response = await _client.Aanvragen.WeigerAanvraag(id);
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
     }
@@ -32,7 +32,7 @@ public class GegevenEenReedsVerwerkteUitnodiging
     {
         foreach (var id in _fixture.VerwerkteUitnodigingsIds)
         {
-            var response = await _client.Aanvragen.WeigerAanvraag(id, _client);
+            var response = await _client.Aanvragen.WeigerAanvraag(id);
 
             var content = await response.Content.ReadAsStringAsync();
             var token = JToken.Parse(content);

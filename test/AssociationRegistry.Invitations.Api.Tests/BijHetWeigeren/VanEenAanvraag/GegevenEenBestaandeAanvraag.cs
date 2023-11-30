@@ -3,7 +3,6 @@
 using Aanvragen.Registreer;
 using AssociationRegistry.Invitations.Api.Tests.Autofixture;
 using AssociationRegistry.Invitations.Api.Tests.Fixture;
-using AssociationRegistry.Invitations.Api.Aanvragen.Registreer;
 using Fixture.Extensions;
 using System.Net;
 
@@ -22,7 +21,7 @@ public class GegevenEenBestaandeAanvraag : IClassFixture<GegevenEenBestaandeAanv
     [Fact]
     public async Task DanIsDeResponse202()
     {
-        var response = await _client.Aanvragen.AanvaardAanvraag(_setup.AanvraagId, _client);
+        var response = await _client.Aanvragen.AanvaardAanvraag(_setup.AanvraagId);
         response.StatusCode.Should().Be(HttpStatusCode.Accepted);
     }
 
@@ -50,7 +49,7 @@ public class GegevenEenBestaandeAanvraag : IClassFixture<GegevenEenBestaandeAanv
 
         public async Task InitializeAsync()
         {
-            var response = await _client.Aanvragen.RegistreerAanvraag(Aanvraag, _client)
+            var response = await _client.Aanvragen.RegistreerAanvraag(Aanvraag)
                                         .EnsureSuccessOrThrowForAanvraag();
 
             AanvraagId = await response.ParseIdFromAanvraagResponse();

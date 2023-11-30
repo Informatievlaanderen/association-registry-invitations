@@ -25,7 +25,7 @@ public class GegevenEenGeldigeAanvraag : IDisposable
     [Fact]
     public async Task DanIsDeResponse201()
     {
-        var response = await _client.Aanvragen.RegistreerAanvraag(_request, _client);
+        var response = await _client.Aanvragen.RegistreerAanvraag(_request);
 
         response.StatusCode.Should().Be(HttpStatusCode.Created);
     }
@@ -33,7 +33,7 @@ public class GegevenEenGeldigeAanvraag : IDisposable
     [Fact]
     public async Task DanHeeftDeBodyEenIdDatEenGuidIs()
     {
-        var response = await _client.Aanvragen.RegistreerAanvraag(_request, _client);
+        var response = await _client.Aanvragen.RegistreerAanvraag(_request);
 
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);

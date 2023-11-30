@@ -21,7 +21,7 @@ public class GegevenEenReedsIngetrokkenUitnodiging : IClassFixture<GegevenEenRee
     [Fact]
     public async Task DanIsDeResponse400()
     {
-        var response = await _client.Uitnodiging.TrekUitnodigingIn(_setup.UitnodigingId, _client);
+        var response = await _client.Uitnodiging.TrekUitnodigingIn(_setup.UitnodigingId);
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
@@ -29,7 +29,7 @@ public class GegevenEenReedsIngetrokkenUitnodiging : IClassFixture<GegevenEenRee
     [Fact]
     public async Task DanBevatDeBodyEenErrorMessage()
     {
-        var response = await _client.Uitnodiging.TrekUitnodigingIn(_setup.UitnodigingId, _client);
+        var response = await _client.Uitnodiging.TrekUitnodigingIn(_setup.UitnodigingId);
 
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);
@@ -63,12 +63,12 @@ public class GegevenEenReedsIngetrokkenUitnodiging : IClassFixture<GegevenEenRee
 
         public async Task InitializeAsync()
         {
-            var response = await _client.Uitnodiging.RegistreerUitnodiging(Uitnodiging, _client)
+            var response = await _client.Uitnodiging.RegistreerUitnodiging(Uitnodiging)
                                         .EnsureSuccessOrThrowForUitnodiging();
             
             UitnodigingId = await response.ParseIdFromUitnodigingResponse();
 
-            await _client.Uitnodiging.TrekUitnodigingIn(UitnodigingId, _client);
+            await _client.Uitnodiging.TrekUitnodigingIn(UitnodigingId);
         }
 
         public Task DisposeAsync() => Task.CompletedTask;

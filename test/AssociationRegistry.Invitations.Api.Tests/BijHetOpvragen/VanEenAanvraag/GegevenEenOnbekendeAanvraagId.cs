@@ -19,14 +19,14 @@ public class GegevenEenOnbekendeAanvraagId : IClassFixture<GegevenEenOnbekendeAa
     [Fact]
     public async Task DanIsDeResponse400()
     {
-        var response = await _client.Aanvragen.GetAanvraagDetail(new AutoFixture.Fixture().Create<string>(), Guid.NewGuid(), _client);
+        var response = await _client.Aanvragen.GetAanvraagDetail(new AutoFixture.Fixture().Create<string>(), Guid.NewGuid());
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
     [Fact]
     public async Task DanBevatDeBodyEenError()
     {
-        var response = await _client.Aanvragen.GetAanvraagDetail(new AutoFixture.Fixture().Create<string>(), Guid.NewGuid(), _client);
+        var response = await _client.Aanvragen.GetAanvraagDetail(new AutoFixture.Fixture().Create<string>(), Guid.NewGuid());
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);
 
@@ -60,7 +60,7 @@ public class GegevenEenOnbekendeAanvraagId : IClassFixture<GegevenEenOnbekendeAa
         {
             foreach (var request in _aanvragen)
             {
-                await _client.Aanvragen.RegistreerAanvraag(request, _client).EnsureSuccessOrThrowForAanvraag();
+                await _client.Aanvragen.RegistreerAanvraag(request).EnsureSuccessOrThrowForAanvraag();
             }
         }
 
