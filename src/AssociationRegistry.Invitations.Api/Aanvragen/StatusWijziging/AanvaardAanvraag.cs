@@ -43,7 +43,7 @@ public class AanvaardAanvraagController : ApiController
 
         return await aanvraag
                     .BadRequestIfNietBestaand()
-                    .BadRequestIfReedsVerwerkt(Resources.AanvaardenOnmogelijk)
+                    .BadRequestIfReedsVerwerkt(Resources.AanvaardenUitnodigingOnmogelijk)
                     .Handle(action: async () =>
                      {
                          await _handler.SetStatus(aanvraag!, AanvraagStatus.Aanvaard, cancellationToken);
