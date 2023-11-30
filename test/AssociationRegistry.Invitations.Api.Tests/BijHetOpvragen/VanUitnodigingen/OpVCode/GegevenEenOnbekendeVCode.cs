@@ -20,7 +20,7 @@ public class GegevenEenOnbekendeVCode : IClassFixture<GegevenEenOnbekendeVCode.S
     [MemberData(nameof(Data))]
     public async Task DanIsDeResponse200(string onbekendeVcode)
     {
-        var response = await _client.Uitnodiging.GetUitnodigingenOpVcode(onbekendeVcode, _client);
+        var response = await _client.Uitnodiging.GetUitnodigingenOpVcode(onbekendeVcode);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
@@ -28,7 +28,7 @@ public class GegevenEenOnbekendeVCode : IClassFixture<GegevenEenOnbekendeVCode.S
     [MemberData(nameof(Data))]
     public async Task DanBevatDeBodyDeGeenUitnodigingen(string onbekendeVcode)
     {
-        var response = await _client.Uitnodiging.GetUitnodigingenOpVcode(onbekendeVcode, _client);
+        var response = await _client.Uitnodiging.GetUitnodigingenOpVcode(onbekendeVcode);
         var content = await response.Content.ReadAsStringAsync();
 
         var token = JToken.Parse(content);
@@ -70,7 +70,7 @@ public class GegevenEenOnbekendeVCode : IClassFixture<GegevenEenOnbekendeVCode.S
         {
             foreach (var request in _uitnodigingen)
             {
-                await _client.Uitnodiging.RegistreerUitnodiging(request, _client).EnsureSuccessOrThrowForUitnodiging();
+                await _client.Uitnodiging.RegistreerUitnodiging(request).EnsureSuccessOrThrowForUitnodiging();
             }
         }
 

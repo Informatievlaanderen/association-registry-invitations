@@ -6,7 +6,6 @@ namespace AssociationRegistry.Invitations.Archiver;
 
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Serilog;
 
 public class ArchiverService : BackgroundService
 {
@@ -28,27 +27,38 @@ public class ArchiverService : BackgroundService
         LogBewaartijden(_logger, _options);
 
         var session = _store.LightweightSession();
+        
+        ArchiveerUitnodigingenWachtOpAntwoord(session);
+        _logger.LogInformation($"{nameof(ArchiveerUitnodigingenWachtOpAntwoord)} voltooid.");
+        ArchiveerUitnodigingenAanvaard(session);
+        _logger.LogInformation($"{nameof(ArchiveerUitnodigingenAanvaard)} voltooid.");
+        ArchiveerUitnodigingenGeweigerd(session);
+        _logger.LogInformation($"{nameof(ArchiveerUitnodigingenGeweigerd)} voltooid.");
+        ArchiveerUitnodigingenIngetrokken(session);
+        _logger.LogInformation($"{nameof(ArchiveerUitnodigingenIngetrokken)} voltooid.");
+        ArchiveerUitnodigingenVerlopen(session);
+        _logger.LogInformation($"{nameof(ArchiveerUitnodigingenVerlopen)} voltooid.");
 
-        ArchiveerWachtOpAntwoord(session);
-        _logger.LogInformation($"{nameof(ArchiveerWachtOpAntwoord)} voltooid.");
-        ArchiveerAanvaard(session);
-        _logger.LogInformation($"{nameof(ArchiveerAanvaard)} voltooid.");
-        ArchiveerGeweigerd(session);
-        _logger.LogInformation($"{nameof(ArchiveerGeweigerd)} voltooid.");
-        ArchiveerIngetrokken(session);
-        _logger.LogInformation($"{nameof(ArchiveerIngetrokken)} voltooid.");
-        ArchiveerVerlopen(session);
-        _logger.LogInformation($"{nameof(ArchiveerVerlopen)} voltooid.");
+        ArchiveerAanvragenWachtOpAntwoord(session);
+        _logger.LogInformation($"{nameof(ArchiveerAanvragenWachtOpAntwoord)} voltooid.");
+        ArchiveerAanvragenAanvaard(session);
+        _logger.LogInformation($"{nameof(ArchiveerAanvragenAanvaard)} voltooid.");
+        ArchiveerAanvragenGeweigerd(session);
+        _logger.LogInformation($"{nameof(ArchiveerAanvragenGeweigerd)} voltooid.");
+        ArchiveerAanvragenIngetrokken(session);
+        _logger.LogInformation($"{nameof(ArchiveerAanvragenIngetrokken)} voltooid.");
+        ArchiveerAanvragenVerlopen(session);
+        _logger.LogInformation($"{nameof(ArchiveerAanvragenVerlopen)} voltooid.");
 
         await session.SaveChangesAsync(stoppingToken);
     }
-
+    
     private static void LogBewaartijden(ILogger<ArchiverService> logger, AppSettings.BewaartijdenOptions options)
     {
         logger.LogInformation(JsonConvert.SerializeObject(options));
     }
-
-    private void ArchiveerWachtOpAntwoord(IDocumentSession session)
+    
+    private void ArchiveerUitnodigingenWachtOpAntwoord(IDocumentSession session)
     {
         var archivalStartDate = ArchiverDateHelper.CalculateArchivalStartDate(_options.WachtOpAntwoord, _clock.GetCurrentInstant())
                                                   .ToDateTimeOffset();
@@ -69,7 +79,7 @@ public class ArchiverService : BackgroundService
         session.Store(uitnodigingen);
     }
 
-    private void ArchiveerAanvaard(IDocumentSession session)
+    private void ArchiveerUitnodigingenAanvaard(IDocumentSession session)
     {
         var archivalStartDate = ArchiverDateHelper
                                .CalculateArchivalStartDate(
@@ -83,7 +93,7 @@ public class ArchiverService : BackgroundService
                                               u.DatumLaatsteAanpassing <= archivalStartDate);
     }
 
-    private void ArchiveerGeweigerd(IDocumentSession session)
+    private void ArchiveerUitnodigingenGeweigerd(IDocumentSession session)
     {
         var archivalStartDate = ArchiverDateHelper
                                .CalculateArchivalStartDate(
@@ -98,7 +108,7 @@ public class ArchiverService : BackgroundService
                                              u.DatumLaatsteAanpassing <= archivalStartDate);
     }
 
-    private void ArchiveerIngetrokken(IDocumentSession session)
+    private void ArchiveerUitnodigingenIngetrokken(IDocumentSession session)
     {
         var archivalStartDate = ArchiverDateHelper
                                .CalculateArchivalStartDate(
@@ -113,7 +123,7 @@ public class ArchiverService : BackgroundService
                                              u.DatumLaatsteAanpassing <= archivalStartDate);
     }
 
-    private void ArchiveerVerlopen(IDocumentSession session)
+    private void ArchiveerUitnodigingenVerlopen(IDocumentSession session)
     {
         var archivalStartDate = ArchiverDateHelper
                                .CalculateArchivalStartDate(
@@ -125,6 +135,86 @@ public class ArchiverService : BackgroundService
 
         session.DeleteWhere<Uitnodiging>(u =>
                                              u.Status.Status == UitnodigingsStatus.Verlopen.Status &&
+                                             u.DatumLaatsteAanpassing <= archivalStartDate);
+    }
+    
+    private void ArchiveerAanvragenWachtOpAntwoord(IDocumentSession session)
+    {
+        var archivalStartDate = ArchiverDateHelper.CalculateArchivalStartDate(_options.WachtOpAntwoord, _clock.GetCurrentInstant())
+                                                  .ToDateTimeOffset();
+
+        var aanvragen = session
+                           .Query<Aanvraag>()
+                           .Where(u =>
+                                      u.Status.Status == AanvraagStatus.WachtOpAntwoord.Status &&
+                                      u.DatumLaatsteAanpassing < archivalStartDate)
+                           .ToList()
+                           .Select(s => s with
+                            {
+                                Status = AanvraagStatus.Verlopen,
+                                DatumLaatsteAanpassing = _clock.GetCurrentInstant().ToDateTimeOffset(),
+                            });
+
+        _logger.LogInformation("Beginnen met archiveren van {AanvragenAantal} aanvragen met status 'WachtOpAntwoord' die ouder zijn dan {StartDate}", aanvragen.Count(), archivalStartDate.UtcDateTime);
+        session.Store(aanvragen);
+    }
+
+    private void ArchiveerAanvragenAanvaard(IDocumentSession session)
+    {
+        var archivalStartDate = ArchiverDateHelper
+                               .CalculateArchivalStartDate(
+                                    _options.Aanvaard, _clock.GetCurrentInstant())
+                               .ToDateTimeOffset();
+
+        _logger.LogInformation("Beginnen met archiveren van aanvragen met status 'Aanvaard' die ouder zijn dan {StartDate}",
+                               archivalStartDate);
+
+        session.DeleteWhere<Aanvraag>(u => u.Status.Status == AanvraagStatus.Aanvaard.Status &&
+                                           u.DatumLaatsteAanpassing <= archivalStartDate);
+    }
+
+    private void ArchiveerAanvragenGeweigerd(IDocumentSession session)
+    {
+        var archivalStartDate = ArchiverDateHelper
+                               .CalculateArchivalStartDate(
+                                    _options.Geweigerd, _clock.GetCurrentInstant())
+                               .ToDateTimeOffset();
+
+        _logger.LogInformation("Beginnen met archiveren van aanvragen met status 'Geweigerd' die ouder zijn dan {StartDate}",
+                               archivalStartDate);
+
+        session.DeleteWhere<Aanvraag>(u =>
+                                          u.Status.Status == AanvraagStatus.Geweigerd.Status &&
+                                          u.DatumLaatsteAanpassing <= archivalStartDate);
+    }
+
+    private void ArchiveerAanvragenIngetrokken(IDocumentSession session)
+    {
+        var archivalStartDate = ArchiverDateHelper
+                               .CalculateArchivalStartDate(
+                                    _options.Ingetrokken, _clock.GetCurrentInstant())
+                               .ToDateTimeOffset();
+
+        _logger.LogInformation("Beginnen met archiveren van aanvragen met status 'Ingetrokken' die ouder zijn dan {StartDate}",
+                               archivalStartDate);
+
+        session.DeleteWhere<Aanvraag>(u =>
+                                          u.Status.Status == AanvraagStatus.Ingetrokken.Status &&
+                                          u.DatumLaatsteAanpassing <= archivalStartDate);
+    }
+
+    private void ArchiveerAanvragenVerlopen(IDocumentSession session)
+    {
+        var archivalStartDate = ArchiverDateHelper
+                               .CalculateArchivalStartDate(
+                                    _options.Verlopen, _clock.GetCurrentInstant())
+                               .ToDateTimeOffset();
+
+        _logger.LogInformation("Beginnen met archiveren van aanvragen met status 'Verlopen' die ouder zijn dan {StartDate}",
+                               archivalStartDate);
+
+        session.DeleteWhere<Aanvraag>(u =>
+                                             u.Status.Status == AanvraagStatus.Verlopen.Status &&
                                              u.DatumLaatsteAanpassing <= archivalStartDate);
     }
 }

@@ -20,7 +20,7 @@ public class GegevenEenOnbekendeVCode : IClassFixture<GegevenEenOnbekendeVCode.S
     [MemberData(nameof(Data))]
     public async Task DanIsDeResponse200(string onbekendeVcode)
     {
-        var response = await _client.Aanvragen.GetAanvragenOpVcode(onbekendeVcode, _client);
+        var response = await _client.Aanvragen.GetAanvragenOpVcode(onbekendeVcode);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
@@ -28,7 +28,7 @@ public class GegevenEenOnbekendeVCode : IClassFixture<GegevenEenOnbekendeVCode.S
     [MemberData(nameof(Data))]
     public async Task DanBevatDeBodyDeGeenAanvragen(string onbekendeVcode)
     {
-        var response = await _client.Aanvragen.GetAanvragenOpVcode(onbekendeVcode, _client);
+        var response = await _client.Aanvragen.GetAanvragenOpVcode(onbekendeVcode);
         var content = await response.Content.ReadAsStringAsync();
 
         var token = JToken.Parse(content);
@@ -70,7 +70,7 @@ public class GegevenEenOnbekendeVCode : IClassFixture<GegevenEenOnbekendeVCode.S
         {
             foreach (var request in _aanvragen)
             {
-                await _client.Aanvragen.RegistreerAanvraag(request, _client).EnsureSuccessOrThrowForAanvraag();
+                await _client.Aanvragen.RegistreerAanvraag(request).EnsureSuccessOrThrowForAanvraag();
             }
         }
 

@@ -16,7 +16,7 @@ public class GegevenEenUnauthenticatedClient
     [Fact]
     public async Task Then_It_Returns_401_With_Unauthenticated_Client()
     {
-        var response = await _client.Uitnodiging.GetUitnodigingsDetail("", Guid.NewGuid(), _client);
+        var response = await _client.Uitnodiging.GetUitnodigingsDetail("", Guid.NewGuid());
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
     

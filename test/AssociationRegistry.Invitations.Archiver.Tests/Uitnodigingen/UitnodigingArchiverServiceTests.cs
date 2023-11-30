@@ -1,24 +1,26 @@
-﻿using AssociationRegistry.Invitations.Archiver.Tests.Fixture;
-using FluentAssertions;
-using Marten;
-using Microsoft.Extensions.DependencyInjection;
+﻿
 // ReSharper disable ReplaceWithSingleCallToSingleOrDefault
 
 // ReSharper disable ReplaceWithSingleCallToSingle
 
-namespace AssociationRegistry.Invitations.Archiver.Tests;
+namespace AssociationRegistry.Invitations.Archiver.Tests.Uitnodigingen;
+
+using Fixture;
+using FluentAssertions;
+using Marten;
+using Microsoft.Extensions.DependencyInjection;
 
 [Collection(nameof(ArchiverCollection))]
-public class ArchiverServiceTests
+public class UitnodigingArchiverServiceTests
 {
     private readonly ArchiverFixture _fixture;
     private readonly UitnodigingTestDataFactory _testDataFactory;
 
-    public ArchiverServiceTests(ArchiverFixture fixture)
+    public UitnodigingArchiverServiceTests(ArchiverFixture fixture)
     {
         _fixture = fixture;
 
-        _testDataFactory = fixture.TestDataFactory;
+        _testDataFactory = fixture.UitnodigingTestDataFactory;
     }
 
     [Fact]
@@ -28,11 +30,11 @@ public class ArchiverServiceTests
         await using var session = store.QuerySession();
 
         var uitnodiging = session.Query<Uitnodiging>()
-            .Where(x => x.Id == _testDataFactory.NietOverTijdUitnodigingen.WachtOpAntwoord.Id)
+            .Where(x => x.Id == _testDataFactory.NietOverTijd.WachtOpAntwoord.Id)
             .Single();
         uitnodiging.Status.Should().Be(UitnodigingsStatus.WachtOpAntwoord);
-        uitnodiging.DatumRegistratie.Should().Be(_testDataFactory.NietOverTijdUitnodigingen.WachtOpAntwoord.DatumRegistratie);
-        uitnodiging.DatumLaatsteAanpassing.Should().Be(_testDataFactory.NietOverTijdUitnodigingen.WachtOpAntwoord.DatumLaatsteAanpassing);
+        uitnodiging.DatumRegistratie.Should().Be(_testDataFactory.NietOverTijd.WachtOpAntwoord.DatumRegistratie);
+        uitnodiging.DatumLaatsteAanpassing.Should().Be(_testDataFactory.NietOverTijd.WachtOpAntwoord.DatumLaatsteAanpassing);
     }
 
     [Fact]
@@ -42,11 +44,11 @@ public class ArchiverServiceTests
         await using var session = store.QuerySession();
 
         var uitnodiging = session.Query<Uitnodiging>()
-            .Where(x => x.Id == _testDataFactory.NietOverTijdUitnodigingen.Aanvaard.Id)
+            .Where(x => x.Id == _testDataFactory.NietOverTijd.Aanvaard.Id)
             .Single();
         uitnodiging.Status.Should().Be(UitnodigingsStatus.Aanvaard);
-        uitnodiging.DatumRegistratie.Should().Be(_testDataFactory.NietOverTijdUitnodigingen.Aanvaard.DatumRegistratie);
-        uitnodiging.DatumLaatsteAanpassing.Should().Be(_testDataFactory.NietOverTijdUitnodigingen.Aanvaard.DatumLaatsteAanpassing);
+        uitnodiging.DatumRegistratie.Should().Be(_testDataFactory.NietOverTijd.Aanvaard.DatumRegistratie);
+        uitnodiging.DatumLaatsteAanpassing.Should().Be(_testDataFactory.NietOverTijd.Aanvaard.DatumLaatsteAanpassing);
     }
 
     [Fact]
@@ -56,11 +58,11 @@ public class ArchiverServiceTests
         await using var session = store.QuerySession();
 
         var uitnodiging = session.Query<Uitnodiging>()
-            .Where(x => x.Id == _testDataFactory.NietOverTijdUitnodigingen.Geweigerd.Id)
+            .Where(x => x.Id == _testDataFactory.NietOverTijd.Geweigerd.Id)
             .Single();
         uitnodiging.Status.Should().Be(UitnodigingsStatus.Geweigerd);
-        uitnodiging.DatumRegistratie.Should().Be(_testDataFactory.NietOverTijdUitnodigingen.Geweigerd.DatumRegistratie);
-        uitnodiging.DatumLaatsteAanpassing.Should().Be(_testDataFactory.NietOverTijdUitnodigingen.Geweigerd.DatumLaatsteAanpassing);
+        uitnodiging.DatumRegistratie.Should().Be(_testDataFactory.NietOverTijd.Geweigerd.DatumRegistratie);
+        uitnodiging.DatumLaatsteAanpassing.Should().Be(_testDataFactory.NietOverTijd.Geweigerd.DatumLaatsteAanpassing);
     }
 
     [Fact]
@@ -70,11 +72,11 @@ public class ArchiverServiceTests
         await using var session = store.QuerySession();
 
         var uitnodiging = session.Query<Uitnodiging>()
-            .Where(x => x.Id == _testDataFactory.NietOverTijdUitnodigingen.Ingetrokken.Id)
+            .Where(x => x.Id == _testDataFactory.NietOverTijd.Ingetrokken.Id)
             .Single();
         uitnodiging.Status.Should().Be(UitnodigingsStatus.Ingetrokken);
-        uitnodiging.DatumRegistratie.Should().Be(_testDataFactory.NietOverTijdUitnodigingen.Ingetrokken.DatumRegistratie);
-        uitnodiging.DatumLaatsteAanpassing.Should().Be(_testDataFactory.NietOverTijdUitnodigingen.Ingetrokken.DatumLaatsteAanpassing);
+        uitnodiging.DatumRegistratie.Should().Be(_testDataFactory.NietOverTijd.Ingetrokken.DatumRegistratie);
+        uitnodiging.DatumLaatsteAanpassing.Should().Be(_testDataFactory.NietOverTijd.Ingetrokken.DatumLaatsteAanpassing);
     }
 
     [Fact]
@@ -84,13 +86,13 @@ public class ArchiverServiceTests
         await using var session = store.QuerySession();
 
         var uitnodiging = session.Query<Uitnodiging>()
-            .Where(x => x.Id == _testDataFactory.NietOverTijdUitnodigingen.Verlopen.Id)
+            .Where(x => x.Id == _testDataFactory.NietOverTijd.Verlopen.Id)
             .Single();
         uitnodiging.Status.Should().Be(UitnodigingsStatus.Verlopen);
-        uitnodiging.DatumRegistratie.Should().Be(_testDataFactory.NietOverTijdUitnodigingen.Verlopen.DatumRegistratie);
-        uitnodiging.DatumLaatsteAanpassing.Should().Be(_testDataFactory.NietOverTijdUitnodigingen.Verlopen.DatumLaatsteAanpassing);
+        uitnodiging.DatumRegistratie.Should().Be(_testDataFactory.NietOverTijd.Verlopen.DatumRegistratie);
+        uitnodiging.DatumLaatsteAanpassing.Should().Be(_testDataFactory.NietOverTijd.Verlopen.DatumLaatsteAanpassing);
     }
-    
+
     [Fact]
     public async Task OverTijd_WachtendOpAntwoord_VerandertNaar_Verlopen()
     {
@@ -98,14 +100,14 @@ public class ArchiverServiceTests
         await using var session = store.QuerySession();
 
         var uitnodiging = session.Query<Uitnodiging>()
-            .Where(x => x.Id == _testDataFactory.OverTijdUitnodigingen.WachtOpAntwoord.Id)
+            .Where(x => x.Id == _testDataFactory.OverTijd.WachtOpAntwoord.Id)
             .Single();
 
         uitnodiging.Status.Should().Be(UitnodigingsStatus.Verlopen);
-        uitnodiging.DatumRegistratie.Should().Be(_testDataFactory.NietOverTijdUitnodigingen.WachtOpAntwoord.DatumRegistratie);
-        uitnodiging.DatumLaatsteAanpassing.Should().BeAfter(_testDataFactory.NietOverTijdUitnodigingen.WachtOpAntwoord.DatumLaatsteAanpassing);
+        uitnodiging.DatumRegistratie.Should().Be(_testDataFactory.NietOverTijd.WachtOpAntwoord.DatumRegistratie);
+        uitnodiging.DatumLaatsteAanpassing.Should().BeAfter(_testDataFactory.NietOverTijd.WachtOpAntwoord.DatumLaatsteAanpassing);
     }
-    
+
     [Fact]
     public async Task OverTijd_Aanvaard_WerdVerwijderd()
     {
@@ -113,7 +115,7 @@ public class ArchiverServiceTests
         await using var session = store.QuerySession();
 
         session.Query<Uitnodiging>()
-            .Where(x => x.Id == _testDataFactory.OverTijdUitnodigingen.Aanvaard.Id)
+            .Where(x => x.Id == _testDataFactory.OverTijd.Aanvaard.Id)
             .SingleOrDefault()
             .Should()
             .BeNull();
@@ -126,7 +128,7 @@ public class ArchiverServiceTests
         await using var session = store.QuerySession();
 
         session.Query<Uitnodiging>()
-            .Where(x => x.Id == _testDataFactory.OverTijdUitnodigingen.Geweigerd.Id)
+            .Where(x => x.Id == _testDataFactory.OverTijd.Geweigerd.Id)
             .SingleOrDefault()
             .Should()
             .BeNull();
@@ -138,7 +140,7 @@ public class ArchiverServiceTests
         await using var session = store.QuerySession();
 
         session.Query<Uitnodiging>()
-            .Where(x => x.Id == _testDataFactory.OverTijdUitnodigingen.Ingetrokken.Id)
+            .Where(x => x.Id == _testDataFactory.OverTijd.Ingetrokken.Id)
             .SingleOrDefault()
             .Should()
             .BeNull();
@@ -150,7 +152,7 @@ public class ArchiverServiceTests
         await using var session = store.QuerySession();
 
         session.Query<Uitnodiging>()
-            .Where(x => x.Id == _testDataFactory.OverTijdUitnodigingen.Verlopen.Id)
+            .Where(x => x.Id == _testDataFactory.OverTijd.Verlopen.Id)
             .SingleOrDefault()
             .Should()
             .BeNull();

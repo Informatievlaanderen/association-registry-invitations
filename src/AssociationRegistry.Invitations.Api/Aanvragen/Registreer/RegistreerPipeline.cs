@@ -2,7 +2,7 @@ namespace AssociationRegistry.Invitations.Api.Aanvragen.Registreer;
 
 using Marten;
 using Microsoft.AspNetCore.Mvc;
-using Ophalen;
+using Queries;
 using StatusWijziging;
 
 public static class RegistreerPipeline
@@ -38,8 +38,7 @@ public static class RegistreerPipeline
         if (source.Failure is not null)
             return source;
 
-        var hasDuplicate = await session.Query<Aanvraag>()
-                                        .HeeftBestaandeAanvraagVoor(source.Input.VCode, source.Input.Aanvrager.Insz, cancellationToken);
+        var hasDuplicate = await session.HeeftBestaandeAanvraagVoor(source.Input.VCode, source.Input.Aanvrager.Insz, cancellationToken);
 
         if (hasDuplicate)
             return new Either<AanvraagRequest>

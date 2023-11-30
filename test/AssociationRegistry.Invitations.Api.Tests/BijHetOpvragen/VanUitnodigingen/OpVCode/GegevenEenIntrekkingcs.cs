@@ -25,14 +25,14 @@ public class GegevenEenIntrekking : IClassFixture<GegevenEenIntrekking.Setup>
     [Fact]
     public async Task DanIsDeResponse200()
     {
-        var response = await _client.Uitnodiging.GetUitnodigingenOpVcode(_setup.Uitnodiging.VCode, _client);
+        var response = await _client.Uitnodiging.GetUitnodigingenOpVcode(_setup.Uitnodiging.VCode);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
     [Fact]
     public async Task DanBevatDeBodyDeUitnodiging()
     {
-        var response = await _client.Uitnodiging.GetUitnodigingenOpVcode(_setup.Uitnodiging.VCode, _client);
+        var response = await _client.Uitnodiging.GetUitnodigingenOpVcode(_setup.Uitnodiging.VCode);
         var content = await response.Content.ReadAsStringAsync();
 
         var token = JsonConvert.DeserializeObject<JObject>(content,
@@ -75,12 +75,12 @@ public class GegevenEenIntrekking : IClassFixture<GegevenEenIntrekking.Setup>
 
         public async Task InitializeAsync()
         {
-            var response = await _client.Uitnodiging.RegistreerUitnodiging(Uitnodiging, _client)
+            var response = await _client.Uitnodiging.RegistreerUitnodiging(Uitnodiging)
                                         .EnsureSuccessOrThrowForUitnodiging();
             
             UitnodigingId = await response.ParseIdFromUitnodigingResponse();
             
-            await _client.Uitnodiging.TrekUitnodigingIn(UitnodigingId, _client);
+            await _client.Uitnodiging.TrekUitnodigingIn(UitnodigingId);
             
             UitnodigingAanvaardOp = _fixture.Clock.PreviousInstant;
         }

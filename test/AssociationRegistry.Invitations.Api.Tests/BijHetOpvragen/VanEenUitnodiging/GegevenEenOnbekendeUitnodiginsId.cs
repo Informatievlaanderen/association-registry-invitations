@@ -19,7 +19,7 @@ public class GegevenEenOnbekendeUitnodiginsId : IClassFixture<GegevenEenOnbekend
     [Fact]
     public async Task DanIsDeResponse400()
     {
-        var response = await _client.Uitnodiging.GetUitnodigingsDetail(new AutoFixture.Fixture().Create<string>(), Guid.NewGuid(), _client);
+        var response = await _client.Uitnodiging.GetUitnodigingsDetail(new AutoFixture.Fixture().Create<string>(), Guid.NewGuid());
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
@@ -27,7 +27,7 @@ public class GegevenEenOnbekendeUitnodiginsId : IClassFixture<GegevenEenOnbekend
 
     public async Task DanBevatDeBodyEenError()
     {
-        var response = await _client.Uitnodiging.GetUitnodigingsDetail(new AutoFixture.Fixture().Create<string>(), Guid.NewGuid(), _client);
+        var response = await _client.Uitnodiging.GetUitnodigingsDetail(new AutoFixture.Fixture().Create<string>(), Guid.NewGuid());
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);
         token["errors"]!.ToObject<Dictionary<string, string[]>>()
@@ -61,7 +61,7 @@ public class GegevenEenOnbekendeUitnodiginsId : IClassFixture<GegevenEenOnbekend
         {
             foreach (var request in _uitnodigingen)
             {
-                await _client.Uitnodiging.RegistreerUitnodiging(request, _client).EnsureSuccessOrThrowForUitnodiging();
+                await _client.Uitnodiging.RegistreerUitnodiging(request).EnsureSuccessOrThrowForUitnodiging();
             }
         }
 

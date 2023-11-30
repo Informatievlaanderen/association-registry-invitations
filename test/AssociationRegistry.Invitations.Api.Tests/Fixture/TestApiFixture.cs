@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
-using Newtonsoft.Json.Linq;
 using NodaTime;
 using Npgsql;
 
@@ -87,7 +86,7 @@ public class TestApiFixture : IAsyncLifetime
         var uitnodiging = _autoFixture.Create<UitnodigingsRequest>();
         uitnodiging.Uitgenodigde.Insz = _autoFixture.Create<TestInsz>();
 
-        var response = await Clients.Authenticated.Uitnodiging.RegistreerUitnodiging(uitnodiging, Clients.Authenticated).EnsureSuccessOrThrowForUitnodiging();
+        var response = await Clients.Authenticated.Uitnodiging.RegistreerUitnodiging(uitnodiging).EnsureSuccessOrThrowForUitnodiging();
 
         var uitnodigingId = await response.ParseIdFromUitnodigingResponse();
         VerwerkteUitnodigingsIds.Add(uitnodigingId);
@@ -100,7 +99,7 @@ public class TestApiFixture : IAsyncLifetime
         var uitnodiging = _autoFixture.Create<AanvraagRequest>();
         uitnodiging.Aanvrager.Insz = _autoFixture.Create<TestInsz>();
 
-        var response = await Clients.Authenticated.Aanvragen.RegistreerAanvraag(uitnodiging, Clients.Authenticated).EnsureSuccessOrThrowForAanvraag();
+        var response = await Clients.Authenticated.Aanvragen.RegistreerAanvraag(uitnodiging).EnsureSuccessOrThrowForAanvraag();
 
         var uitnodigingId = await response.ParseIdFromAanvraagResponse();
         VerwerkteAanvraagIds.Add(uitnodigingId);

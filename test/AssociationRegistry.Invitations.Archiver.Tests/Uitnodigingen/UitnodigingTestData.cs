@@ -1,7 +1,7 @@
-﻿using Marten;
-using Marten.Schema;
+﻿namespace AssociationRegistry.Invitations.Archiver.Tests.Uitnodigingen;
 
-namespace AssociationRegistry.Invitations.Archiver.Tests.Fixture;
+using Marten;
+using Marten.Schema;
 
 public class UitnodigingTestData : IInitialData
 {
@@ -19,4 +19,13 @@ public class UitnodigingTestData : IInitialData
         session.StoreObjects(_factory.Build());
         await session.SaveChangesAsync(cancellation);
     }
+}
+
+public record Uitnodigingen
+{
+    public Uitnodiging WachtOpAntwoord { get; set; }
+    public Uitnodiging Aanvaard { get; set; }
+    public Uitnodiging Geweigerd { get; set; }
+    public Uitnodiging Ingetrokken { get; set; }
+    public Uitnodiging Verlopen { get; set; }
 }

@@ -56,17 +56,17 @@ public class GegevenEenReedsIngetrokkenAanvraag : IClassFixture<GegevenEenReedsI
 
         public async Task InitializeAsync()
         {
-            var response = await _client.Aanvragen.RegistreerAanvraag(Aanvraag, _client).EnsureSuccessOrThrowForAanvraag();
+            var response = await _client.Aanvragen.RegistreerAanvraag(Aanvraag).EnsureSuccessOrThrowForAanvraag();
 
             AanvraagId = await response.ParseIdFromAanvraagResponse();
-            await _client.Aanvragen.TrekAanvraagIn(AanvraagId, _client).EnsureSuccessOrThrowForAanvraag();
+            await _client.Aanvragen.TrekAanvraagIn(AanvraagId).EnsureSuccessOrThrowForAanvraag();
 
             var request = new AutoFixture.Fixture()
                 .CustomizeAll()
                 .Create<AanvraagRequest>();
             request.VCode = Aanvraag.VCode;
             request.Aanvrager.Insz = Aanvraag.Aanvrager.Insz;
-            ActResponse = await _client.Aanvragen.RegistreerAanvraag(request, _client);
+            ActResponse = await _client.Aanvragen.RegistreerAanvraag(request);
         }
 
         public Task DisposeAsync() => Task.CompletedTask;

@@ -21,7 +21,7 @@ public class GegevenEenReedsIngetrokkenAanvraag : IClassFixture<GegevenEenReedsI
     [Fact]
     public async Task DanIsDeResponse400()
     {
-        var response = await _client.Aanvragen.TrekAanvraagIn(_setup.AanvraagId, _client);
+        var response = await _client.Aanvragen.TrekAanvraagIn(_setup.AanvraagId);
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
@@ -29,7 +29,7 @@ public class GegevenEenReedsIngetrokkenAanvraag : IClassFixture<GegevenEenReedsI
     [Fact]
     public async Task DanBevatDeBodyEenErrorMessage()
     {
-        var response = await _client.Aanvragen.TrekAanvraagIn(_setup.AanvraagId, _client);
+        var response = await _client.Aanvragen.TrekAanvraagIn(_setup.AanvraagId);
 
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);
@@ -63,12 +63,12 @@ public class GegevenEenReedsIngetrokkenAanvraag : IClassFixture<GegevenEenReedsI
 
         public async Task InitializeAsync()
         {
-            var response = await _client.Aanvragen.RegistreerAanvraag(Aanvraag, _client)
+            var response = await _client.Aanvragen.RegistreerAanvraag(Aanvraag)
                                         .EnsureSuccessOrThrowForAanvraag();
 
             AanvraagId = await response.ParseIdFromAanvraagResponse();
 
-            await _client.Aanvragen.TrekAanvraagIn(AanvraagId, _client);
+            await _client.Aanvragen.TrekAanvraagIn(AanvraagId);
         }
 
         public Task DisposeAsync() => Task.CompletedTask;

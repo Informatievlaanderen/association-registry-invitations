@@ -13,11 +13,11 @@ nuget IdentityModel.AspnetCore.OAuth2Introspection
 nuget Microsoft.AspNetCore.Authentication.JwtBearer 6.0.3
 nuget Microsoft.AspNetCore.Mvc.Testing 6.0.3
 nuget Microsoft.AspNetCore.TestHost 6.0.3
-nuget Microsoft.AspNetCore.Mvc.NewtonsoftJson < 7.0
-nuget Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer
-nuget Microsoft.Extensions.DependencyInjection
-nuget Microsoft.Extensions.Hosting
-nuget Microsoft.Extensions.Configuration
+nuget Microsoft.AspNetCore.Mvc.NewtonsoftJson 6.0.3
+nuget Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer 5.1
+nuget Microsoft.Extensions.DependencyInjection  >= 6.0.1
+nuget Microsoft.Extensions.Hosting >= 6.0.1
+nuget Microsoft.Extensions.Configuration  >= 6.0.1
 
 nuget FluentAssertions
 nuget Marten
@@ -34,13 +34,13 @@ nuget Serilog.Settings.Configuration
 nuget Serilog.Sinks.File
 nuget Serilog.Sinks.Console
 
-nuget OpenTelemetry 
+nuget OpenTelemetry
 nuget OpenTelemetry.Api
 nuget OpenTelemetry.Exporter.Console
-nuget OpenTelemetry.Exporter.OpenTelemetryProtocol 
-nuget OpenTelemetry.Exporter.OpenTelemetryProtocol.Logs 
-nuget OpenTelemetry.Extensions.Hosting 
-nuget OpenTelemetry.Instrumentation.AspNetCore 
+nuget OpenTelemetry.Exporter.OpenTelemetryProtocol
+nuget OpenTelemetry.Exporter.OpenTelemetryProtocol.Logs
+nuget OpenTelemetry.Extensions.Hosting
+nuget OpenTelemetry.Instrumentation.AspNetCore
 nuget OpenTelemetry.Instrumentation.Http
 nuget OpenTelemetry.Instrumentation.Runtime
 nuget NpgSql.OpenTelemetry

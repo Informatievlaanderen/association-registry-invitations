@@ -1,9 +1,10 @@
-using AssociationRegistry.Invitations.Api.Uitnodigingen.Ophalen;
 using AssociationRegistry.Invitations.Api.Uitnodigingen.StatusWijziging;
 using Marten;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Registreer;
+
+using Queries;
 
 public static class RegistreerPipeline
 {
@@ -33,7 +34,7 @@ public static class RegistreerPipeline
         if (source.Failure is not null)
             return source;
         
-        var hasDuplicate = await session.Query<Uitnodiging>()
+        var hasDuplicate = await session
             .HeeftBestaandeUitnodigingVoor(source.Input.VCode, source.Input.Uitgenodigde.Insz, cancellationToken);
         
         if (hasDuplicate)

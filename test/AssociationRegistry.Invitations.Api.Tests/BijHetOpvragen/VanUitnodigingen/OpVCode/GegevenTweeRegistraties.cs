@@ -24,14 +24,14 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
     [Fact]
     public async Task DanIsDeResponse200()
     {
-        var response = await _client.Uitnodiging.GetUitnodigingenOpVcode("V0000001", _client);
+        var response = await _client.Uitnodiging.GetUitnodigingenOpVcode("V0000001");
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
     [Fact]
     public async Task DanBevatDeBodyDeGeregistreerdeUitnodiging()
     {
-        var response = await _client.Uitnodiging.GetUitnodigingenOpVcode(_setup.VCode, _client);
+        var response = await _client.Uitnodiging.GetUitnodigingenOpVcode(_setup.VCode);
         var content = await response.Content.ReadAsStringAsync();
 
         var token = JsonConvert.DeserializeObject<JObject>(content,
@@ -111,7 +111,7 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
 
         private async Task<Guid> RegistreerUitnodiging(UitnodigingsRequest uitnodigingsRequest)
         {
-            var response = await _client.Uitnodiging.RegistreerUitnodiging(uitnodigingsRequest, _client).EnsureSuccessOrThrowForUitnodiging();
+            var response = await _client.Uitnodiging.RegistreerUitnodiging(uitnodigingsRequest).EnsureSuccessOrThrowForUitnodiging();
             var content = await response.Content.ReadAsStringAsync();
             return Guid.Parse(JToken.Parse(content)["uitnodigingId"]!.Value<string>()!);
         }

@@ -17,14 +17,14 @@ public class GegevenGeenRegistraties
     [Fact]
     public async Task DanIsDeResponse200()
     {
-        var response = await _client.Uitnodiging.GetUitnodigingenOpVcode("V0000001", _client);
+        var response = await _client.Uitnodiging.GetUitnodigingenOpVcode("V0000001");
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
     [Fact]
     public async Task DanBevatDeBodyGeenUitnodigingen()
     {
-        var response = await _client.Uitnodiging.GetUitnodigingenOpVcode("V0000001", _client);
+        var response = await _client.Uitnodiging.GetUitnodigingenOpVcode("V0000001");
         var content = await response.Content.ReadAsStringAsync();
 
         var token = JToken.Parse(content);

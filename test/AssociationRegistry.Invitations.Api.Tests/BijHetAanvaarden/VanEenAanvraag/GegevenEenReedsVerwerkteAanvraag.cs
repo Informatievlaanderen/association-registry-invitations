@@ -22,7 +22,7 @@ public class GegevenEenReedsVerwerkteAanvraag
         foreach (var aanvraagId in _fixture.VerwerkteAanvraagIds)
         {
 
-            var response = await _client.Aanvragen.AanvaardAanvraag(aanvraagId, _client);
+            var response = await _client.Aanvragen.AanvaardAanvraag(aanvraagId);
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
     }
@@ -32,7 +32,7 @@ public class GegevenEenReedsVerwerkteAanvraag
     {
         foreach (var aanvraagId in _fixture.VerwerkteAanvraagIds)
         {
-            var response = await _client.Aanvragen.AanvaardAanvraag(aanvraagId, _client);
+            var response = await _client.Aanvragen.AanvaardAanvraag(aanvraagId);
 
             var content = await response.Content.ReadAsStringAsync();
             var token = JToken.Parse(content);

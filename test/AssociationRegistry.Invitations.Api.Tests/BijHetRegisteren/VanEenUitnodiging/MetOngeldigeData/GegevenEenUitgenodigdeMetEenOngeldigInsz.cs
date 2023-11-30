@@ -31,7 +31,7 @@ public class GegevenEenUitgenodigdeMetEenOngeldigInsz : IDisposable
     [MemberData(nameof(Data))]
     public async Task DanIsDeResponse400(string insz)
     {
-        var response = await _client.Uitnodiging.RegistreerUitnodiging(_request(insz), _client);
+        var response = await _client.Uitnodiging.RegistreerUitnodiging(_request(insz));
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
@@ -41,7 +41,7 @@ public class GegevenEenUitgenodigdeMetEenOngeldigInsz : IDisposable
     [MemberData(nameof(Data))]
     public async Task DanBevatDeBodyEenErrorMessage(string insz)
     {
-        var response = await _client.Uitnodiging.RegistreerUitnodiging(_request(insz), _client);
+        var response = await _client.Uitnodiging.RegistreerUitnodiging(_request(insz));
 
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);
