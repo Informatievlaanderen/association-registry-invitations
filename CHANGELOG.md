@@ -1,3 +1,16 @@
+# [1.20.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.19.9...v1.20.0) (2023-11-30)
+
+
+### Bug Fixes
+
+* update broken tests for aanvraag and uitnodiging ([5c2f270](https://github.com/informatievlaanderen/association-registry-invitations/commit/5c2f2708f3a9bcd33f7a8da23d2c1a9703e5ee14))
+
+
+### Features
+
+* or-1928 add tests for aanvraag ([281a533](https://github.com/informatievlaanderen/association-registry-invitations/commit/281a533f670b4c6e3932187bca01d3f4d03b47bc))
+* or-1928 archive aanvragen ([b0ce566](https://github.com/informatievlaanderen/association-registry-invitations/commit/b0ce566fd9de4f291b0c7943921a1375cb2020df))
+
 ## [1.19.9](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.19.8...v1.19.9) (2023-11-28)
 
 
