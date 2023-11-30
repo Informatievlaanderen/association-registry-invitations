@@ -1,16 +1,16 @@
-﻿namespace AssociationRegistry.Invitations.Api.Tests.BijHetWijgeren.VanEenUitnodiging;
+﻿namespace AssociationRegistry.Invitations.Api.Tests.BijHetWeigeren.VanEenUitnodiging;
 
-using Fixture;
+using AssociationRegistry.Invitations.Api.Tests.Fixture;
 using Newtonsoft.Json.Linq;
 using System.Net;
 
-[Collection(UitnodigingenApiCollection.Name)]
+[Collection(TestApiCollection.Name)]
 public class GegevenEenReedsVerwerkteUitnodiging
 {
-    private readonly UitnodigingenApiFixture _fixture;
-    private readonly UitnodigingenApiClient _client;
+    private readonly TestApiFixture _fixture;
+    private readonly TestApiClient _client;
 
-    public GegevenEenReedsVerwerkteUitnodiging(UitnodigingenApiFixture fixture)
+    public GegevenEenReedsVerwerkteUitnodiging(TestApiFixture fixture)
     {
         _fixture = fixture;
         _client = fixture.Clients.Authenticated;
@@ -21,7 +21,7 @@ public class GegevenEenReedsVerwerkteUitnodiging
     {
         foreach (var id in _fixture.VerwerkteUitnodigingsIds)
         {
-            var response = await _client.WijgerAanvraag(id);
+            var response = await _client.Aanvragen.WeigerAanvraag(id, _client);
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
     }
@@ -32,7 +32,7 @@ public class GegevenEenReedsVerwerkteUitnodiging
     {
         foreach (var id in _fixture.VerwerkteUitnodigingsIds)
         {
-            var response = await _client.WijgerAanvraag(id);
+            var response = await _client.Aanvragen.WeigerAanvraag(id, _client);
 
             var content = await response.Content.ReadAsStringAsync();
             var token = JToken.Parse(content);

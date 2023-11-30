@@ -6,12 +6,12 @@ using Fixture;
 using Newtonsoft.Json.Linq;
 using System.Net;
 
-[Collection(UitnodigingenApiCollection.Name)]
+[Collection(TestApiCollection.Name)]
 public class GegevenEenOnbekendeAanvraagId : IClassFixture<GegevenEenOnbekendeAanvraagId.Setup>
 {
-    private readonly UitnodigingenApiClient _client;
+    private readonly TestApiClient _client;
 
-    public GegevenEenOnbekendeAanvraagId(UitnodigingenApiFixture fixture, Setup setup)
+    public GegevenEenOnbekendeAanvraagId(TestApiFixture fixture, Setup setup)
     {
         _client = fixture.Clients.Authenticated;
     }
@@ -19,14 +19,14 @@ public class GegevenEenOnbekendeAanvraagId : IClassFixture<GegevenEenOnbekendeAa
     [Fact]
     public async Task DanIsDeResponse400()
     {
-        var response = await _client.GetAanvraagDetail(new AutoFixture.Fixture().Create<string>(), Guid.NewGuid());
+        var response = await _client.Aanvragen.GetAanvraagDetail(new AutoFixture.Fixture().Create<string>(), Guid.NewGuid(), _client);
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
     [Fact]
     public async Task DanBevatDeBodyEenError()
     {
-        var response = await _client.GetAanvraagDetail(new AutoFixture.Fixture().Create<string>(), Guid.NewGuid());
+        var response = await _client.Aanvragen.GetAanvraagDetail(new AutoFixture.Fixture().Create<string>(), Guid.NewGuid(), _client);
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);
 
@@ -38,16 +38,16 @@ public class GegevenEenOnbekendeAanvraagId : IClassFixture<GegevenEenOnbekendeAa
 
     public class Setup : IDisposable, IAsyncLifetime
     {
-        private readonly UitnodigingenApiClient _client;
-        private readonly UitnodigingenApiFixture _fixture;
-        private readonly IEnumerable<AanvraagRequest> _aanvragingen;
+        private readonly TestApiClient _client;
+        private readonly TestApiFixture _fixture;
+        private readonly IEnumerable<AanvraagRequest> _aanvragen;
 
-        public Setup(UitnodigingenApiFixture fixture)
+        public Setup(TestApiFixture fixture)
         {
             _fixture = fixture;
             _client = fixture.Clients.Authenticated;
 
-            _aanvragingen = new AutoFixture.Fixture().CustomizeAll()
+            _aanvragen = new AutoFixture.Fixture().CustomizeAll()
                                                      .CreateMany<AanvraagRequest>();
         }
 
@@ -58,9 +58,9 @@ public class GegevenEenOnbekendeAanvraagId : IClassFixture<GegevenEenOnbekendeAa
 
         public async Task InitializeAsync()
         {
-            foreach (var request in _aanvragingen)
+            foreach (var request in _aanvragen)
             {
-                await _client.RegistreerAanvraag(request).EnsureSuccessOrThrowForAanvraag();
+                await _client.Aanvragen.RegistreerAanvraag(request, _client).EnsureSuccessOrThrowForAanvraag();
             }
         }
 

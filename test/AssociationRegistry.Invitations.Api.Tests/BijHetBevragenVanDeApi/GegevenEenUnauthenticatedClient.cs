@@ -3,12 +3,12 @@ using AssociationRegistry.Invitations.Api.Tests.Fixture;
 
 namespace AssociationRegistry.Invitations.Api.Tests.BijHetBevragenVanDeApi;
 
-[Collection(UitnodigingenApiCollection.Name)]
+[Collection(TestApiCollection.Name)]
 public class GegevenEenUnauthenticatedClient
 {
-    private readonly UitnodigingenApiClient _client;
+    private readonly TestApiClient _client;
 
-    public GegevenEenUnauthenticatedClient(UitnodigingenApiFixture fixture)
+    public GegevenEenUnauthenticatedClient(TestApiFixture fixture)
     {
         _client = fixture.Clients.Unauthenticated;
     }
@@ -16,7 +16,7 @@ public class GegevenEenUnauthenticatedClient
     [Fact]
     public async Task Then_It_Returns_401_With_Unauthenticated_Client()
     {
-        var response = await _client.GetUitnodigingsDetail("", Guid.NewGuid());
+        var response = await _client.Uitnodiging.GetUitnodigingsDetail("", Guid.NewGuid(), _client);
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
     

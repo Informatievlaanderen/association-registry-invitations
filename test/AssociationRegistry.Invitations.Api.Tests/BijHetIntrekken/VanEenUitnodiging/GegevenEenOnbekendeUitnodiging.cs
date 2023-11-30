@@ -4,13 +4,13 @@ using Fixture;
 using Newtonsoft.Json.Linq;
 using System.Net;
 
-[Collection(UitnodigingenApiCollection.Name)]
+[Collection(TestApiCollection.Name)]
 public class GegevenEenOnbekendeUitnodiging : IDisposable
 {
-    private readonly UitnodigingenApiFixture _fixture;
-    private readonly UitnodigingenApiClient _client;
+    private readonly TestApiFixture _fixture;
+    private readonly TestApiClient _client;
 
-    public GegevenEenOnbekendeUitnodiging(UitnodigingenApiFixture fixture)
+    public GegevenEenOnbekendeUitnodiging(TestApiFixture fixture)
     {
         _fixture = fixture;
         _client = fixture.Clients.Authenticated;
@@ -19,14 +19,14 @@ public class GegevenEenOnbekendeUitnodiging : IDisposable
     [Fact]
     public async Task DanIsDeResponse400()
     {
-        var response = await _client.TrekUitnodigingIn(Guid.NewGuid());
+        var response = await _client.Uitnodiging.TrekUitnodigingIn(Guid.NewGuid(), _client);
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
     
     [Fact]
     public async Task DanBevatDeBodyEenErrorMessage()
     {
-        var response = await _client.TrekUitnodigingIn(Guid.NewGuid());
+        var response = await _client.Uitnodiging.TrekUitnodigingIn(Guid.NewGuid(), _client);
 
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);

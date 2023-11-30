@@ -1,16 +1,16 @@
-﻿namespace AssociationRegistry.Invitations.Api.Tests.BijHetWijgeren.VanEenAanvraag;
+﻿namespace AssociationRegistry.Invitations.Api.Tests.BijHetWeigeren.VanEenAanvraag;
 
-using Fixture;
+using AssociationRegistry.Invitations.Api.Tests.Fixture;
 using Newtonsoft.Json.Linq;
 using System.Net;
 
-[Collection(UitnodigingenApiCollection.Name)]
+[Collection(TestApiCollection.Name)]
 public class GegevenEenOnbekendeAanvraag : IDisposable
 {
-    private readonly UitnodigingenApiFixture _fixture;
-    private readonly UitnodigingenApiClient _client;
+    private readonly TestApiFixture _fixture;
+    private readonly TestApiClient _client;
 
-    public GegevenEenOnbekendeAanvraag(UitnodigingenApiFixture fixture)
+    public GegevenEenOnbekendeAanvraag(TestApiFixture fixture)
     {
         _fixture = fixture;
         _client = fixture.Clients.Authenticated;
@@ -19,14 +19,14 @@ public class GegevenEenOnbekendeAanvraag : IDisposable
     [Fact]
     public async Task DanIsDeResponse400()
     {
-        var response = await _client.AanvaardUitnodiging(Guid.NewGuid());
+        var response = await _client.Aanvragen.AanvaardAanvraag(Guid.NewGuid(), _client);
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
     [Fact]
     public async Task DanBevatDeBodyEenErrorMessage()
     {
-        var response = await _client.AanvaardUitnodiging(Guid.NewGuid());
+        var response = await _client.Aanvragen.AanvaardAanvraag(Guid.NewGuid(), _client);
 
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);

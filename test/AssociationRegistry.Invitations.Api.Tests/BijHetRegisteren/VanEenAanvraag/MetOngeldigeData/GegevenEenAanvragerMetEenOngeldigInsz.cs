@@ -6,14 +6,14 @@ using Fixture;
 using Newtonsoft.Json.Linq;
 using System.Net;
 
-[Collection(UitnodigingenApiCollection.Name)]
+[Collection(TestApiCollection.Name)]
 public class GegevenEenAanvragerMetEenOngeldigInsz : IDisposable
 {
-    private readonly UitnodigingenApiClient _client;
-    private readonly UitnodigingenApiFixture _fixture;
+    private readonly TestApiClient _client;
+    private readonly TestApiFixture _fixture;
     private readonly Func<string, AanvraagRequest> _request;
 
-    public GegevenEenAanvragerMetEenOngeldigInsz(UitnodigingenApiFixture fixture)
+    public GegevenEenAanvragerMetEenOngeldigInsz(TestApiFixture fixture)
     {
         _fixture = fixture;
         _client = fixture.Clients.Authenticated;
@@ -31,7 +31,7 @@ public class GegevenEenAanvragerMetEenOngeldigInsz : IDisposable
     [MemberData(nameof(Data))]
     public async Task DanIsDeResponse400(string insz)
     {
-        var response = await _client.RegistreerAanvraag(_request(insz));
+        var response = await _client.Aanvragen.RegistreerAanvraag(_request(insz), _client);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
@@ -41,7 +41,7 @@ public class GegevenEenAanvragerMetEenOngeldigInsz : IDisposable
     [MemberData(nameof(Data))]
     public async Task DanBevatDeBodyEenErrorMessage(string insz)
     {
-        var response = await _client.RegistreerAanvraag(_request(insz));
+        var response = await _client.Aanvragen.RegistreerAanvraag(_request(insz), _client);
 
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);

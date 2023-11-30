@@ -4,18 +4,19 @@ using Aanvragen.Registreer;
 using Infrastructure.Extensions;
 using Autofixture;
 using Fixture;
+using Fixture.Extensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NodaTime;
 using System.Net;
 
-[Collection(UitnodigingenApiCollection.Name)]
+[Collection(TestApiCollection.Name)]
 public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
 {
-    private readonly UitnodigingenApiClient _client;
+    private readonly TestApiClient _client;
     private readonly Setup _setup;
 
-    public GegevenEenWeigering(UitnodigingenApiFixture fixture, Setup setup)
+    public GegevenEenWeigering(TestApiFixture fixture, Setup setup)
     {
         _setup = setup;
         _client = fixture.Clients.Authenticated;
@@ -24,30 +25,30 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
     [Fact]
     public async Task DanIsDeResponse200()
     {
-        var response = await _client.GetAanvraagDetail(_setup.Aanvraag.Aanvrager.Insz, _setup.AanvraagId);
+        var response = await _client.Aanvragen.GetAanvraagDetail(_setup.Aanvraag.Aanvrager.Insz, _setup.AanvraagId, _client);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
     [Fact]
-    public async Task DanBevatDeBodyDeGeregistreerdeUitnodiging()
+    public async Task DanBevatDeBodyDeGeregistreerdeAanvraag()
     {
-        var response = await _client.GetAanvraagDetail(_setup.Aanvraag.Aanvrager.Insz, _setup.AanvraagId);
+        var response = await _client.Aanvragen.GetAanvraagDetail(_setup.Aanvraag.Aanvrager.Insz, _setup.AanvraagId, _client);
         var content = await response.Content.ReadAsStringAsync();
 
-        var uitnodiging = JsonConvert.DeserializeObject<JObject>(content,
+        var aanvraag = JsonConvert.DeserializeObject<JObject>(content,
             new JsonSerializerSettings { DateParseHandling = DateParseHandling.None })!;
-        uitnodiging["aanvraagId"]!.Value<string>().Should().Be(_setup.AanvraagId.ToString());
-        uitnodiging["vCode"]!.Value<string>().Should().Be(_setup.Aanvraag.VCode);
-        uitnodiging["boodschap"]!.Value<string>().Should().Be(_setup.Aanvraag.Boodschap);
-        uitnodiging["status"]!.Value<string>().Should().Be(UitnodigingsStatus.Geweigerd.Status);
-        uitnodiging["datumRegistratie"]!.Value<string>().Should()
+        aanvraag["aanvraagId"]!.Value<string>().Should().Be(_setup.AanvraagId.ToString());
+        aanvraag["vCode"]!.Value<string>().Should().Be(_setup.Aanvraag.VCode);
+        aanvraag["boodschap"]!.Value<string>().Should().Be(_setup.Aanvraag.Boodschap);
+        aanvraag["status"]!.Value<string>().Should().Be(AanvraagStatus.Geweigerd.Status);
+        aanvraag["datumRegistratie"]!.Value<string>().Should()
             .Be(_setup.AanvraagGeregistreerdOp.AsFormattedString());
-        uitnodiging["datumLaatsteAanpassing"]!.Value<string>().Should()
+        aanvraag["datumLaatsteAanpassing"]!.Value<string>().Should()
             .Be(_setup.AanvraagGeweigerdOp.AsFormattedString());
-        uitnodiging["aanvrager"]!["insz"]!.Value<string>().Should().Be(_setup.Aanvraag.Aanvrager.Insz);
-        uitnodiging["aanvrager"]!["achternaam"]!.Value<string>().Should().Be(_setup.Aanvraag.Aanvrager.Achternaam);
-        uitnodiging["aanvrager"]!["voornaam"]!.Value<string>().Should().Be(_setup.Aanvraag.Aanvrager.Voornaam);
-        uitnodiging["aanvrager"]!["e-mail"]!.Value<string>().Should().Be(_setup.Aanvraag.Aanvrager.Email);
+        aanvraag["aanvrager"]!["insz"]!.Value<string>().Should().Be(_setup.Aanvraag.Aanvrager.Insz);
+        aanvraag["aanvrager"]!["achternaam"]!.Value<string>().Should().Be(_setup.Aanvraag.Aanvrager.Achternaam);
+        aanvraag["aanvrager"]!["voornaam"]!.Value<string>().Should().Be(_setup.Aanvraag.Aanvrager.Voornaam);
+        aanvraag["aanvrager"]!["e-mail"]!.Value<string>().Should().Be(_setup.Aanvraag.Aanvrager.Email);
     }
 
     public class Setup : IDisposable, IAsyncLifetime
@@ -58,10 +59,10 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
         public Instant AanvraagGeregistreerdOp { get; set; }
         public Instant AanvraagGeweigerdOp { get; set; }
 
-        private readonly UitnodigingenApiClient _client;
-        private UitnodigingenApiFixture _fixture;
+        private readonly TestApiClient _client;
+        private TestApiFixture _fixture;
 
-        public Setup(UitnodigingenApiFixture fixture)
+        public Setup(TestApiFixture fixture)
         {
             _fixture = fixture;
             _client = fixture.Clients.Authenticated;
@@ -77,14 +78,14 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
 
         public async Task InitializeAsync()
         {
-            var response = await _client.RegistreerAanvraag(Aanvraag)
-                .EnsureSuccessOrThrowForAanvraag();
+            var response = await _client.Aanvragen.RegistreerAanvraag(Aanvraag, _client)
+                                        .EnsureSuccessOrThrowForAanvraag();
 
             AanvraagId = await response.ParseIdFromAanvraagResponse();
 
             AanvraagGeregistreerdOp = _fixture.Clock.PreviousInstant;
 
-            await _client.WijgerAanvraag(AanvraagId);
+            await _client.Aanvragen.WeigerAanvraag(AanvraagId, _client);
 
             AanvraagGeweigerdOp = _fixture.Clock.PreviousInstant;
         }

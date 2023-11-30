@@ -1,4 +1,4 @@
-﻿namespace AssociationRegistry.Invitations.Api.Tests.BijHetOpvragen.VanUitnodigingen.OpVCode;
+﻿namespace AssociationRegistry.Invitations.Api.Tests.BijHetOpvragen.VanAanvragen.OpVCode;
 
 using Fixture;
 using Newtonsoft.Json.Linq;
@@ -17,18 +17,18 @@ public class GegevenGeenRegistraties
     [Fact]
     public async Task DanIsDeResponse200()
     {
-        var response = await _client.Uitnodiging.GetUitnodigingenOpVcode("V0000001", _client);
+        var response = await _client.Aanvragen.GetAanvragenOpVcode("V0000001", _client);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
     [Fact]
-    public async Task DanBevatDeBodyGeenUitnodigingen()
+    public async Task DanBevatDeBodyGeenAanvragen()
     {
-        var response = await _client.Uitnodiging.GetUitnodigingenOpVcode("V0000001", _client);
+        var response = await _client.Aanvragen.GetAanvragenOpVcode("V0000001", _client);
         var content = await response.Content.ReadAsStringAsync();
 
         var token = JToken.Parse(content);
-        token["uitnodigingen"].Should()
+        token["aanvragen"].Should()
             .BeEmpty();
     }
 }

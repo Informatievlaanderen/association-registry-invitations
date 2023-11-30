@@ -1,9 +1,9 @@
-﻿namespace AssociationRegistry.Invitations.Api.Tests.BijHetAanvaarden.VanEenUitnodiging;
+﻿namespace AssociationRegistry.Invitations.Api.Tests.BijHetWeigeren.VanEenUitnodiging;
 
-using Autofixture;
-using Fixture;
+using AssociationRegistry.Invitations.Api.Aanvragen.Registreer;
+using AssociationRegistry.Invitations.Api.Tests.Autofixture;
+using AssociationRegistry.Invitations.Api.Tests.Fixture;
 using Fixture.Extensions;
-using Uitnodigingen.Registreer;
 using System.Net;
 
 [Collection(TestApiCollection.Name)]
@@ -21,14 +21,14 @@ public class GegevenEenBestaandeUitnodiging : IClassFixture<GegevenEenBestaandeU
     [Fact]
     public async Task DanIsDeResponse202()
     {
-        var response = await _client.Uitnodiging.AanvaardUitnodiging(_setup.UitnodigingId, _client);
+        var response = await _client.Aanvragen.WeigerAanvraag(_setup.AanvraagId, _client);
         response.StatusCode.Should().Be(HttpStatusCode.Accepted);
     }
 
     public class Setup : IDisposable, IAsyncLifetime
     {
-        public UitnodigingsRequest Uitnodiging { get; set; }
-        public Guid UitnodigingId { get; set; }
+        public AanvraagRequest Aanvraag { get; set; }
+        public Guid AanvraagId { get; set; }
 
         private readonly TestApiClient _client;
         private TestApiFixture _fixture;
@@ -38,8 +38,8 @@ public class GegevenEenBestaandeUitnodiging : IClassFixture<GegevenEenBestaandeU
             _fixture = fixture;
             _client = fixture.Clients.Authenticated;
 
-            Uitnodiging = new AutoFixture.Fixture().CustomizeAll()
-                .Create<UitnodigingsRequest>();
+            Aanvraag = new AutoFixture.Fixture().CustomizeAll()
+                .Create<AanvraagRequest>();
         }
 
         public void Dispose()
@@ -49,11 +49,10 @@ public class GegevenEenBestaandeUitnodiging : IClassFixture<GegevenEenBestaandeU
 
         public async Task InitializeAsync()
         {
-            var response = await _client.Uitnodiging.RegistreerUitnodiging(Uitnodiging, _client)
-                                        .EnsureSuccessOrThrowForUitnodiging();
-            
-            UitnodigingId = await response.ParseIdFromUitnodigingResponse();
+            var response = await _client.Aanvragen.RegistreerAanvraag(Aanvraag, _client)
+                                        .EnsureSuccessOrThrowForAanvraag();
 
+            AanvraagId = await response.ParseIdFromAanvraagResponse();
         }
 
         public Task DisposeAsync() => Task.CompletedTask;

@@ -6,14 +6,14 @@ using Uitnodigingen.Registreer;
 using Newtonsoft.Json.Linq;
 using System.Net;
 
-[Collection(UitnodigingenApiCollection.Name)]
+[Collection(TestApiCollection.Name)]
 public class GegevenEenUitnodigingMetEenOngeldigeVCode : IDisposable
 {
-    private readonly UitnodigingenApiClient _client;
-    private readonly UitnodigingenApiFixture _fixture;
+    private readonly TestApiClient _client;
+    private readonly TestApiFixture _fixture;
     private readonly Func<string, UitnodigingsRequest> _request;
 
-    public GegevenEenUitnodigingMetEenOngeldigeVCode(UitnodigingenApiFixture fixture)
+    public GegevenEenUitnodigingMetEenOngeldigeVCode(TestApiFixture fixture)
     {
         _fixture = fixture;
         _client = fixture.Clients.Authenticated;
@@ -31,7 +31,7 @@ public class GegevenEenUitnodigingMetEenOngeldigeVCode : IDisposable
     [MemberData(nameof(Data))]
     public async Task DanIsDeResponse400(string vCode)
     {
-        var response = await _client.RegistreerUitnodiging(_request(vCode));
+        var response = await _client.Uitnodiging.RegistreerUitnodiging(_request(vCode), _client);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
@@ -40,7 +40,7 @@ public class GegevenEenUitnodigingMetEenOngeldigeVCode : IDisposable
     [MemberData(nameof(Data))]
     public async Task DanBevatDeBodyEenErrorMessage(string vCode)
     {
-        var response = await _client.RegistreerUitnodiging(_request(vCode));
+        var response = await _client.Uitnodiging.RegistreerUitnodiging(_request(vCode), _client);
 
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);

@@ -6,14 +6,14 @@ using Uitnodigingen.Registreer;
 using Newtonsoft.Json.Linq;
 using System.Net;
 
-[Collection(UitnodigingenApiCollection.Name)]
+[Collection(TestApiCollection.Name)]
 public class GegevenEenGeldigeUitnodigingZonderBoodschap : IDisposable
 {
-    private readonly UitnodigingenApiClient _client;
-    private readonly UitnodigingenApiFixture _fixture;
+    private readonly TestApiClient _client;
+    private readonly TestApiFixture _fixture;
     private readonly UitnodigingsRequest _request;
 
-    public GegevenEenGeldigeUitnodigingZonderBoodschap(UitnodigingenApiFixture fixture)
+    public GegevenEenGeldigeUitnodigingZonderBoodschap(TestApiFixture fixture)
     {
         _fixture = fixture;
         _client = fixture.Clients.Authenticated;
@@ -26,7 +26,7 @@ public class GegevenEenGeldigeUitnodigingZonderBoodschap : IDisposable
     [Fact]
     public async Task DanIsDeResponse201()
     {
-        var response = await _client.RegistreerUitnodiging(_request);
+        var response = await _client.Uitnodiging.RegistreerUitnodiging(_request, _client);
 
         response.StatusCode.Should().Be(HttpStatusCode.Created);
     }
@@ -34,7 +34,7 @@ public class GegevenEenGeldigeUitnodigingZonderBoodschap : IDisposable
     [Fact]
     public async Task DanHeeftDeBodyEenIdDatEenGuidIs()
     {
-        var response = await _client.RegistreerUitnodiging(_request);
+        var response = await _client.Uitnodiging.RegistreerUitnodiging(_request, _client);
 
         var content = await response.Content.ReadAsStringAsync();
         var token = JToken.Parse(content);

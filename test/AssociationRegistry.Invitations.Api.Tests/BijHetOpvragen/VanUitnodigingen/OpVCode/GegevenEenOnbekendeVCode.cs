@@ -6,12 +6,12 @@ using Uitnodigingen.Registreer;
 using Newtonsoft.Json.Linq;
 using System.Net;
 
-[Collection(UitnodigingenApiCollection.Name)]
+[Collection(TestApiCollection.Name)]
 public class GegevenEenOnbekendeVCode : IClassFixture<GegevenEenOnbekendeVCode.Setup>
 {
-    private readonly UitnodigingenApiClient _client;
+    private readonly TestApiClient _client;
 
-    public GegevenEenOnbekendeVCode(UitnodigingenApiFixture fixture, Setup setup)
+    public GegevenEenOnbekendeVCode(TestApiFixture fixture, Setup setup)
     {
         _client = fixture.Clients.Authenticated;
     }
@@ -20,7 +20,7 @@ public class GegevenEenOnbekendeVCode : IClassFixture<GegevenEenOnbekendeVCode.S
     [MemberData(nameof(Data))]
     public async Task DanIsDeResponse200(string onbekendeVcode)
     {
-        var response = await _client.GetUitnodigingenOpVcode(onbekendeVcode);
+        var response = await _client.Uitnodiging.GetUitnodigingenOpVcode(onbekendeVcode, _client);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
@@ -28,7 +28,7 @@ public class GegevenEenOnbekendeVCode : IClassFixture<GegevenEenOnbekendeVCode.S
     [MemberData(nameof(Data))]
     public async Task DanBevatDeBodyDeGeenUitnodigingen(string onbekendeVcode)
     {
-        var response = await _client.GetUitnodigingenOpVcode(onbekendeVcode);
+        var response = await _client.Uitnodiging.GetUitnodigingenOpVcode(onbekendeVcode, _client);
         var content = await response.Content.ReadAsStringAsync();
 
         var token = JToken.Parse(content);
@@ -47,11 +47,11 @@ public class GegevenEenOnbekendeVCode : IClassFixture<GegevenEenOnbekendeVCode.S
 
     public class Setup : IDisposable, IAsyncLifetime
     {
-        private readonly UitnodigingenApiClient _client;
-        private readonly UitnodigingenApiFixture _fixture;
+        private readonly TestApiClient _client;
+        private readonly TestApiFixture _fixture;
         private readonly IEnumerable<UitnodigingsRequest> _uitnodigingen;
 
-        public Setup(UitnodigingenApiFixture fixture)
+        public Setup(TestApiFixture fixture)
         {
             _fixture = fixture;
             _client = fixture.Clients.Authenticated;
@@ -70,7 +70,7 @@ public class GegevenEenOnbekendeVCode : IClassFixture<GegevenEenOnbekendeVCode.S
         {
             foreach (var request in _uitnodigingen)
             {
-                await _client.RegistreerUitnodiging(request).EnsureSuccessOrThrowForUitnodiging();
+                await _client.Uitnodiging.RegistreerUitnodiging(request, _client).EnsureSuccessOrThrowForUitnodiging();
             }
         }
 

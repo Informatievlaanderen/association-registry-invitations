@@ -27,12 +27,12 @@
         <value>Deze uitnodiging kan niet meer geweigerd worden.</value>
     </data>
     <data name="AanvaardenAanvraagOnmogelijk" xml:space="preserve">
-        <value>Deze aanvraging kan niet meer aanvaard worden.</value>
+        <value>Deze aanvraag kan niet meer aanvaard worden.</value>
     </data>
     <data name="IntrekkenAanvraagOnmogelijk" xml:space="preserve">
-        <value>Deze aanvraging kan niet meer ingetrokken worden.</value>
+        <value>Deze aanvraag kan niet meer ingetrokken worden.</value>
     </data>
     <data name="WeigerenAanvraagOnmogelijk" xml:space="preserve">
-        <value>Deze aanvraging kan niet meer geweigerd worden.</value>
+        <value>Deze aanvraag kan niet meer geweigerd worden.</value>
     </data>
 </root>

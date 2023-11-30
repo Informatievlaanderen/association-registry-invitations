@@ -20,10 +20,37 @@ public class AanvraagValidator : AbstractValidator<AanvraagRequest>
            .WithMessage(u => $"{nameof(u.Aanvrager)} is verplicht.");
 
         RuleFor(u => u.Aanvrager.Insz)
+           .NotNull()
+           .WithName(u => $"{nameof(u.Aanvrager)}.{nameof(u.Aanvrager.Insz)}")
+           .WithMessage(u=> $"{nameof(u.Aanvrager.Insz)} is verplicht.")
+           .When(u => u.Aanvrager != null);
+        RuleFor(u => u.Aanvrager.Insz)
            .Must(BeValidInsz)
            .WithName(u => $"{nameof(u.Aanvrager)}.{nameof(u.Aanvrager.Insz)}")
-           .WithMessage(u => $"{nameof(u.Aanvrager.Insz)} is ongeldig.")
+           .WithMessage(u=> $"{nameof(u.Aanvrager.Insz)} is ongeldig. (##.##.##-###.## of ###########)")
+           .When(u => u.Aanvrager?.Insz != null);
+        
+        RuleFor(u => u.Aanvrager.Achternaam)
+           .NotNull()
+           .WithName(u => $"{nameof(u.Aanvrager)}.{nameof(u.Aanvrager.Achternaam)}")
+           .WithMessage(u=> $"{nameof(u.Aanvrager.Achternaam)} is verplicht.")
            .When(u => u.Aanvrager != null);
+        RuleFor(u => u.Aanvrager.Voornaam)
+           .NotNull()
+           .WithName(u => $"{nameof(u.Aanvrager)}.{nameof(u.Aanvrager.Voornaam)}")
+           .WithMessage(u=> $"{nameof(u.Aanvrager.Voornaam)} is verplicht.")
+           .When(u => u.Aanvrager != null);
+
+        RuleFor(u => u.Aanvrager.Email)
+           .NotNull()
+           .WithName(u => $"{nameof(u.Aanvrager)}.{nameof(u.Aanvrager.Email)}")
+           .WithMessage(u=> $"{nameof(u.Aanvrager.Email)} is verplicht.")
+           .When(u => u.Aanvrager != null);
+        RuleFor(u => u.Aanvrager.Email)
+           .EmailAddress()
+           .WithName(u => $"{nameof(u.Aanvrager)}.{nameof(u.Aanvrager.Email)}")
+           .WithMessage(u=> $"{nameof(u.Aanvrager.Email)} is ongeldig.")
+           .When(u => u.Aanvrager?.Email != null);
     }
 
     private static bool BeValidInsz(string insz)

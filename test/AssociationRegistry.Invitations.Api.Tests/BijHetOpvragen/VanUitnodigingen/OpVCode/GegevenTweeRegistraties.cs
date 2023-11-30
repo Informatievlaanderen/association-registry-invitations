@@ -9,13 +9,13 @@ using Newtonsoft.Json.Linq;
 using NodaTime;
 using System.Net;
 
-[Collection(UitnodigingenApiCollection.Name)]
+[Collection(TestApiCollection.Name)]
 public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Setup>
 {
-    private readonly UitnodigingenApiClient _client;
+    private readonly TestApiClient _client;
     private readonly Setup _setup;
 
-    public GegevenTweeRegistraties(UitnodigingenApiFixture fixture, Setup setup)
+    public GegevenTweeRegistraties(TestApiFixture fixture, Setup setup)
     {
         _setup = setup;
         _client = fixture.Clients.Authenticated;
@@ -24,14 +24,14 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
     [Fact]
     public async Task DanIsDeResponse200()
     {
-        var response = await _client.GetUitnodigingenOpVcode("V0000001");
+        var response = await _client.Uitnodiging.GetUitnodigingenOpVcode("V0000001", _client);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
     [Fact]
     public async Task DanBevatDeBodyDeGeregistreerdeUitnodiging()
     {
-        var response = await _client.GetUitnodigingenOpVcode(_setup.VCode);
+        var response = await _client.Uitnodiging.GetUitnodigingenOpVcode(_setup.VCode, _client);
         var content = await response.Content.ReadAsStringAsync();
 
         var token = JsonConvert.DeserializeObject<JObject>(content,
@@ -76,10 +76,10 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
         public Instant Uitnodiging1AangemaaktOp { get; set; }
         public Instant Uitnodiging2AangemaaktOp { get; set; }
 
-        private readonly UitnodigingenApiClient _client;
-        private UitnodigingenApiFixture _fixture;
+        private readonly TestApiClient _client;
+        private TestApiFixture _fixture;
 
-        public Setup(UitnodigingenApiFixture fixture)
+        public Setup(TestApiFixture fixture)
         {
             _fixture = fixture;
             _client = fixture.Clients.Authenticated;
@@ -111,7 +111,7 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
 
         private async Task<Guid> RegistreerUitnodiging(UitnodigingsRequest uitnodigingsRequest)
         {
-            var response = await _client.RegistreerUitnodiging(uitnodigingsRequest).EnsureSuccessOrThrowForUitnodiging();
+            var response = await _client.Uitnodiging.RegistreerUitnodiging(uitnodigingsRequest, _client).EnsureSuccessOrThrowForUitnodiging();
             var content = await response.Content.ReadAsStringAsync();
             return Guid.Parse(JToken.Parse(content)["uitnodigingId"]!.Value<string>()!);
         }
