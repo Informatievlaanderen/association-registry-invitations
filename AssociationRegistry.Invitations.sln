@@ -16,9 +16,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		.gitignore = .gitignore
 		otel-collector-config.yaml = otel-collector-config.yaml
 		global.json = global.json
-		SolutionInfo.cs = SolutionInfo.cs
 		package.json = package.json
 		renovate.json = renovate.json
+		SolutionInfo.cs = SolutionInfo.cs
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "identityserver", "identityserver", "{580B24EC-9E76-455D-B55A-26E2B1E12F81}"
