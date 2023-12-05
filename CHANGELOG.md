@@ -1,3 +1,12 @@
+## [1.20.1](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.20.0...v1.20.1) (2023-12-05)
+
+
+### Bug Fixes
+
+* link solution info so version is displayed in docs ([2600f28](https://github.com/informatievlaanderen/association-registry-invitations/commit/2600f287714cf1559ec531de677017dedb80dc06))
+* remove company and product ([0d8e352](https://github.com/informatievlaanderen/association-registry-invitations/commit/0d8e352df7ec2acc1d9155b19159bed51d57c7c1))
+* remove generation of specific attributes ([5a19d40](https://github.com/informatievlaanderen/association-registry-invitations/commit/5a19d405631f0f975be627d6906fbf53fc039de4))
+
 # [1.20.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.19.9...v1.20.0) (2023-11-30)
 
 
