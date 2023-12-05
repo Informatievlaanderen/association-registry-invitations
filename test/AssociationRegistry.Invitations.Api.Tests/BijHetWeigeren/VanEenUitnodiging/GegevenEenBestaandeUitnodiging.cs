@@ -1,8 +1,9 @@
 ﻿namespace AssociationRegistry.Invitations.Api.Tests.BijHetWeigeren.VanEenUitnodiging;
 
-using AssociationRegistry.Invitations.Api.Aanvragen.Registreer;
-using AssociationRegistry.Invitations.Api.Tests.Autofixture;
-using AssociationRegistry.Invitations.Api.Tests.Fixture;
+using Aanvragen.StatusWijziging;
+using Aanvragen.Registreer;
+using Autofixture;
+using Fixture;
 using Fixture.Extensions;
 using System.Net;
 
@@ -21,7 +22,9 @@ public class GegevenEenBestaandeUitnodiging : IClassFixture<GegevenEenBestaandeU
     [Fact]
     public async Task DanIsDeResponse202()
     {
-        var response = await _client.Aanvragen.WeigerAanvraag(_setup.AanvraagId);
+        var response = await _client.Aanvragen.WeigerAanvraag(_setup.AanvraagId, new WijzigAanvraagStatusRequest
+                                                                  { Validator = new Validator
+                                                                      { VertegenwoordigerId = 1 } });
         response.StatusCode.Should().Be(HttpStatusCode.Accepted);
     }
 

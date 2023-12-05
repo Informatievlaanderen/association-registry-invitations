@@ -42,6 +42,7 @@ public class GegevenEenIntrekking : IClassFixture<GegevenEenIntrekking.Setup>
         aanvraag["vCode"].Value<string>().Should().Be(_setup.Aanvraag.VCode);
         aanvraag["boodschap"].Value<string>().Should().Be(_setup.Aanvraag.Boodschap);
         aanvraag["status"].Value<string>().Should().Be(AanvraagStatus.Ingetrokken.Status);
+        aanvraag["validator"].Value<int?>().Should().BeNull();
         aanvraag["datumLaatsteAanpassing"].Value<string>().Should().Be(_setup.AanvraagAanvaardOp.AsFormattedString());
         aanvraag["aanvrager"]["insz"].Value<string>().Should().Be(_setup.Aanvraag.Aanvrager.Insz);
         aanvraag["aanvrager"]["achternaam"].Value<string>().Should().Be(_setup.Aanvraag.Aanvrager.Achternaam);

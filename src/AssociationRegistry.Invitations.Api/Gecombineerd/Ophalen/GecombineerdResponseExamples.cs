@@ -9,7 +9,7 @@ internal class GecombineerdResponseExamples : IExamplesProvider<GecombineerdResp
         {
             Uitnodigingen = new []
             {
-                new Uitnodigingen.Ophalen.VoorVereniging.Uitnodiging()
+                new Uitnodigingen.Ophalen.VoorVereniging.Uitnodiging
                 {
                     UitnodigingId = Guid.NewGuid(),
                     VCode = "V0000001",
@@ -34,7 +34,7 @@ internal class GecombineerdResponseExamples : IExamplesProvider<GecombineerdResp
                     UitnodigingId = Guid.NewGuid(),
                     VCode = "V0000001",
                     Boodschap = "Boodschap voor uitgenodigde",
-                    Uitgenodigde = new Uitnodigingen.Ophalen.VoorVereniging.Uitgenodigde()
+                    Uitgenodigde = new Uitnodigingen.Ophalen.VoorVereniging.Uitgenodigde
                     {
                         Voornaam = "Jane",
                         Achternaam = "Smith",
@@ -52,12 +52,12 @@ internal class GecombineerdResponseExamples : IExamplesProvider<GecombineerdResp
             },
             Aanvragen = new[]
             {
-                new Aanvragen.Ophalen.VoorVereniging.Aanvraag()
+                new Aanvragen.Ophalen.VoorVereniging.Aanvraag
                 {
                     AanvraagId = Guid.NewGuid(),
                     VCode = "V0000001",
                     Boodschap = "Boodschap voor uitgenodigde",
-                    Aanvrager = new Aanvragen.Ophalen.VoorVereniging.Aanvrager()
+                    Aanvrager = new Aanvragen.Ophalen.VoorVereniging.Aanvrager
                     {
                         Voornaam = "John",
                         Achternaam = "Doe",

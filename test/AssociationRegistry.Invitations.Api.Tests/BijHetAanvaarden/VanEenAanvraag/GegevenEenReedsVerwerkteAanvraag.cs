@@ -1,5 +1,6 @@
 ﻿namespace AssociationRegistry.Invitations.Api.Tests.BijHetAanvaarden.VanEenAanvraag;
 
+using Aanvragen.StatusWijziging;
 using Fixture;
 using Newtonsoft.Json.Linq;
 using System.Net;
@@ -22,7 +23,12 @@ public class GegevenEenReedsVerwerkteAanvraag
         foreach (var aanvraagId in _fixture.VerwerkteAanvraagIds)
         {
 
-            var response = await _client.Aanvragen.AanvaardAanvraag(aanvraagId);
+            var response = await _client.Aanvragen.AanvaardAanvraag(aanvraagId,
+                                                                    new WijzigAanvraagStatusRequest
+                                                                    {
+                                                                        Validator = new Validator
+                                                                            { VertegenwoordigerId = 1 },
+                                                                    });
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
     }
@@ -32,7 +38,12 @@ public class GegevenEenReedsVerwerkteAanvraag
     {
         foreach (var aanvraagId in _fixture.VerwerkteAanvraagIds)
         {
-            var response = await _client.Aanvragen.AanvaardAanvraag(aanvraagId);
+            var response = await _client.Aanvragen.AanvaardAanvraag(aanvraagId,
+                                                                    new WijzigAanvraagStatusRequest
+                                                                    {
+                                                                        Validator = new Validator
+                                                                            { VertegenwoordigerId = 1 },
+                                                                    });
 
             var content = await response.Content.ReadAsStringAsync();
             var token = JToken.Parse(content);

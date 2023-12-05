@@ -109,7 +109,7 @@ public static class AutofixtureCustomizations
             composerTransformation: composer => composer.FromFactory<int>(
                                                              factory: (value) =>
                                                              {
-                                                                 return new Aanvraag()
+                                                                 return new Aanvraag
                                                                  {
                                                                      Aanvrager = fixture.Create<Aanvrager>(),
                                                                      Boodschap = fixture.Create<string>(),

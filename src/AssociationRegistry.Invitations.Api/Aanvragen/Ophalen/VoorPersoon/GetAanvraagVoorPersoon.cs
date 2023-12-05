@@ -7,6 +7,8 @@ using Marten;
 using Microsoft.AspNetCore.Mvc;
 using NodaTime;
 using Swashbuckle.AspNetCore.Filters;
+using VoorVereniging;
+using Aanvraag = Invitations.Aanvraag;
 
 [ApiVersion("1.0")]
 [AdvertiseApiVersions("1.0")]
@@ -61,24 +63,6 @@ public class GetAanvraagVoorPersoon : ApiController
             return ValidationProblem(ModelState);
         }
 
-        return Ok(ToDetail(aanvraag));
+        return Ok(AanvraagMapper.ToDetail(aanvraag));
     }
-
-    private static AanvraagDetail ToDetail(Aanvraag model) =>
-        new()
-        {
-            AanvraagId = model.Id,
-            VCode = model.VCode,
-            Boodschap = model.Boodschap,
-            Status = model.Status,
-            DatumRegistratie = Instant.FromDateTimeOffset(model.DatumRegistratie).AsFormattedString(),
-            DatumLaatsteAanpassing = Instant.FromDateTimeOffset(model.DatumLaatsteAanpassing).AsFormattedString(),
-            Aanvrager = new AanvraagDetail.AanvragerDetail
-            {
-                Insz = model.Aanvrager.Insz,
-                Voornaam = model.Aanvrager.Voornaam,
-                Achternaam = model.Aanvrager.Achternaam,
-                Email = model.Aanvrager.Email,
-            },
-        };
 }

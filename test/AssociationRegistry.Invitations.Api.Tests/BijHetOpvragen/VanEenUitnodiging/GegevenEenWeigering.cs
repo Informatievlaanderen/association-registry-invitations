@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NodaTime;
 using System.Net;
+using Uitnodigingen.StatusWijziging;
 
 [Collection(TestApiCollection.Name)]
 public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
@@ -36,17 +37,25 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
         var content = await response.Content.ReadAsStringAsync();
 
         var uitnodiging = JsonConvert.DeserializeObject<JObject>(content,
-            new JsonSerializerSettings { DateParseHandling = DateParseHandling.None })!;
+                                                                 new JsonSerializerSettings
+                                                                     { DateParseHandling = DateParseHandling.None })!;
+
         uitnodiging["uitnodigingId"]!.Value<string>().Should().Be(_setup.UitnodigingId.ToString());
         uitnodiging["vCode"]!.Value<string>().Should().Be(_setup.Uitnodiging.VCode);
         uitnodiging["boodschap"]!.Value<string>().Should().Be(_setup.Uitnodiging.Boodschap);
         uitnodiging["status"]!.Value<string>().Should().Be(UitnodigingsStatus.Geweigerd.Status);
+
         uitnodiging["datumRegistratie"]!.Value<string>().Should()
-            .Be(_setup.UitnodigingGeregistreerdOp.AsFormattedString());
+                                        .Be(_setup.UitnodigingGeregistreerdOp.AsFormattedString());
+
         uitnodiging["datumLaatsteAanpassing"]!.Value<string>().Should()
-            .Be(_setup.UitnodigingGeweigerdOp.AsFormattedString());
+                                              .Be(_setup.UitnodigingGeweigerdOp.AsFormattedString());
+
+        uitnodiging["validator"]["vertegenwoordigerId"].Value<int>().Should().Be(_setup.VertegenwoordigerId);
+
         uitnodiging["uitnodiger"]!["vertegenwoordigerId"]!.Value<int>().Should()
-            .Be(_setup.Uitnodiging.Uitnodiger.VertegenwoordigerId);
+                                                          .Be(_setup.Uitnodiging.Uitnodiger.VertegenwoordigerId);
+
         uitnodiging["uitgenodigde"]!["insz"]!.Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Insz);
         uitnodiging["uitgenodigde"]!["achternaam"]!.Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Achternaam);
         uitnodiging["uitgenodigde"]!["voornaam"]!.Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Voornaam);
@@ -57,10 +66,9 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
     {
         public UitnodigingsRequest Uitnodiging { get; set; }
         public Guid UitnodigingId { get; set; }
-        
         public Instant UitnodigingGeregistreerdOp { get; set; }
         public Instant UitnodigingGeweigerdOp { get; set; }
-
+        public int VertegenwoordigerId { get; set; }
         private readonly TestApiClient _client;
         private TestApiFixture _fixture;
 
@@ -70,7 +78,9 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
             _client = fixture.Clients.Authenticated;
 
             Uitnodiging = new AutoFixture.Fixture().CustomizeAll()
-                .Create<UitnodigingsRequest>();
+                                                   .Create<UitnodigingsRequest>();
+
+            VertegenwoordigerId = new AutoFixture.Fixture().Create<int>();
         }
 
         public void Dispose()
@@ -82,12 +92,16 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
         {
             var response = await _client.Uitnodiging.RegistreerUitnodiging(Uitnodiging)
                                         .EnsureSuccessOrThrowForUitnodiging();
-            
+
             UitnodigingId = await response.ParseIdFromUitnodigingResponse();
-            
+
             UitnodigingGeregistreerdOp = _fixture.Clock.PreviousInstant;
 
-            await _client.Uitnodiging.WeigerUitnodiging(UitnodigingId);
+            await _client.Uitnodiging.WeigerUitnodiging(UitnodigingId, new WijzigUitnodigingStatusRequest
+            {
+                Validator = new Validator
+                    { VertegenwoordigerId = VertegenwoordigerId },
+            });
 
             UitnodigingGeweigerdOp = _fixture.Clock.PreviousInstant;
         }

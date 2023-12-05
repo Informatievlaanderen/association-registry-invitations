@@ -6,6 +6,7 @@ using Fixture.Extensions;
 using Uitnodigingen.Registreer;
 using Newtonsoft.Json.Linq;
 using System.Net;
+using Uitnodigingen.StatusWijziging;
 
 [Collection(TestApiCollection.Name)]
 public class GegevenEenReedsGeweigerdeUitnodiging : IClassFixture<GegevenEenReedsGeweigerdeUitnodiging.Setup>
@@ -57,10 +58,12 @@ public class GegevenEenReedsGeweigerdeUitnodiging : IClassFixture<GegevenEenReed
         public async Task InitializeAsync()
         {
             var response = await _client.Uitnodiging.RegistreerUitnodiging(Uitnodiging).EnsureSuccessOrThrowForUitnodiging();
-            
+
             UitnodigingId = await response.ParseIdFromUitnodigingResponse();
-            await _client.Uitnodiging.WeigerUitnodiging(UitnodigingId).EnsureSuccessOrThrowForUitnodiging();
-            
+            await _client.Uitnodiging.WeigerUitnodiging(UitnodigingId, new WijzigUitnodigingStatusRequest
+                                                            { Validator = new Validator
+                                                                { VertegenwoordigerId = 1 } }).EnsureSuccessOrThrowForUitnodiging();
+
             var request = new AutoFixture.Fixture()
                 .CustomizeAll()
                 .Create<UitnodigingsRequest>();

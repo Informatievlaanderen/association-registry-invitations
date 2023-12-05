@@ -22,6 +22,10 @@ internal class AanvraagDetailExamples : IExamplesProvider<AanvraagDetail>
             Status = AanvraagStatus.WachtOpAntwoord,
             DatumRegistratie = _clock.GetCurrentInstant().AsFormattedString(),
             DatumLaatsteAanpassing = _clock.GetCurrentInstant().AsFormattedString(),
+            Validator = new AanvraagDetail.ValidatorDetail
+            {
+                VertegenwoordigerId = 1,
+            },
             Aanvrager = new AanvraagDetail.AanvragerDetail
             {
                 Voornaam = "John",

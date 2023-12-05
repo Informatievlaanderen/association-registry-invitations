@@ -6,6 +6,8 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace AssociationRegistry.Invitations.Api.Uitnodigingen.StatusWijziging;
 
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+
 [ApiVersion("1.0")]
 [AdvertiseApiVersions("1.0")]
 [ApiRoute("")]
@@ -37,19 +39,32 @@ public class WeigerUitnodiging : ApiController
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     [ProducesJson]
-    public async Task<IActionResult> Post([FromRoute] Guid uitnodigingId, CancellationToken cancellationToken)
+    public async Task<IActionResult> Post(
+        [FromRoute] Guid uitnodigingId,
+        [FromBody] WijzigUitnodigingStatusRequest request,
+        CancellationToken cancellationToken)
     {
+        if (request.Validator is null)
+        {
+            var modelstate = new ModelStateDictionary();
+            modelstate.AddModelError("Validator", "Validator is verplicht.");
+
+            return ValidationProblem(modelstate);
+        }
+
         var uitnodiging = await _session.LoadAsync<Uitnodiging>(uitnodigingId, cancellationToken);
 
         return await uitnodiging
-            .BadRequestIfNietBestaand()
-            .BadRequestIfReedsVerwerkt(Resources.WeigerenUitnodigingOnmogelijk)
-            .Handle(async () =>
-            {
-                await _handler.SetStatus(uitnodiging!, UitnodigingsStatus.Geweigerd, cancellationToken);
+                    .BadRequestIfNietBestaand()
+                    .BadRequestIfReedsVerwerkt(Resources.WeigerenUitnodigingOnmogelijk)
+                    .Handle(async () =>
+                     {
+                         await _handler.SetStatus(uitnodiging!, UitnodigingsStatus.Geweigerd, new Invitations.Validator
+                         {
+                             VertegenwoordigerId = request.Validator.VertegenwoordigerId,
+                         }, cancellationToken);
 
-                return Accepted();
-
-            }, this);
+                         return Accepted();
+                     }, this);
     }
 }

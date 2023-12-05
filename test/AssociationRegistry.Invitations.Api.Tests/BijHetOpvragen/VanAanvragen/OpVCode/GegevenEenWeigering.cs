@@ -1,6 +1,7 @@
 ﻿namespace AssociationRegistry.Invitations.Api.Tests.BijHetOpvragen.VanAanvragen.OpVCode;
 
 using Aanvragen.Registreer;
+using Aanvragen.StatusWijziging;
 using Infrastructure.Extensions;
 using Autofixture;
 using Fixture;
@@ -36,13 +37,15 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
         var content = await response.Content.ReadAsStringAsync();
 
         var token = JsonConvert.DeserializeObject<JObject>(content,
-            new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+                                                           new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+
         var aanvraag = token["aanvragen"].Should().ContainSingle().Subject;
         aanvraag["aanvraagId"].Value<string>().Should().Be(_setup.AanvraagId.ToString());
         aanvraag["vCode"].Value<string>().Should().Be(_setup.Aanvraag.VCode);
         aanvraag["boodschap"].Value<string>().Should().Be(_setup.Aanvraag.Boodschap);
         aanvraag["status"].Value<string>().Should().Be(AanvraagStatus.Geweigerd.Status);
         aanvraag["datumLaatsteAanpassing"].Value<string>().Should().Be(_setup.AanvraagAanvaardOp.AsFormattedString());
+        aanvraag["validator"]["vertegenwoordigerId"].Value<int>().Should().Be(_setup.VertegenwoordigerId);
         aanvraag["aanvrager"]["insz"].Value<string>().Should().Be(_setup.Aanvraag.Aanvrager.Insz);
         aanvraag["aanvrager"]["achternaam"].Value<string>().Should().Be(_setup.Aanvraag.Aanvrager.Achternaam);
         aanvraag["aanvrager"]["voornaam"].Value<string>().Should().Be(_setup.Aanvraag.Aanvrager.Voornaam);
@@ -54,7 +57,7 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
         public AanvraagRequest Aanvraag { get; set; }
         public Guid AanvraagId { get; set; }
         public Instant AanvraagAanvaardOp { get; set; }
-
+        public int VertegenwoordigerId { get; set; }
         private readonly TestApiClient _client;
         private TestApiFixture _fixture;
 
@@ -64,7 +67,9 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
             _client = fixture.Clients.Authenticated;
 
             Aanvraag = new AutoFixture.Fixture().CustomizeAll()
-                .Create<AanvraagRequest>();
+                                                .Create<AanvraagRequest>();
+
+            VertegenwoordigerId = new AutoFixture.Fixture().Create<int>();
         }
 
         public void Dispose()
@@ -79,7 +84,12 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
 
             AanvraagId = await response.ParseIdFromAanvraagResponse();
 
-            await _client.Aanvragen.WeigerAanvraag(AanvraagId);
+            await _client.Aanvragen.WeigerAanvraag(AanvraagId,
+                                                   new WijzigAanvraagStatusRequest
+                                                   {
+                                                       Validator = new Validator
+                                                           { VertegenwoordigerId = VertegenwoordigerId },
+                                                   });
 
             AanvraagAanvaardOp = _fixture.Clock.PreviousInstant;
         }

@@ -8,6 +8,9 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Ophalen.VoorPersoon;
 
+using VoorVereniging;
+using Uitnodiging = Invitations.Uitnodiging;
+
 [ApiVersion("1.0")]
 [AdvertiseApiVersions("1.0")]
 [ApiRoute("")]
@@ -39,46 +42,28 @@ public class GetUitnodigingVoorPersoon : ApiController
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     [ProducesJson]
-    public async Task<IActionResult> Get([FromRoute] string insz, [FromRoute] Guid uitnodigingId,
+    public async Task<IActionResult> Get(
+        [FromRoute] string insz,
+        [FromRoute] Guid uitnodigingId,
         CancellationToken cancellationToken)
     {
         var uitnodiging = await _session
-            .LoadAsync<Uitnodiging>(uitnodigingId, cancellationToken);
+           .LoadAsync<Uitnodiging>(uitnodigingId, cancellationToken);
+
         if (uitnodiging is null)
         {
             ModelState.AddModelError("UitnodigingId", "Deze uitnodiging is niet gekend.");
+
             return ValidationProblem(ModelState);
         }
 
         if (uitnodiging.Uitgenodigde.Insz != insz)
         {
             ModelState.AddModelError("Insz", "Deze uitnodiging is niet voor deze persoon bestemd.");
+
             return ValidationProblem(ModelState);
         }
 
-        return Ok(ToDetail(uitnodiging));
+        return Ok(UitnodigingMapper.ToDetail(uitnodiging));
     }
-
-    private static UitnodigingsDetail ToDetail(Uitnodiging model) =>
-        new()
-        {
-            UitnodigingId = model.Id,
-            VCode = model.VCode,
-            Boodschap = model.Boodschap,
-            Status = model.Status,
-            DatumRegistratie = Instant.FromDateTimeOffset(model.DatumRegistratie).AsFormattedString(),
-            DatumLaatsteAanpassing = Instant.FromDateTimeOffset(model.DatumLaatsteAanpassing).AsFormattedString(),
-            Uitnodiger = new UitnodigingsDetail.UitnodigerDetail
-            {
-                VertegenwoordigerId = model.Uitnodiger.VertegenwoordigerId,
-            },
-            Uitgenodigde = new UitnodigingsDetail.UitgenodigdeDetail
-            {
-                Insz = model.Uitgenodigde.Insz,
-                Voornaam = model.Uitgenodigde.Voornaam,
-                Achternaam = model.Uitgenodigde.Achternaam,
-                Email = model.Uitgenodigde.Email,
-            },
-        };
-
 }

@@ -1,6 +1,7 @@
 ﻿namespace AssociationRegistry.Invitations.Api.Tests.BijHetAanvaarden.VanEenAanvraag;
 
 using Aanvragen.Registreer;
+using Aanvragen.StatusWijziging;
 using Autofixture;
 using Fixture;
 using Fixture.Extensions;
@@ -21,7 +22,13 @@ public class GegevenEenBestaandeAanvraag : IClassFixture<GegevenEenBestaandeAanv
     [Fact]
     public async Task DanIsDeResponse202()
     {
-        var response = await _client.Aanvragen.AanvaardAanvraag(_setup.AanvraagId);
+        var response = await _client.Aanvragen.AanvaardAanvraag(_setup.AanvraagId,
+                                                                new WijzigAanvraagStatusRequest
+                                                                {
+                                                                    Validator = new Validator
+                                                                        { VertegenwoordigerId = 1 },
+                                                                });
+
         response.StatusCode.Should().Be(HttpStatusCode.Accepted);
     }
 
@@ -29,7 +36,6 @@ public class GegevenEenBestaandeAanvraag : IClassFixture<GegevenEenBestaandeAanv
     {
         public AanvraagRequest Aanvraag { get; set; }
         public Guid AanvraagId { get; set; }
-
         private readonly TestApiClient _client;
         private TestApiFixture _fixture;
 
@@ -39,7 +45,7 @@ public class GegevenEenBestaandeAanvraag : IClassFixture<GegevenEenBestaandeAanv
             _client = fixture.Clients.Authenticated;
 
             Aanvraag = new AutoFixture.Fixture().CustomizeAll()
-                .Create<AanvraagRequest>();
+                                                .Create<AanvraagRequest>();
         }
 
         public void Dispose()
@@ -53,7 +59,6 @@ public class GegevenEenBestaandeAanvraag : IClassFixture<GegevenEenBestaandeAanv
                                         .EnsureSuccessOrThrowForAanvraag();
 
             AanvraagId = await response.ParseIdFromAanvraagResponse();
-
         }
 
         public Task DisposeAsync() => Task.CompletedTask;
