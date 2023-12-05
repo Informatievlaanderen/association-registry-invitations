@@ -1,6 +1,7 @@
 ﻿namespace AssociationRegistry.Invitations.Api.Tests.BijHetRegisteren.VanEenAanvraag;
 
 using Aanvragen.Registreer;
+using Aanvragen.StatusWijziging;
 using Autofixture;
 using Fixture;
 using Fixture.Extensions;
@@ -57,7 +58,9 @@ public class GegevenEenReedsGeweigerdeAanvraag : IClassFixture<GegevenEenReedsGe
             var response = await _client.Aanvragen.RegistreerAanvraag(Aanvraag).EnsureSuccessOrThrowForAanvraag();
 
             AanvraagId = await response.ParseIdFromAanvraagResponse();
-            await _client.Aanvragen.WeigerAanvraag(AanvraagId).EnsureSuccessOrThrowForAanvraag();
+            await _client.Aanvragen.WeigerAanvraag(AanvraagId, new WijzigAanvraagStatusRequest
+                                                       { Validator = new Validator
+                                                           { VertegenwoordigerId = 1 } }).EnsureSuccessOrThrowForAanvraag();
 
             var request = new AutoFixture.Fixture()
                 .CustomizeAll()

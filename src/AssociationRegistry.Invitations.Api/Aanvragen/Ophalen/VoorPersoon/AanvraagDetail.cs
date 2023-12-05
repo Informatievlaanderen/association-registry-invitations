@@ -11,6 +11,7 @@ public class AanvraagDetail
     public string Status { get; set; } = null!;
     public string DatumRegistratie { get; set; } = null!;
     public string DatumLaatsteAanpassing { get; set; } = null!;
+    public ValidatorDetail? Validator { get; set; }
     public AanvragerDetail Aanvrager { get; set; } = null!;
 
     public class AanvragerDetail
@@ -22,5 +23,9 @@ public class AanvraagDetail
         [JsonProperty("e-mail")]
         [JsonPropertyName("e-mail")]
         public string Email { get; set; } = null!;
+    }
+    public class ValidatorDetail
+    {
+        public int VertegenwoordigerId { get; set; }
     }
 }

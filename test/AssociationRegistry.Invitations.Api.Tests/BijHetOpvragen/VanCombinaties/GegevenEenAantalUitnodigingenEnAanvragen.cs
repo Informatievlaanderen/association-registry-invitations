@@ -1,15 +1,18 @@
 ﻿namespace AssociationRegistry.Invitations.Api.Tests.BijHetOpvragen.VanCombinaties;
 
-using AssociationRegistry.Invitations.Api.Aanvragen.Registreer;
-using AssociationRegistry.Invitations.Api.Infrastructure.Extensions;
-using AssociationRegistry.Invitations.Api.Tests.Autofixture;
-using AssociationRegistry.Invitations.Api.Tests.Fixture;
-using AssociationRegistry.Invitations.Api.Tests.Fixture.Extensions;
-using AssociationRegistry.Invitations.Api.Uitnodigingen.Registreer;
+using Aanvragen.StatusWijziging;
+using Aanvragen.Registreer;
+using Infrastructure.Extensions;
+using Autofixture;
+using Fixture;
+using Fixture.Extensions;
+using Uitnodigingen.Registreer;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NodaTime;
 using System.Net;
+using Uitnodigingen.StatusWijziging;
+using Fixture = AutoFixture.Fixture;
 
 [Collection(TestApiCollection.Name)]
 public class GegevenEenAantalUitnodigingenEnAanvragen : IClassFixture<GegevenEenAantalUitnodigingenEnAanvragen.Setup>
@@ -40,7 +43,7 @@ public class GegevenEenAantalUitnodigingenEnAanvragen : IClassFixture<GegevenEen
         var token = JsonConvert.DeserializeObject<JObject>(content,
                                                            new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
 
-        foreach (var (aanvraagId, aanvraagRequest, tijdstip) in _setup.Aanvragen)
+        foreach (var (aanvraagId, aanvraagRequest, tijdstip, vertegenwoordigerId) in _setup.Aanvragen)
         {
             var aanvraag = token!["aanvragen"].Should()
                                               .ContainSingle(u => u["aanvraagId"]!.Value<string>() == aanvraagId.ToString()).Subject;
@@ -52,39 +55,43 @@ public class GegevenEenAantalUitnodigingenEnAanvragen : IClassFixture<GegevenEen
             aanvraag["datumRegistratie"]!.Value<string>().Should()
                                          .Be(tijdstip.AsFormattedString());
 
+            aanvraag["validator"]["vertegenwoordigerId"].Value<int>().Should().Be(vertegenwoordigerId);
+
             aanvraag["aanvrager"]!["insz"]!.Value<string>().Should().Be(aanvraagRequest.Aanvrager.Insz);
             aanvraag["aanvrager"]!["achternaam"]!.Value<string>().Should().Be(aanvraagRequest.Aanvrager.Achternaam);
             aanvraag["aanvrager"]!["voornaam"]!.Value<string>().Should().Be(aanvraagRequest.Aanvrager.Voornaam);
             aanvraag["aanvrager"]!["e-mail"]!.Value<string>().Should().Be(aanvraagRequest.Aanvrager.Email);
         }
 
-        foreach (var (uitnodigingId, uitnodigingRequest, tijdstip) in _setup.Uitnodigingen)
+        foreach (var (uitnodigingId, uitnodigingRequest, tijdstip, vertegenwoordigerId) in _setup.Uitnodigingen)
         {
-            var uitnodiging1 = token!["uitnodigingen"].Should()
-                                                      .ContainSingle(u => u["uitnodigingId"]!.Value<string>() == uitnodigingId.ToString())
-                                                      .Subject;
+            var uitnodiging = token!["uitnodigingen"].Should()
+                                                     .ContainSingle(u => u["uitnodigingId"]!.Value<string>() == uitnodigingId.ToString())
+                                                     .Subject;
 
-            uitnodiging1["vCode"]!.Value<string>().Should().Be(_setup.VCode);
-            uitnodiging1["boodschap"]!.Value<string>().Should().Be(uitnodigingRequest.Boodschap);
-            uitnodiging1["status"]!.Value<string>().Should().Be(UitnodigingsStatus.Geweigerd.Status);
+            uitnodiging["vCode"]!.Value<string>().Should().Be(_setup.VCode);
+            uitnodiging["boodschap"]!.Value<string>().Should().Be(uitnodigingRequest.Boodschap);
+            uitnodiging["status"]!.Value<string>().Should().Be(UitnodigingsStatus.Geweigerd.Status);
 
-            uitnodiging1["datumRegistratie"]!.Value<string>().Should()
-                                             .Be(tijdstip.AsFormattedString());
+            uitnodiging["datumRegistratie"]!.Value<string>().Should()
+                                            .Be(tijdstip.AsFormattedString());
 
-            uitnodiging1["uitnodiger"]!["vertegenwoordigerId"]!.Value<int>().Should()
-                                                               .Be(uitnodigingRequest.Uitnodiger.VertegenwoordigerId);
+            uitnodiging["validator"]["vertegenwoordigerId"].Value<int>().Should().Be(vertegenwoordigerId);
 
-            uitnodiging1["uitgenodigde"]!["insz"]!.Value<string>().Should().Be(uitnodigingRequest.Uitgenodigde.Insz);
-            uitnodiging1["uitgenodigde"]!["achternaam"]!.Value<string>().Should().Be(uitnodigingRequest.Uitgenodigde.Achternaam);
-            uitnodiging1["uitgenodigde"]!["voornaam"]!.Value<string>().Should().Be(uitnodigingRequest.Uitgenodigde.Voornaam);
-            uitnodiging1["uitgenodigde"]!["e-mail"]!.Value<string>().Should().Be(uitnodigingRequest.Uitgenodigde.Email);
+            uitnodiging["uitnodiger"]!["vertegenwoordigerId"]!.Value<int>().Should()
+                                                              .Be(uitnodigingRequest.Uitnodiger.VertegenwoordigerId);
+
+            uitnodiging["uitgenodigde"]!["insz"]!.Value<string>().Should().Be(uitnodigingRequest.Uitgenodigde.Insz);
+            uitnodiging["uitgenodigde"]!["achternaam"]!.Value<string>().Should().Be(uitnodigingRequest.Uitgenodigde.Achternaam);
+            uitnodiging["uitgenodigde"]!["voornaam"]!.Value<string>().Should().Be(uitnodigingRequest.Uitgenodigde.Voornaam);
+            uitnodiging["uitgenodigde"]!["e-mail"]!.Value<string>().Should().Be(uitnodigingRequest.Uitgenodigde.Email);
         }
     }
 
     public class Setup : IDisposable, IAsyncLifetime
     {
-        public (Guid, AanvraagRequest, Instant)[] Aanvragen { get; set; } = { };
-        public (Guid, UitnodigingsRequest, Instant)[] Uitnodigingen { get; set; } = { };
+        public (Guid, AanvraagRequest, Instant, int)[] Aanvragen { get; set; } = { };
+        public (Guid, UitnodigingsRequest, Instant, int)[] Uitnodigingen { get; set; } = { };
         public string VCode { get; set; }
         private readonly TestApiClient _client;
         private TestApiFixture _fixture;
@@ -114,9 +121,17 @@ public class GegevenEenAantalUitnodigingenEnAanvragen : IClassFixture<GegevenEen
                                             .EnsureSuccessOrThrowForAanvraag();
 
                 var aanvraagId = await response.ParseIdFromAanvraagResponse();
-                await _client.Aanvragen.AanvaardAanvraag(aanvraagId);
+                var vertegenwoordigerId = new Fixture().Create<int>();
+
+                await _client.Aanvragen.AanvaardAanvraag(aanvraagId,
+                                                         new WijzigAanvraagStatusRequest
+                                                         {
+                                                             Validator = new Aanvragen.StatusWijziging.Validator
+                                                                 { VertegenwoordigerId = vertegenwoordigerId },
+                                                         });
+
                 var aanvraagAanvaardOp = _fixture.Clock.PreviousInstant;
-                Aanvragen = Aanvragen.Append((aanvraagId, request, aanvraagAanvaardOp)).ToArray();
+                Aanvragen = Aanvragen.Append((aanvraagId, request, aanvraagAanvaardOp, vertegenwoordigerId)).ToArray();
             }
 
             foreach (var request in autoFixture.CreateMany<UitnodigingsRequest>())
@@ -127,9 +142,17 @@ public class GegevenEenAantalUitnodigingenEnAanvragen : IClassFixture<GegevenEen
                                             .EnsureSuccessOrThrowForUitnodiging();
 
                 var uitnodigingId = await response.ParseIdFromUitnodigingResponse();
-                await _client.Uitnodiging.WeigerUitnodiging(uitnodigingId);
+                var vertegenwoordigerId = new Fixture().Create<int>();
+
+                await _client.Uitnodiging.WeigerUitnodiging(uitnodigingId,
+                                                            new WijzigUitnodigingStatusRequest
+                                                            {
+                                                                Validator = new Uitnodigingen.StatusWijziging.Validator
+                                                                    { VertegenwoordigerId = vertegenwoordigerId },
+                                                            });
+
                 var uitnodigingAanvaardOp = _fixture.Clock.PreviousInstant;
-                Uitnodigingen = Uitnodigingen.Append((uitnodigingId, request, uitnodigingAanvaardOp)).ToArray();
+                Uitnodigingen = Uitnodigingen.Append((uitnodigingId, request, uitnodigingAanvaardOp, vertegenwoordigerId)).ToArray();
             }
         }
 

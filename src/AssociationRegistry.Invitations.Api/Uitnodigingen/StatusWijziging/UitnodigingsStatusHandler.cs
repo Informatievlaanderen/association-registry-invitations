@@ -13,13 +13,20 @@ public class UitnodigingsStatusHandler
         _clock = clock;
         _store = store;
     }
-    
-    public async Task SetStatus(Uitnodiging uitnodiging, UitnodigingsStatus status, CancellationToken cancellationToken)
+
+    public async Task SetStatus(
+        Uitnodiging uitnodiging,
+        UitnodigingsStatus status,
+        Invitations.Validator? validator,
+        CancellationToken cancellationToken)
     {
         await using var session = _store.LightweightSession();
         uitnodiging.Status = status;
+
+        uitnodiging.Validator = validator;
+
         uitnodiging.DatumLaatsteAanpassing = _clock.GetCurrentInstant().ToDateTimeOffset();
-        
+
         session.Store(uitnodiging);
         await session.SaveChangesAsync(cancellationToken);
     }

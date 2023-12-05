@@ -3,6 +3,7 @@
 using Fixture;
 using Newtonsoft.Json.Linq;
 using System.Net;
+using Uitnodigingen.StatusWijziging;
 
 [Collection(TestApiCollection.Name)]
 public class GegevenEenReedsVerwerkteUitnodiging
@@ -22,7 +23,10 @@ public class GegevenEenReedsVerwerkteUitnodiging
         foreach (var uitnodigingId in _fixture.VerwerkteUitnodigingsIds)
         {
 
-            var response = await _client.Uitnodiging.AanvaardUitnodiging(uitnodigingId);
+            var response = await _client.Uitnodiging.AanvaardUitnodiging(uitnodigingId,
+                                                                         new WijzigUitnodigingStatusRequest
+                                                                         { Validator = new Validator
+                                                                             { VertegenwoordigerId = 1 } });
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
     }
@@ -32,7 +36,10 @@ public class GegevenEenReedsVerwerkteUitnodiging
     {
         foreach (var uitnodigingId in _fixture.VerwerkteUitnodigingsIds)
         {
-            var response = await _client.Uitnodiging.AanvaardUitnodiging(uitnodigingId);
+            var response = await _client.Uitnodiging.AanvaardUitnodiging(uitnodigingId,
+                                                                         new WijzigUitnodigingStatusRequest
+                                                                         { Validator = new Validator
+                                                                             { VertegenwoordigerId = 1 } });
 
             var content = await response.Content.ReadAsStringAsync();
             var token = JToken.Parse(content);

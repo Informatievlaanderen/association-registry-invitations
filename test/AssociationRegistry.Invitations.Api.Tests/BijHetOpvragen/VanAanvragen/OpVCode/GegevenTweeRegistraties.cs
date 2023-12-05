@@ -45,6 +45,7 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
         aanvraag1["status"]!.Value<string>().Should().Be(AanvraagStatus.WachtOpAntwoord.Status);
         aanvraag1["datumRegistratie"]!.Value<string>().Should()
             .Be(_setup.Aanvraag1AangemaaktOp.AsFormattedString());
+        aanvraag1["validator"].Value<int?>().Should().BeNull();
         aanvraag1["aanvrager"]!["insz"]!.Value<string>().Should().Be(_setup.Aanvraag1.Aanvrager.Insz);
         aanvraag1["aanvrager"]!["achternaam"]!.Value<string>().Should().Be(_setup.Aanvraag1.Aanvrager.Achternaam);
         aanvraag1["aanvrager"]!["voornaam"]!.Value<string>().Should().Be(_setup.Aanvraag1.Aanvrager.Voornaam);
@@ -57,6 +58,7 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
         aanvraag2["status"]!.Value<string>().Should().Be(AanvraagStatus.WachtOpAntwoord.Status);
         aanvraag2["datumRegistratie"]!.Value<string>().Should()
             .Be(_setup.Aanvraag2AangemaaktOp.AsFormattedString());
+        aanvraag2["validator"].Value<int?>().Should().BeNull();
         aanvraag2["aanvrager"]!["insz"]!.Value<string>().Should().Be(_setup.Aanvraag2.Aanvrager.Insz);
         aanvraag2["aanvrager"]!["achternaam"]!.Value<string>().Should().Be(_setup.Aanvraag2.Aanvrager.Achternaam);
         aanvraag2["aanvrager"]!["voornaam"]!.Value<string>().Should().Be(_setup.Aanvraag2.Aanvrager.Voornaam);

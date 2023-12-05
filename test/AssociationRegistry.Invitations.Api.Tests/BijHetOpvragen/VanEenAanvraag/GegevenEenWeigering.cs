@@ -1,6 +1,7 @@
 ﻿namespace AssociationRegistry.Invitations.Api.Tests.BijHetOpvragen.VanEenAanvraag;
 
 using Aanvragen.Registreer;
+using Aanvragen.StatusWijziging;
 using Infrastructure.Extensions;
 using Autofixture;
 using Fixture;
@@ -45,6 +46,7 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
             .Be(_setup.AanvraagGeregistreerdOp.AsFormattedString());
         aanvraag["datumLaatsteAanpassing"]!.Value<string>().Should()
             .Be(_setup.AanvraagGeweigerdOp.AsFormattedString());
+        aanvraag["validator"]["vertegenwoordigerId"].Value<int>().Should().Be(_setup.VertegenwoordigerId);
         aanvraag["aanvrager"]!["insz"]!.Value<string>().Should().Be(_setup.Aanvraag.Aanvrager.Insz);
         aanvraag["aanvrager"]!["achternaam"]!.Value<string>().Should().Be(_setup.Aanvraag.Aanvrager.Achternaam);
         aanvraag["aanvrager"]!["voornaam"]!.Value<string>().Should().Be(_setup.Aanvraag.Aanvrager.Voornaam);
@@ -58,6 +60,7 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
 
         public Instant AanvraagGeregistreerdOp { get; set; }
         public Instant AanvraagGeweigerdOp { get; set; }
+        public int VertegenwoordigerId { get; set; }
 
         private readonly TestApiClient _client;
         private TestApiFixture _fixture;
@@ -69,6 +72,8 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
 
             Aanvraag = new AutoFixture.Fixture().CustomizeAll()
                 .Create<AanvraagRequest>();
+            VertegenwoordigerId = new AutoFixture.Fixture().Create<int>();
+
         }
 
         public void Dispose()
@@ -85,7 +90,9 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
 
             AanvraagGeregistreerdOp = _fixture.Clock.PreviousInstant;
 
-            await _client.Aanvragen.WeigerAanvraag(AanvraagId);
+            await _client.Aanvragen.WeigerAanvraag(AanvraagId, new WijzigAanvraagStatusRequest
+                                                       { Validator = new Validator
+                                                           { VertegenwoordigerId = VertegenwoordigerId } });
 
             AanvraagGeweigerdOp = _fixture.Clock.PreviousInstant;
         }

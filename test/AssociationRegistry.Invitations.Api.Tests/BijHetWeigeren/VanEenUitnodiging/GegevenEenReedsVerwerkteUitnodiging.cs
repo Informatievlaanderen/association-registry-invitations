@@ -1,6 +1,7 @@
 ﻿namespace AssociationRegistry.Invitations.Api.Tests.BijHetWeigeren.VanEenUitnodiging;
 
-using AssociationRegistry.Invitations.Api.Tests.Fixture;
+using Aanvragen.StatusWijziging;
+using Fixture;
 using Newtonsoft.Json.Linq;
 using System.Net;
 
@@ -21,7 +22,9 @@ public class GegevenEenReedsVerwerkteUitnodiging
     {
         foreach (var id in _fixture.VerwerkteUitnodigingsIds)
         {
-            var response = await _client.Aanvragen.WeigerAanvraag(id);
+            var response = await _client.Aanvragen.WeigerAanvraag(id, new WijzigAanvraagStatusRequest
+                                                                      { Validator = new Validator
+                                                                          { VertegenwoordigerId = 1 } });
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
     }
@@ -32,7 +35,9 @@ public class GegevenEenReedsVerwerkteUitnodiging
     {
         foreach (var id in _fixture.VerwerkteUitnodigingsIds)
         {
-            var response = await _client.Aanvragen.WeigerAanvraag(id);
+            var response = await _client.Aanvragen.WeigerAanvraag(id, new WijzigAanvraagStatusRequest
+                                                                      { Validator = new Validator
+                                                                          { VertegenwoordigerId = 1 } });
 
             var content = await response.Content.ReadAsStringAsync();
             var token = JToken.Parse(content);

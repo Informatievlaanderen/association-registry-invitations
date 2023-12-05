@@ -45,8 +45,9 @@ public class GegevenEenIntreking : IClassFixture<GegevenEenIntreking.Setup>
             .Be(_setup.UitnodigingGeregistreerdOp.AsFormattedString());
         uitnodiging["datumLaatsteAanpassing"]!.Value<string>().Should()
             .Be(_setup.UitnodigingIngetrokkenOp.AsFormattedString());
+        uitnodiging["validator"].Value<int?>().Should().BeNull();
         uitnodiging["uitnodiger"]!["vertegenwoordigerId"]!.Value<int>().Should()
-            .Be(_setup.Uitnodiging.Uitnodiger.VertegenwoordigerId);
+                                                          .Be(_setup.Uitnodiging.Uitnodiger.VertegenwoordigerId);
         uitnodiging["uitgenodigde"]!["insz"]!.Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Insz);
         uitnodiging["uitgenodigde"]!["achternaam"]!.Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Achternaam);
         uitnodiging["uitgenodigde"]!["voornaam"]!.Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Voornaam);
@@ -57,7 +58,7 @@ public class GegevenEenIntreking : IClassFixture<GegevenEenIntreking.Setup>
     {
         public UitnodigingsRequest Uitnodiging { get; set; }
         public Guid UitnodigingId { get; set; }
-        
+
         public Instant UitnodigingGeregistreerdOp { get; set; }
         public Instant UitnodigingIngetrokkenOp { get; set; }
 
@@ -82,7 +83,7 @@ public class GegevenEenIntreking : IClassFixture<GegevenEenIntreking.Setup>
         {
             var response = await _client.Uitnodiging.RegistreerUitnodiging(Uitnodiging)
                                         .EnsureSuccessOrThrowForUitnodiging();
-            
+
             UitnodigingId = await response.ParseIdFromUitnodigingResponse();
             UitnodigingGeregistreerdOp = _fixture.Clock.PreviousInstant;
 

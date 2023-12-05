@@ -10,7 +10,6 @@ namespace AssociationRegistry.Invitations.Api.Uitnodigingen.StatusWijziging;
 [AdvertiseApiVersions("1.0")]
 [ApiRoute("")]
 [SwaggerGroup.Beheer]
-
 public class TrekUitnodigingInController : ApiController
 {
     private readonly IQuerySession _session;
@@ -41,16 +40,15 @@ public class TrekUitnodigingInController : ApiController
     public async Task<IActionResult> Post([FromRoute] Guid uitnodigingId, CancellationToken cancellationToken)
     {
         var uitnodiging = await _session.LoadAsync<Uitnodiging>(uitnodigingId, cancellationToken);
-        
+
         return await uitnodiging
-            .BadRequestIfNietBestaand()
-            .BadRequestIfReedsVerwerkt(Resources.IntrekkenUitnodigingOnmogelijk)
-            .Handle(async () =>
-            {
-                await _handler.SetStatus(uitnodiging!, UitnodigingsStatus.Ingetrokken, cancellationToken);
+                    .BadRequestIfNietBestaand()
+                    .BadRequestIfReedsVerwerkt(Resources.IntrekkenUitnodigingOnmogelijk)
+                    .Handle(async () =>
+                     {
+                         await _handler.SetStatus(uitnodiging!, UitnodigingsStatus.Ingetrokken, null, cancellationToken);
 
-                return Accepted();
-
-            }, this);
+                         return Accepted();
+                     }, this);
     }
 }

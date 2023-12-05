@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NodaTime;
 using System.Net;
+using Uitnodigingen.StatusWijziging;
 
 [Collection(TestApiCollection.Name)]
 public class GegevenEenAanvaarding : IClassFixture<GegevenEenAanvaarding.Setup>
@@ -45,6 +46,8 @@ public class GegevenEenAanvaarding : IClassFixture<GegevenEenAanvaarding.Setup>
             .Be(_setup.UitnodigingGeregistreerdOp.AsFormattedString());
         uitnodiging["datumLaatsteAanpassing"]!.Value<string>().Should()
             .Be(_setup.UitnodigingAanvaardOp.AsFormattedString());
+        uitnodiging["validator"]["vertegenwoordigerId"].Value<int>().Should().Be(_setup.VertegenwoordigerId);
+
         uitnodiging["uitnodiger"]!["vertegenwoordigerId"]!.Value<int>().Should()
             .Be(_setup.Uitnodiging.Uitnodiger.VertegenwoordigerId);
         uitnodiging["uitgenodigde"]!["insz"]!.Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Insz);
@@ -59,7 +62,7 @@ public class GegevenEenAanvaarding : IClassFixture<GegevenEenAanvaarding.Setup>
         public Guid UitnodigingId { get; set; }
         public Instant UitnodigingGeregistreerdOp { get; set; }
         public Instant UitnodigingAanvaardOp { get; set; }
-
+        public int VertegenwoordigerId { get; set; }
         private readonly TestApiClient _client;
         private TestApiFixture _fixture;
 
@@ -70,6 +73,8 @@ public class GegevenEenAanvaarding : IClassFixture<GegevenEenAanvaarding.Setup>
 
             Uitnodiging = new AutoFixture.Fixture().CustomizeAll()
                 .Create<UitnodigingsRequest>();
+            VertegenwoordigerId = new AutoFixture.Fixture().Create<int>();
+
         }
 
         public void Dispose()
@@ -81,12 +86,15 @@ public class GegevenEenAanvaarding : IClassFixture<GegevenEenAanvaarding.Setup>
         {
             var response = await _client.Uitnodiging.RegistreerUitnodiging(Uitnodiging)
                                         .EnsureSuccessOrThrowForUitnodiging();
-            
+
             UitnodigingId = await response.ParseIdFromUitnodigingResponse();
-            
+
             UitnodigingGeregistreerdOp = _fixture.Clock.PreviousInstant;
-            
-            await _client.Uitnodiging.AanvaardUitnodiging(UitnodigingId);
+
+            await _client.Uitnodiging.AanvaardUitnodiging(UitnodigingId,
+                                                          new WijzigUitnodigingStatusRequest
+                                                          { Validator = new Validator
+                                                              { VertegenwoordigerId = VertegenwoordigerId } });
             UitnodigingAanvaardOp = _fixture.Clock.PreviousInstant;
         }
 

@@ -1,6 +1,7 @@
 ﻿namespace AssociationRegistry.Invitations.Api.Tests.BijHetWeigeren.VanEenAanvraag;
 
-using AssociationRegistry.Invitations.Api.Tests.Fixture;
+using Aanvragen.StatusWijziging;
+using Fixture;
 using Newtonsoft.Json.Linq;
 using System.Net;
 
@@ -21,25 +22,34 @@ public class GegevenEenReedsVerwerkteAanvraag
     {
         foreach (var id in _fixture.VerwerkteAanvraagIds)
         {
-            var response = await _client.Aanvragen.WeigerAanvraag(id);
+            var response =
+                await _client.Aanvragen.WeigerAanvraag(
+                    id, new WijzigAanvraagStatusRequest
+                        { Validator = new Validator
+                            { VertegenwoordigerId = 1 } });
+
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
     }
-
 
     [Fact]
     public async Task DanBevatDeBodyEenErrorMessage()
     {
         foreach (var id in _fixture.VerwerkteAanvraagIds)
         {
-            var response = await _client.Aanvragen.WeigerAanvraag(id);
+            var response =
+                await _client.Aanvragen.WeigerAanvraag(
+                    id, new WijzigAanvraagStatusRequest
+                        { Validator = new Validator
+                            { VertegenwoordigerId = 1 } });
 
             var content = await response.Content.ReadAsStringAsync();
             var token = JToken.Parse(content);
+
             token["errors"]!.ToObject<Dictionary<string, string[]>>()
-                .Should().ContainKey("aanvraag")
-                .WhoseValue
-                .Should().ContainEquivalentOf(Resources.WeigerenAanvraagOnmogelijk);
+                            .Should().ContainKey("aanvraag")
+                            .WhoseValue
+                            .Should().ContainEquivalentOf(Resources.WeigerenAanvraagOnmogelijk);
         }
     }
 }

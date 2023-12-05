@@ -4,6 +4,7 @@ using Infrastructure;
 using Infrastructure.Swagger;
 using Marten;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Swashbuckle.AspNetCore.Filters;
 
 [ApiVersion("1.0")]
@@ -37,8 +38,18 @@ public class AanvaardAanvraagController : ApiController
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     [ProducesJson]
-    public async Task<IActionResult> Post([FromRoute] Guid aanvraagId, CancellationToken cancellationToken)
+    public async Task<IActionResult> Post(
+        [FromRoute] Guid aanvraagId,
+        [FromBody] WijzigAanvraagStatusRequest request,
+        CancellationToken cancellationToken)
     {
+        if (request.Validator is null)
+        {
+            var modelstate = new ModelStateDictionary();
+            modelstate.AddModelError("Validator", "Validator is verplicht.");
+
+            return ValidationProblem(modelstate);
+        }
         var aanvraag = await _session.LoadAsync<Aanvraag>(aanvraagId, cancellationToken);
 
         return await aanvraag
@@ -46,7 +57,11 @@ public class AanvaardAanvraagController : ApiController
                     .BadRequestIfReedsVerwerkt(Resources.AanvaardenAanvraagOnmogelijk)
                     .Handle(action: async () =>
                      {
-                         await _handler.SetStatus(aanvraag!, AanvraagStatus.Aanvaard, cancellationToken);
+                         int? vertegenwoordigerId = request.Validator.VertegenwoordigerId;
+                         await _handler.SetStatus(aanvraag!, AanvraagStatus.Aanvaard, new Invitations.Validator
+                         {
+                             VertegenwoordigerId = vertegenwoordigerId.Value,
+                         }, cancellationToken);
 
                          return Accepted();
                      }, this);

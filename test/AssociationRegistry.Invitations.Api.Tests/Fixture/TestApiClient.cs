@@ -4,6 +4,10 @@ using AssociationRegistry.Invitations.Api.Uitnodigingen.Registreer;
 namespace AssociationRegistry.Invitations.Api.Tests.Fixture;
 
 using Aanvragen.Registreer;
+using Aanvragen.StatusWijziging;
+using Newtonsoft.Json;
+using System.Text;
+using Uitnodigingen.StatusWijziging;
 
 public class TestApiClient : IDisposable
 {
@@ -26,8 +30,10 @@ public class TestApiClient : IDisposable
 
     public async Task<HttpResponseMessage> GetHealth()
         => await _httpClient.GetAsync("/health");
+
     public async Task<HttpResponseMessage> GetGecombineerdResultaat(string vCode)
         => await _httpClient.GetAsync($"/v1/verenigingen/{vCode}/gecombineerd");
+
     public class UitnodigingApiClient
     {
         private readonly HttpClient _httpClient;
@@ -40,11 +46,12 @@ public class TestApiClient : IDisposable
         public async Task<HttpResponseMessage> TrekUitnodigingIn(Guid uitnodigingId)
             => await _httpClient.PostAsync($"/v1/uitnodigingen/{uitnodigingId}/intrekkingen", null);
 
-        public async Task<HttpResponseMessage> WeigerUitnodiging(Guid uitnodigingId)
-            => await _httpClient.PostAsync($"/v1/uitnodigingen/{uitnodigingId}/weigeringen", null);
+        public async Task<HttpResponseMessage> WeigerUitnodiging(Guid uitnodigingId, WijzigUitnodigingStatusRequest request)
+            => await _httpClient.PostAsync($"/v1/uitnodigingen/{uitnodigingId}/weigeringen", request.ToStringContent());
 
-        public async Task<HttpResponseMessage> AanvaardUitnodiging(Guid uitnodigingId)
-            => await _httpClient.PostAsync($"/v1/uitnodigingen/{uitnodigingId}/aanvaardingen", null);
+        public async Task<HttpResponseMessage> AanvaardUitnodiging(Guid uitnodigingId, WijzigUitnodigingStatusRequest request)
+            => await _httpClient.PostAsync($"/v1/uitnodigingen/{uitnodigingId}/aanvaardingen",
+                                           request.ToStringContent());
 
         public async Task<HttpResponseMessage> GetUitnodigingenOpVcode(string vCode)
             => await _httpClient.GetAsync($"/v1/verenigingen/{vCode}/uitnodigingen");
@@ -54,6 +61,8 @@ public class TestApiClient : IDisposable
 
         public async Task<HttpResponseMessage> RegistreerUitnodiging(UitnodigingsRequest uitnodigingsRequest)
             => await _httpClient.PostAsJsonAsync($"/v1/uitnodigingen", uitnodigingsRequest);
+
+
     }
 
     public class AanvraagApiClient
@@ -74,11 +83,11 @@ public class TestApiClient : IDisposable
         public async Task<HttpResponseMessage> RegistreerAanvraag(AanvraagRequest request)
             => await _httpClient.PostAsJsonAsync($"/v1/aanvragen", request);
 
-        public async Task<HttpResponseMessage> AanvaardAanvraag(Guid aanvraagId)
-            => await _httpClient.PostAsync($"/v1/aanvragen/{aanvraagId}/aanvaardingen", null);
+        public async Task<HttpResponseMessage> AanvaardAanvraag(Guid aanvraagId, WijzigAanvraagStatusRequest request)
+            => await _httpClient.PostAsync($"/v1/aanvragen/{aanvraagId}/aanvaardingen", request.ToStringContent());
 
-        public async Task<HttpResponseMessage> WeigerAanvraag(Guid aanvraagId)
-            => await _httpClient.PostAsync($"/v1/aanvragen/{aanvraagId}/weigeringen", null);
+        public async Task<HttpResponseMessage> WeigerAanvraag(Guid aanvraagId,WijzigAanvraagStatusRequest request)
+            => await _httpClient.PostAsync($"/v1/aanvragen/{aanvraagId}/weigeringen", request.ToStringContent());
 
         public async Task<HttpResponseMessage> TrekAanvraagIn(Guid aanvraagId)
             => await _httpClient.PostAsync($"/v1/aanvragen/{aanvraagId}/intrekkingen", null);
@@ -108,4 +117,7 @@ public static class UitnodigingenApiClientExtensions
 
         return response;
     }
+
+    public  static StringContent ToStringContent(this object request)
+        => new(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
 }

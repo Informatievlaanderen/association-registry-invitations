@@ -21,6 +21,10 @@ internal class AanvragenResponseExamples : IExamplesProvider<AanvragenResponse>
                         Email = "john.doe@example.com",
                         Insz = "00000000001",
                     },
+                    Validator = new Validator
+                    {
+                        VertegenwoordigerId = 1,
+                    },
                     Status = AanvraagStatus.All[Random.Shared.Next(minValue: 0, AanvraagStatus.All.Length - 1)],
                     DatumRegistratie = DateTime.Today.AddDays(-1).ToLongDateString(),
                     DatumLaatsteAanpassing = DateTime.Today.ToLongDateString(),
@@ -36,6 +40,10 @@ internal class AanvragenResponseExamples : IExamplesProvider<AanvragenResponse>
                         Achternaam = "Smith",
                         Email = "jane.smith@example.com",
                         Insz = "00000000002",
+                    },
+                    Validator = new Validator
+                    {
+                        VertegenwoordigerId = 3,
                     },
                     Status = AanvraagStatus.All[Random.Shared.Next(minValue: 0, AanvraagStatus.All.Length - 1)],
                     DatumRegistratie = DateTime.Today.AddDays(-1).ToLongDateString(),

@@ -43,6 +43,7 @@ public class GegevenEenRegistratie : IClassFixture<GegevenEenRegistratie.Setup>
         aanvraag["boodschap"]!.Value<string>().Should().Be(_setup.Aanvraag.Boodschap);
         aanvraag["status"]!.Value<string>().Should().Be(AanvraagStatus.WachtOpAntwoord.Status);
         aanvraag["datumRegistratie"]!.Value<string>().Should().Be(_setup.AanvraagGeregistreerdOp.AsFormattedString());
+        aanvraag["validator"].Value<int?>().Should().BeNull();
         aanvraag["aanvrager"]!["insz"]!.Value<string>().Should().Be(_setup.Aanvraag.Aanvrager.Insz);
         aanvraag["aanvrager"]!["achternaam"]!.Value<string>().Should().Be(_setup.Aanvraag.Aanvrager.Achternaam);
         aanvraag["aanvrager"]!["voornaam"]!.Value<string>().Should().Be(_setup.Aanvraag.Aanvrager.Voornaam);

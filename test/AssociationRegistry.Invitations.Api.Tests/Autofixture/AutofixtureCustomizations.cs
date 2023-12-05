@@ -114,7 +114,7 @@ public static class AutofixtureCustomizations
                                                              {
                                                                  var randomCode = new Random().Next(0, 9999999);
 
-                                                                 return new AanvraagRequest()
+                                                                 return new AanvraagRequest
                                                                  {
                                                                      Aanvrager = fixture.Create<Aanvrager>(),
                                                                      Boodschap = fixture.Create<string>(),

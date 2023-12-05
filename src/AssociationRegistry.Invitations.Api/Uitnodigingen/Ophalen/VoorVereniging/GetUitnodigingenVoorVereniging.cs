@@ -1,9 +1,7 @@
 ﻿using AssociationRegistry.Invitations.Api.Infrastructure;
-using AssociationRegistry.Invitations.Api.Infrastructure.Extensions;
 using AssociationRegistry.Invitations.Api.Infrastructure.Swagger;
 using Marten;
 using Microsoft.AspNetCore.Mvc;
-using NodaTime;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Ophalen.VoorVereniging;
@@ -39,26 +37,4 @@ public class GetUitnodigingenVoorVereniging : ApiController
     [ProducesJson]
     public async Task<IActionResult> Get([FromRoute] string vCode, CancellationToken cancellationToken)
         => Ok(await _session.GetUitnodigingen(vCode, cancellationToken));
-
-    private static Uitnodiging ToResponse(Invitations.Uitnodiging model) =>
-        new()
-        {
-            UitnodigingId = model.Id,
-            VCode = model.VCode,
-            Boodschap = model.Boodschap,
-            Status = model.Status,
-            DatumRegistratie = Instant.FromDateTimeOffset(model.DatumRegistratie).AsFormattedString(),
-            DatumLaatsteAanpassing = Instant.FromDateTimeOffset(model.DatumLaatsteAanpassing).AsFormattedString(),
-            Uitnodiger = new Uitnodiger
-            {
-                VertegenwoordigerId = model.Uitnodiger.VertegenwoordigerId,
-            },
-            Uitgenodigde = new Uitgenodigde
-            {
-                Insz = model.Uitgenodigde.Insz,
-                Voornaam = model.Uitgenodigde.Voornaam,
-                Achternaam = model.Uitgenodigde.Achternaam,
-                Email = model.Uitgenodigde.Email,
-            },
-        };
 }
