@@ -2,7 +2,7 @@ namespace AssociationRegistry.Invitations.Api.Gecombineerd.Ophalen;
 
 using Swashbuckle.AspNetCore.Filters;
 
-internal class UitnodigingenResponseExamples : IExamplesProvider<GecombineerdResponse>
+internal class GecombineerdResponseExamples : IExamplesProvider<GecombineerdResponse>
 {
     public GecombineerdResponse GetExamples()
         => new()
