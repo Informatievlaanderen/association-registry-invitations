@@ -1,3 +1,11 @@
+# [1.21.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.20.1...v1.21.0) (2023-12-05)
+
+
+### Features
+
+* or-1928 add validator ([ea2bc30](https://github.com/informatievlaanderen/association-registry-invitations/commit/ea2bc304db2fb34d9bdb8b358c7b47b14f6c10fc))
+* or-1928 correction of swagger docs ([2aaa6bf](https://github.com/informatievlaanderen/association-registry-invitations/commit/2aaa6bffe5ec409af4cae4bd51feaa66617d28b6))
+
 ## [1.20.1](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.20.0...v1.20.1) (2023-12-05)
 
 
