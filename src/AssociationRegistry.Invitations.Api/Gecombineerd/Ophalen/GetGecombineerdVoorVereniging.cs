@@ -30,9 +30,9 @@ public class GetUitnodigingenVoorVereniging : ApiController
     /// <response code="500">Er is een interne fout opgetreden.</response>
     /// <returns></returns>
     [HttpGet("verenigingen/{vcode}/gecombineerd")]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(UitnodigingenResponseExamples))]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GecombineerdResponseExamples))]
     [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(InternalServerErrorResponseExamples))]
-    [ProducesResponseType(typeof(UitnodigingenResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(GecombineerdResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     [ProducesJson]
     public async Task<IActionResult> Get([FromRoute] string vCode, CancellationToken cancellationToken)
