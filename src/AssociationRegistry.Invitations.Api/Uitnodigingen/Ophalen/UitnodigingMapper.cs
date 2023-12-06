@@ -15,12 +15,6 @@ public static class UitnodigingMapper
             Status = model.Status,
             DatumRegistratie = Instant.FromDateTimeOffset(model.DatumRegistratie).AsFormattedString(),
             DatumLaatsteAanpassing = Instant.FromDateTimeOffset(model.DatumLaatsteAanpassing).AsFormattedString(),
-            Validator = model.Validator is null
-                ? null
-                : new UitnodigingsDetail.ValidatorDetail
-                {
-                    VertegenwoordigerId = model.Validator.VertegenwoordigerId,
-                },
             Uitnodiger = new UitnodigingsDetail.UitnodigerDetail
             {
                 VertegenwoordigerId = model.Uitnodiger.VertegenwoordigerId,
@@ -44,12 +38,6 @@ public static class UitnodigingMapper
             Status = model.Status,
             DatumRegistratie = Instant.FromDateTimeOffset(model.DatumRegistratie).AsFormattedString(),
             DatumLaatsteAanpassing = Instant.FromDateTimeOffset(model.DatumLaatsteAanpassing).AsFormattedString(),
-            Validator = model.Validator is null
-                ? null
-                : new Validator
-                {
-                    VertegenwoordigerId = model.Validator.VertegenwoordigerId,
-                },
             Uitnodiger = new Uitnodiger
             {
                 VertegenwoordigerId = model.Uitnodiger.VertegenwoordigerId,

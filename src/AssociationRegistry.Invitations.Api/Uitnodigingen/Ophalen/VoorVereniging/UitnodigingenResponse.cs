@@ -16,7 +16,6 @@ public class Uitnodiging
     public string Status { get; set; } = null!;
     public string DatumRegistratie { get; set; } = null!;
     public string DatumLaatsteAanpassing { get; set; } = null!;
-    public Validator? Validator { get; set; }
     public Uitnodiger Uitnodiger { get; set; } = null!;
     public Uitgenodigde Uitgenodigde { get; set; } = null!;
 }

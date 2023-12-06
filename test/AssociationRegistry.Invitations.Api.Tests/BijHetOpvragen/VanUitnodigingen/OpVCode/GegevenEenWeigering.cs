@@ -45,7 +45,6 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
         uitnodiging["boodschap"].Value<string>().Should().Be(_setup.Uitnodiging.Boodschap);
         uitnodiging["status"].Value<string>().Should().Be(UitnodigingsStatus.Geweigerd.Status);
         uitnodiging["datumLaatsteAanpassing"].Value<string>().Should().Be(_setup.UitnodigingAanvaardOp.AsFormattedString());
-        uitnodiging["validator"]["vertegenwoordigerId"].Value<int>().Should().Be(_setup.VertegenwoordigerId);
         uitnodiging["uitnodiger"]["vertegenwoordigerId"].Value<int>().Should().Be(_setup.Uitnodiging.Uitnodiger.VertegenwoordigerId);
         uitnodiging["uitgenodigde"]["insz"].Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Insz);
         uitnodiging["uitgenodigde"]["achternaam"].Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Achternaam);
@@ -85,11 +84,7 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
 
             UitnodigingId = await response.ParseIdFromUitnodigingResponse();
 
-            await _client.Uitnodiging.WeigerUitnodiging(UitnodigingId, new WijzigUitnodigingStatusRequest
-            {
-                Validator = new Validator
-                    { VertegenwoordigerId = VertegenwoordigerId },
-            });
+            await _client.Uitnodiging.WeigerUitnodiging(UitnodigingId);
 
             UitnodigingAanvaardOp = _fixture.Clock.PreviousInstant;
         }

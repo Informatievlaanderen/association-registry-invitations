@@ -60,9 +60,7 @@ public class GegevenEenReedsGeweigerdeUitnodiging : IClassFixture<GegevenEenReed
             var response = await _client.Uitnodiging.RegistreerUitnodiging(Uitnodiging).EnsureSuccessOrThrowForUitnodiging();
 
             UitnodigingId = await response.ParseIdFromUitnodigingResponse();
-            await _client.Uitnodiging.WeigerUitnodiging(UitnodigingId, new WijzigUitnodigingStatusRequest
-                                                            { Validator = new Validator
-                                                                { VertegenwoordigerId = 1 } }).EnsureSuccessOrThrowForUitnodiging();
+            await _client.Uitnodiging.WeigerUitnodiging(UitnodigingId).EnsureSuccessOrThrowForUitnodiging();
 
             var request = new AutoFixture.Fixture()
                 .CustomizeAll()

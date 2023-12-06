@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AssociationRegistry.Invitations.Api.Uitnodigingen.StatusWijziging;
 
+using Aanvragen.StatusWijziging;
+
 public static class StatusWijzigingPipeline
 {
     public static Either<Uitnodiging> BadRequestIfNietBestaand(this Uitnodiging? source)
@@ -15,13 +17,13 @@ public static class StatusWijzigingPipeline
 
         return new Either<Uitnodiging> { Input = source };
     }
-    
-    
+
+
     public static Either<Uitnodiging> BadRequestIfReedsVerwerkt(this Either<Uitnodiging> source, string foutboodschap)
     {
         if (source.Failure is not null)
             return source;
-        
+
         if (source.Input.Status != UitnodigingsStatus.WachtOpAntwoord)
         {
             return new Either<Uitnodiging>
@@ -33,10 +35,10 @@ public static class StatusWijzigingPipeline
                 },
             };
         }
-        
+
         return new Either<Uitnodiging> { Input = source.Input };
     }
-    
+
     public static async Task<IActionResult> Handle(this Either<Uitnodiging> source, Func<Task<IActionResult>> action, ControllerBase controller)
     {
         if (source.Failure is not null)

@@ -8,7 +8,6 @@ public record Uitnodiging
     [Identity] public Guid Id { get; set; }
     public string VCode { get; set; }
     public string Boodschap { get; set; }
-    public Validator? Validator { get; set; }
     public UitnodigingsStatus Status { get; set; }
     public Uitnodiger Uitnodiger { get; set; }
     public Uitgenodigde Uitgenodigde { get; set; }

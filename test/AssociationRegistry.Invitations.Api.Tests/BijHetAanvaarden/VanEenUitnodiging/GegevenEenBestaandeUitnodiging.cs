@@ -22,10 +22,7 @@ public class GegevenEenBestaandeUitnodiging : IClassFixture<GegevenEenBestaandeU
     [Fact]
     public async Task DanIsDeResponse202()
     {
-        var response = await _client.Uitnodiging.AanvaardUitnodiging(_setup.UitnodigingId,
-                                                                     new WijzigUitnodigingStatusRequest
-                                                                         { Validator = new Validator
-                                                                             { VertegenwoordigerId = 1 } });
+        var response = await _client.Uitnodiging.AanvaardUitnodiging(_setup.UitnodigingId);
 
         response.StatusCode.Should().Be(HttpStatusCode.Accepted);
     }

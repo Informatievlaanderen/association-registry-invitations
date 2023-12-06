@@ -46,7 +46,6 @@ public class GegevenEenAanvaarding : IClassFixture<GegevenEenAanvaarding.Setup>
             .Be(_setup.UitnodigingGeregistreerdOp.AsFormattedString());
         uitnodiging["datumLaatsteAanpassing"]!.Value<string>().Should()
             .Be(_setup.UitnodigingAanvaardOp.AsFormattedString());
-        uitnodiging["validator"]["vertegenwoordigerId"].Value<int>().Should().Be(_setup.VertegenwoordigerId);
 
         uitnodiging["uitnodiger"]!["vertegenwoordigerId"]!.Value<int>().Should()
             .Be(_setup.Uitnodiging.Uitnodiger.VertegenwoordigerId);
@@ -91,10 +90,7 @@ public class GegevenEenAanvaarding : IClassFixture<GegevenEenAanvaarding.Setup>
 
             UitnodigingGeregistreerdOp = _fixture.Clock.PreviousInstant;
 
-            await _client.Uitnodiging.AanvaardUitnodiging(UitnodigingId,
-                                                          new WijzigUitnodigingStatusRequest
-                                                          { Validator = new Validator
-                                                              { VertegenwoordigerId = VertegenwoordigerId } });
+            await _client.Uitnodiging.AanvaardUitnodiging(UitnodigingId);
             UitnodigingAanvaardOp = _fixture.Clock.PreviousInstant;
         }
 

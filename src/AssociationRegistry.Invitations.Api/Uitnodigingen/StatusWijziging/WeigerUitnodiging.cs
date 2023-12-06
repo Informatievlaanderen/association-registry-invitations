@@ -41,17 +41,8 @@ public class WeigerUitnodiging : ApiController
     [ProducesJson]
     public async Task<IActionResult> Post(
         [FromRoute] Guid uitnodigingId,
-        [FromBody] WijzigUitnodigingStatusRequest request,
         CancellationToken cancellationToken)
     {
-        if (request.Validator is null)
-        {
-            var modelstate = new ModelStateDictionary();
-            modelstate.AddModelError("Validator", "Validator is verplicht.");
-
-            return ValidationProblem(modelstate);
-        }
-
         var uitnodiging = await _session.LoadAsync<Uitnodiging>(uitnodigingId, cancellationToken);
 
         return await uitnodiging
@@ -59,10 +50,7 @@ public class WeigerUitnodiging : ApiController
                     .BadRequestIfReedsVerwerkt(Resources.WeigerenUitnodigingOnmogelijk)
                     .Handle(async () =>
                      {
-                         await _handler.SetStatus(uitnodiging!, UitnodigingsStatus.Geweigerd, new Invitations.Validator
-                         {
-                             VertegenwoordigerId = request.Validator.VertegenwoordigerId,
-                         }, cancellationToken);
+                         await _handler.SetStatus(uitnodiging!, UitnodigingsStatus.Geweigerd, cancellationToken);
 
                          return Accepted();
                      }, this);

@@ -51,7 +51,6 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
         uitnodiging["datumLaatsteAanpassing"]!.Value<string>().Should()
                                               .Be(_setup.UitnodigingGeweigerdOp.AsFormattedString());
 
-        uitnodiging["validator"]["vertegenwoordigerId"].Value<int>().Should().Be(_setup.VertegenwoordigerId);
 
         uitnodiging["uitnodiger"]!["vertegenwoordigerId"]!.Value<int>().Should()
                                                           .Be(_setup.Uitnodiging.Uitnodiger.VertegenwoordigerId);
@@ -97,11 +96,7 @@ public class GegevenEenWeigering : IClassFixture<GegevenEenWeigering.Setup>
 
             UitnodigingGeregistreerdOp = _fixture.Clock.PreviousInstant;
 
-            await _client.Uitnodiging.WeigerUitnodiging(UitnodigingId, new WijzigUitnodigingStatusRequest
-            {
-                Validator = new Validator
-                    { VertegenwoordigerId = VertegenwoordigerId },
-            });
+            await _client.Uitnodiging.WeigerUitnodiging(UitnodigingId);
 
             UitnodigingGeweigerdOp = _fixture.Clock.PreviousInstant;
         }
