@@ -76,8 +76,6 @@ public class GegevenEenAantalUitnodigingenEnAanvragen : IClassFixture<GegevenEen
             uitnodiging["datumRegistratie"]!.Value<string>().Should()
                                             .Be(tijdstip.AsFormattedString());
 
-            uitnodiging["validator"]["vertegenwoordigerId"].Value<int>().Should().Be(vertegenwoordigerId);
-
             uitnodiging["uitnodiger"]!["vertegenwoordigerId"]!.Value<int>().Should()
                                                               .Be(uitnodigingRequest.Uitnodiger.VertegenwoordigerId);
 
@@ -144,12 +142,7 @@ public class GegevenEenAantalUitnodigingenEnAanvragen : IClassFixture<GegevenEen
                 var uitnodigingId = await response.ParseIdFromUitnodigingResponse();
                 var vertegenwoordigerId = new Fixture().Create<int>();
 
-                await _client.Uitnodiging.WeigerUitnodiging(uitnodigingId,
-                                                            new WijzigUitnodigingStatusRequest
-                                                            {
-                                                                Validator = new Uitnodigingen.StatusWijziging.Validator
-                                                                    { VertegenwoordigerId = vertegenwoordigerId },
-                                                            });
+                await _client.Uitnodiging.WeigerUitnodiging(uitnodigingId);
 
                 var uitnodigingAanvaardOp = _fixture.Clock.PreviousInstant;
                 Uitnodigingen = Uitnodigingen.Append((uitnodigingId, request, uitnodigingAanvaardOp, vertegenwoordigerId)).ToArray();

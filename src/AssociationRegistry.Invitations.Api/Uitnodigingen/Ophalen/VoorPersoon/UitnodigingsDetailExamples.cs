@@ -22,10 +22,6 @@ internal class UitnodigingsDetailExamples : IExamplesProvider<UitnodigingsDetail
             Status = UitnodigingsStatus.WachtOpAntwoord,
             DatumRegistratie = _clock.GetCurrentInstant().AsFormattedString(),
             DatumLaatsteAanpassing = _clock.GetCurrentInstant().AsFormattedString(),
-            Validator = new UitnodigingsDetail.ValidatorDetail
-            {
-                VertegenwoordigerId = 2,
-            },
             Uitnodiger = new UitnodigingsDetail.UitnodigerDetail
             {
                 VertegenwoordigerId = 12345,

@@ -48,7 +48,6 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
         uitnodiging1["datumRegistratie"]!.Value<string>().Should()
                                          .Be(_setup.Uitnodiging1AangemaaktOp.AsFormattedString());
 
-        uitnodiging1["validator"].Value<int?>().Should().BeNull();
 
         uitnodiging1["uitnodiger"]!["vertegenwoordigerId"]!.Value<int>().Should()
                                                            .Be(_setup.Uitnodiging1.Uitnodiger.VertegenwoordigerId);
@@ -69,7 +68,6 @@ public class GegevenTweeRegistraties : IClassFixture<GegevenTweeRegistraties.Set
         uitnodiging2["datumRegistratie"]!.Value<string>().Should()
                                          .Be(_setup.Uitnodiging2AangemaaktOp.AsFormattedString());
 
-        uitnodiging2["validator"].Value<int?>().Should().BeNull();
 
         uitnodiging2["uitnodiger"]!["vertegenwoordigerId"]!.Value<int>().Should()
                                                            .Be(_setup.Uitnodiging2.Uitnodiger.VertegenwoordigerId);

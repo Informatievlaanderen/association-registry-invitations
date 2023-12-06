@@ -21,8 +21,6 @@ internal class UitnodigingenResponseExamples : IExamplesProvider<UitnodigingenRe
                         Email = "john.doe@example.com",
                         Insz = "00000000001",
                     },
-                    Validator = new Validator
-                        { VertegenwoordigerId = 1 },
                     Uitnodiger = new Uitnodiger
                     {
                         VertegenwoordigerId = 12345,
@@ -43,8 +41,6 @@ internal class UitnodigingenResponseExamples : IExamplesProvider<UitnodigingenRe
                         Email = "jane.smith@example.com",
                         Insz = "00000000002",
                     },
-                    Validator = new Validator
-                        { VertegenwoordigerId = 5 },
                     Uitnodiger = new Uitnodiger
                     {
                         VertegenwoordigerId = 12345,

@@ -45,7 +45,6 @@ public class GegevenEenRegistratie : IClassFixture<GegevenEenRegistratie.Setup>
             .Be(_setup.UitnodigingGeregistreerdOp.AsFormattedString());
         uitnodiging["datumLaatsteAanpassing"]!.Value<string>().Should()
                                         .Be(_setup.UitnodigingGeregistreerdOp.AsFormattedString());
-        uitnodiging["validator"].Value<int?>().Should().BeNull();
         uitnodiging["uitnodiger"]!["vertegenwoordigerId"]!.Value<int>().Should()
                                                           .Be(_setup.Uitnodiging.Uitnodiger.VertegenwoordigerId);
         uitnodiging["uitgenodigde"]!["insz"]!.Value<string>().Should().Be(_setup.Uitnodiging.Uitgenodigde.Insz);

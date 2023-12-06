@@ -46,12 +46,12 @@ public class TestApiClient : IDisposable
         public async Task<HttpResponseMessage> TrekUitnodigingIn(Guid uitnodigingId)
             => await _httpClient.PostAsync($"/v1/uitnodigingen/{uitnodigingId}/intrekkingen", null);
 
-        public async Task<HttpResponseMessage> WeigerUitnodiging(Guid uitnodigingId, WijzigUitnodigingStatusRequest request)
-            => await _httpClient.PostAsync($"/v1/uitnodigingen/{uitnodigingId}/weigeringen", request.ToStringContent());
+        public async Task<HttpResponseMessage> WeigerUitnodiging(Guid uitnodigingId)
+            => await _httpClient.PostAsync($"/v1/uitnodigingen/{uitnodigingId}/weigeringen", null);
 
-        public async Task<HttpResponseMessage> AanvaardUitnodiging(Guid uitnodigingId, WijzigUitnodigingStatusRequest request)
+        public async Task<HttpResponseMessage> AanvaardUitnodiging(Guid uitnodigingId)
             => await _httpClient.PostAsync($"/v1/uitnodigingen/{uitnodigingId}/aanvaardingen",
-                                           request.ToStringContent());
+                                           null);
 
         public async Task<HttpResponseMessage> GetUitnodigingenOpVcode(string vCode)
             => await _httpClient.GetAsync($"/v1/verenigingen/{vCode}/uitnodigingen");
