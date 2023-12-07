@@ -1,3 +1,10 @@
+## [1.21.1](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.21.0...v1.21.1) (2023-12-07)
+
+
+### Bug Fixes
+
+* or-1928 remove validator from uitnodigingen ([30f111d](https://github.com/informatievlaanderen/association-registry-invitations/commit/30f111d362f90e866f6f0cb1c8709bab724b9575))
+
 # [1.21.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.20.1...v1.21.0) (2023-12-05)
 
 
