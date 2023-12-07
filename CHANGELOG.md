@@ -1,3 +1,10 @@
+# [1.22.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.21.1...v1.22.0) (2023-12-07)
+
+
+### Features
+
+* or-1928 show correct date format in examples ([20f37e8](https://github.com/informatievlaanderen/association-registry-invitations/commit/20f37e892886b6208866ed4c176f441a7393951a))
+
 ## [1.21.1](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.21.0...v1.21.1) (2023-12-07)
 
 
