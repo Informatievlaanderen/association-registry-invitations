@@ -2,8 +2,18 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace AssociationRegistry.Invitations.Api.Uitnodigingen.Ophalen.VoorVereniging;
 
+using Infrastructure.Extensions;
+using NodaTime;
+
 internal class UitnodigingenResponseExamples : IExamplesProvider<UitnodigingenResponse>
 {
+    private readonly IClock _clock;
+
+    public UitnodigingenResponseExamples(IClock clock)
+    {
+        _clock = clock;
+    }
+
     public UitnodigingenResponse GetExamples()
         => new()
         {
@@ -26,8 +36,8 @@ internal class UitnodigingenResponseExamples : IExamplesProvider<UitnodigingenRe
                         VertegenwoordigerId = 12345,
                     },
                     Status = UitnodigingsStatus.All[Random.Shared.Next(0, UitnodigingsStatus.All.Length - 1)],
-                    DatumRegistratie = DateTime.Today.AddDays(-1).ToLongDateString(),
-                    DatumLaatsteAanpassing = DateTime.Today.ToLongDateString(),
+                    DatumRegistratie = _clock.GetCurrentInstant().AsFormattedString(),
+                    DatumLaatsteAanpassing = _clock.GetCurrentInstant().AsFormattedString(),
                 },
                 new Uitnodiging
                 {
@@ -46,8 +56,8 @@ internal class UitnodigingenResponseExamples : IExamplesProvider<UitnodigingenRe
                         VertegenwoordigerId = 12345,
                     },
                     Status = UitnodigingsStatus.All[Random.Shared.Next(0, UitnodigingsStatus.All.Length - 1)],
-                    DatumRegistratie = DateTime.Today.AddDays(-1).ToLongDateString(),
-                    DatumLaatsteAanpassing = DateTime.Today.ToLongDateString(),
+                    DatumRegistratie = _clock.GetCurrentInstant().AsFormattedString(),
+                    DatumLaatsteAanpassing = _clock.GetCurrentInstant().AsFormattedString(),
                 },
             },
         };

@@ -1,9 +1,17 @@
 namespace AssociationRegistry.Invitations.Api.Gecombineerd.Ophalen;
 
+using Infrastructure.Extensions;
+using NodaTime;
 using Swashbuckle.AspNetCore.Filters;
 
 internal class GecombineerdResponseExamples : IExamplesProvider<GecombineerdResponse>
 {
+    private readonly IClock _clock;
+
+    public GecombineerdResponseExamples(IClock clock)
+    {
+        _clock = clock;
+    }
     public GecombineerdResponse GetExamples()
         => new()
         {
@@ -26,8 +34,8 @@ internal class GecombineerdResponseExamples : IExamplesProvider<GecombineerdResp
                         VertegenwoordigerId = 12345,
                     },
                     Status = UitnodigingsStatus.All[Random.Shared.Next(0, UitnodigingsStatus.All.Length - 1)],
-                    DatumRegistratie = DateTime.Today.AddDays(-1).ToLongDateString(),
-                    DatumLaatsteAanpassing = DateTime.Today.ToLongDateString(),
+                    DatumRegistratie = _clock.GetCurrentInstant().AsFormattedString(),
+                    DatumLaatsteAanpassing = _clock.GetCurrentInstant().AsFormattedString(),
                 },
                 new Uitnodigingen.Ophalen.VoorVereniging.Uitnodiging
                 {
@@ -46,8 +54,8 @@ internal class GecombineerdResponseExamples : IExamplesProvider<GecombineerdResp
                         VertegenwoordigerId = 12345,
                     },
                     Status = UitnodigingsStatus.All[Random.Shared.Next(0, UitnodigingsStatus.All.Length - 1)],
-                    DatumRegistratie = DateTime.Today.AddDays(-1).ToLongDateString(),
-                    DatumLaatsteAanpassing = DateTime.Today.ToLongDateString(),
+                    DatumRegistratie = _clock.GetCurrentInstant().AsFormattedString(),
+                    DatumLaatsteAanpassing = _clock.GetCurrentInstant().AsFormattedString(),
                 },
             },
             Aanvragen = new[]
@@ -65,8 +73,8 @@ internal class GecombineerdResponseExamples : IExamplesProvider<GecombineerdResp
                         Insz = "00000000001",
                     },
                     Status = AanvraagStatus.All[Random.Shared.Next(minValue: 0, AanvraagStatus.All.Length - 1)],
-                    DatumRegistratie = DateTime.Today.AddDays(-1).ToLongDateString(),
-                    DatumLaatsteAanpassing = DateTime.Today.ToLongDateString(),
+                    DatumRegistratie = _clock.GetCurrentInstant().AsFormattedString(),
+                    DatumLaatsteAanpassing = _clock.GetCurrentInstant().AsFormattedString(),
                 },
                 new Aanvragen.Ophalen.VoorVereniging.Aanvraag
                 {
@@ -81,8 +89,8 @@ internal class GecombineerdResponseExamples : IExamplesProvider<GecombineerdResp
                         Insz = "00000000002",
                     },
                     Status = AanvraagStatus.All[Random.Shared.Next(minValue: 0, AanvraagStatus.All.Length - 1)],
-                    DatumRegistratie = DateTime.Today.AddDays(-1).ToLongDateString(),
-                    DatumLaatsteAanpassing = DateTime.Today.ToLongDateString(),
+                    DatumRegistratie = _clock.GetCurrentInstant().AsFormattedString(),
+                    DatumLaatsteAanpassing = _clock.GetCurrentInstant().AsFormattedString(),
                 },
             },
 
