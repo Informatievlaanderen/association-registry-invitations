@@ -27,16 +27,16 @@ public static class RegistreerPipeline
 
         return new Either<UitnodigingsRequest> { Input = source! };
     }
-    
-    
+
+
     public static async Task<Either<UitnodigingsRequest>> BadRequestIfUitnodidingReedsBestaand(this Either<UitnodigingsRequest> source, IDocumentSession session, CancellationToken cancellationToken)
     {
         if (source.Failure is not null)
             return source;
-        
+
         var hasDuplicate = await session
-            .HeeftBestaandeUitnodigingVoor(source.Input.VCode, source.Input.Uitgenodigde.Insz, cancellationToken);
-        
+            .HeeftBestaandeUitnodigingVoor(source.Input.VCode, source.Input.Uitgenodigde.Insz.Trim('.', '-'), cancellationToken);
+
         if (hasDuplicate)
         {
             return new Either<UitnodigingsRequest>
@@ -48,10 +48,10 @@ public static class RegistreerPipeline
                 },
             };
         }
-        
+
         return new Either<UitnodigingsRequest> { Input = source.Input };
     }
-    
+
     public static async Task<IActionResult> Handle(this Either<UitnodigingsRequest> source, Func<Task<IActionResult>> action, ControllerBase controller)
     {
         if (source.Failure is not null)

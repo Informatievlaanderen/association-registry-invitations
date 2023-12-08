@@ -72,7 +72,7 @@ public class RegistreerAanvraag : ApiController
             Boodschap = request.Boodschap,
             Aanvrager = new Invitations.Aanvrager
             {
-                Insz = request.Aanvrager.Insz,
+                Insz = request.Aanvrager.Insz.Trim('.', '-'),
                 Voornaam = request.Aanvrager.Voornaam,
                 Achternaam = request.Aanvrager.Achternaam,
                 Email = request.Aanvrager.Email,
