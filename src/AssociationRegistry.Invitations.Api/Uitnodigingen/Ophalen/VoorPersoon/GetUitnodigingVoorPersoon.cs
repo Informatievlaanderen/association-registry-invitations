@@ -57,7 +57,7 @@ public class GetUitnodigingVoorPersoon : ApiController
             return ValidationProblem(ModelState);
         }
 
-        if (uitnodiging.Uitgenodigde.Insz != insz)
+        if (uitnodiging.Uitgenodigde.Insz != insz.Trim('.', '-'))
         {
             ModelState.AddModelError("Insz", "Deze uitnodiging is niet voor deze persoon bestemd.");
 

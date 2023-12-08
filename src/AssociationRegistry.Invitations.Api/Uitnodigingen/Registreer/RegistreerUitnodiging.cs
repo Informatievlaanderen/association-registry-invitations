@@ -43,14 +43,14 @@ public class RegistreerUitnodiging : ApiController
     public async Task<IActionResult> Post([FromBody] UitnodigingsRequest request, CancellationToken cancellationToken)
     {
         await using var lightweightSession = _store.LightweightSession();
-        
+
         return await (await (await request
             .BadRequestIfNotValid(cancellationToken))
             .BadRequestIfUitnodidingReedsBestaand(lightweightSession, cancellationToken))
             .Handle(async () =>
             {
                 var datumRegistratie = _clock.GetCurrentInstant().ToDateTimeOffset();
-                
+
                 var uitnodiging = ToModel(request);
                 uitnodiging.Status = UitnodigingsStatus.WachtOpAntwoord;
                 uitnodiging.DatumRegistratie = datumRegistratie;
@@ -64,7 +64,7 @@ public class RegistreerUitnodiging : ApiController
                 });
             }, this);
     }
-    
+
     public static Uitnodiging ToModel(UitnodigingsRequest request) =>
         new()
         {
@@ -76,7 +76,7 @@ public class RegistreerUitnodiging : ApiController
             },
             Uitgenodigde = new Invitations.Uitgenodigde
             {
-                Insz = request.Uitgenodigde.Insz,
+                Insz = request.Uitgenodigde.Insz.Trim('.', '-'),
                 Voornaam = request.Uitgenodigde.Voornaam,
                 Achternaam = request.Uitgenodigde.Achternaam,
                 Email = request.Uitgenodigde.Email,

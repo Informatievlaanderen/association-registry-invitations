@@ -38,7 +38,7 @@ public static class RegistreerPipeline
         if (source.Failure is not null)
             return source;
 
-        var hasDuplicate = await session.HeeftBestaandeAanvraagVoor(source.Input.VCode, source.Input.Aanvrager.Insz, cancellationToken);
+        var hasDuplicate = await session.HeeftBestaandeAanvraagVoor(source.Input.VCode, source.Input.Aanvrager.Insz.Trim('.', '-'), cancellationToken);
 
         if (hasDuplicate)
             return new Either<AanvraagRequest>
