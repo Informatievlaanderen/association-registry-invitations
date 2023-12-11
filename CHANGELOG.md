@@ -1,3 +1,10 @@
+## [1.23.3](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.23.2...v1.23.3) (2023-12-11)
+
+
+### Bug Fixes
+
+* OR-2009 remove staging docker image push ([27fbda0](https://github.com/informatievlaanderen/association-registry-invitations/commit/27fbda08c3eaf766ca39cd653587ca2f6227c9b6))
+
 ## [1.23.2](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.23.1...v1.23.2) (2023-12-11)
 
 
