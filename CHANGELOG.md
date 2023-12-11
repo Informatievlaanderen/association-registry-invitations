@@ -1,3 +1,15 @@
+# [1.23.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.22.0...v1.23.0) (2023-12-11)
+
+
+### Bug Fixes
+
+* OR-2010 favour datum laatste aanpassing instead of datum registratie ([d5186d3](https://github.com/informatievlaanderen/association-registry-invitations/commit/d5186d3472145dacde640a3cdf7e435b0a55de87))
+
+
+### Features
+
+* clean insz before storeing in db ([768590b](https://github.com/informatievlaanderen/association-registry-invitations/commit/768590b413fcab00f62133318d38b9bdc471b1d2))
+
 # [1.22.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.21.1...v1.22.0) (2023-12-07)
 
 
