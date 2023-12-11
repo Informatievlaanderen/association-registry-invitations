@@ -148,7 +148,7 @@ jobs:
       - name: Save Image
         if: needs.set-release-version.outputs.version != 'none'
         shell: bash
-        run: docker image save $BUILD_DOCKER_REGISTRY/association-registry/verenigingsregister-uitnodigingenapi:$SEMVER -o ~/verenigingsregister-uitnodigingenapi.tar
+        run: docker image save $BUILD_DOCKER_REGISTRY/verenigingsregister-uitnodigingenapi:$SEMVER -o ~/verenigingsregister-uitnodigingenapi.tar
         env:
           BUILD_DOCKER_REGISTRY: ${{ secrets.BUILD_DOCKER_REGISTRY_IK4 }}
           SEMVER: ${{ needs.set-release-version.outputs.version }}
@@ -252,7 +252,7 @@ jobs:
       - name: Save Image
         if: needs.set-release-version.outputs.version != 'none'
         shell: bash
-        run: docker image save $BUILD_DOCKER_REGISTRY/association-registry/verenigingsregister-uitnodigingenarchiver:$SEMVER -o ~/verenigingsregister-uitnodigingenarchiver.tar
+        run: docker image save $BUILD_DOCKER_REGISTRY/verenigingsregister-uitnodigingenarchiver:$SEMVER -o ~/verenigingsregister-uitnodigingenarchiver.tar
         env:
           BUILD_DOCKER_REGISTRY: ${{ secrets.BUILD_DOCKER_REGISTRY_IK4 }}
           SEMVER: ${{ needs.set-release-version.outputs.version }}
