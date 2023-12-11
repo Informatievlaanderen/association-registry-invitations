@@ -52,8 +52,8 @@ public class GegevenEenAantalUitnodigingenEnAanvragen : IClassFixture<GegevenEen
             aanvraag["boodschap"]!.Value<string>().Should().Be(aanvraagRequest.Boodschap);
             aanvraag["status"]!.Value<string>().Should().Be(AanvraagStatus.Aanvaard.Status);
 
-            aanvraag["datumRegistratie"]!.Value<string>().Should()
-                                         .Be(tijdstip.AsFormattedString());
+            aanvraag["datumLaatsteAanpassing"]!.Value<string>().Should()
+                                               .Be(tijdstip.AsFormattedString());
 
             aanvraag["validator"]["vertegenwoordigerId"].Value<int>().Should().Be(vertegenwoordigerId);
 
@@ -73,7 +73,7 @@ public class GegevenEenAantalUitnodigingenEnAanvragen : IClassFixture<GegevenEen
             uitnodiging["boodschap"]!.Value<string>().Should().Be(uitnodigingRequest.Boodschap);
             uitnodiging["status"]!.Value<string>().Should().Be(UitnodigingsStatus.Geweigerd.Status);
 
-            uitnodiging["datumRegistratie"]!.Value<string>().Should()
+            uitnodiging["datumLaatsteAanpassing"]!.Value<string>().Should()
                                             .Be(tijdstip.AsFormattedString());
 
             uitnodiging["uitnodiger"]!["vertegenwoordigerId"]!.Value<int>().Should()
