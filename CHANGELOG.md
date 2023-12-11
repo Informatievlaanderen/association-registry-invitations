@@ -1,3 +1,10 @@
+## [1.23.2](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.23.1...v1.23.2) (2023-12-11)
+
+
+### Bug Fixes
+
+* OR-2009 update names to dutch correction ([a757dc2](https://github.com/informatievlaanderen/association-registry-invitations/commit/a757dc21c94d43638d3d1cba3a78035084c4fad3))
+
 ## [1.23.1](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.23.0...v1.23.1) (2023-12-11)
 
 
