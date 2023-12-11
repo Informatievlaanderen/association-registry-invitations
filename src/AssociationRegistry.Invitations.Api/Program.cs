@@ -540,7 +540,6 @@ public class StartupConfigureOptions
         /// </summary>
         public IEnumerable<Server> Servers { get; set; } = new List<Server>();
 
-
         public MiddlewareHookOptions MiddlewareHooks { get; } = new();
 
         public class MiddlewareHookOptions
