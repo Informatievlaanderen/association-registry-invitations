@@ -76,7 +76,7 @@ public class RegistreerUitnodiging : ApiController
             },
             Uitgenodigde = new Invitations.Uitgenodigde
             {
-                Insz = request.Uitgenodigde.Insz.Trim('.', '-'),
+                Insz = request.Uitgenodigde.Insz.Replace(".", string.Empty).Replace("-", string.Empty),
                 Voornaam = request.Uitgenodigde.Voornaam,
                 Achternaam = request.Uitgenodigde.Achternaam,
                 Email = request.Uitgenodigde.Email,

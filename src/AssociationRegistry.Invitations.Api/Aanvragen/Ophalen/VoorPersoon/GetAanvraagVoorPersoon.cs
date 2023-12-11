@@ -56,7 +56,7 @@ public class GetAanvraagVoorPersoon : ApiController
             return ValidationProblem(ModelState);
         }
 
-        if (aanvraag.Aanvrager.Insz != insz.Trim('.', '-'))
+        if (aanvraag.Aanvrager.Insz != insz.Replace(".", string.Empty).Replace("-", string.Empty))
         {
             ModelState.AddModelError(key: "Insz", errorMessage: "Deze aanvraag werd niet door deze persoon aangevraagd.");
 

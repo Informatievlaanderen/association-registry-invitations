@@ -35,7 +35,7 @@ public static class RegistreerPipeline
             return source;
 
         var hasDuplicate = await session
-            .HeeftBestaandeUitnodigingVoor(source.Input.VCode, source.Input.Uitgenodigde.Insz.Trim('.', '-'), cancellationToken);
+            .HeeftBestaandeUitnodigingVoor(source.Input.VCode, source.Input.Uitgenodigde.Insz.Replace(".", string.Empty).Replace("-", string.Empty), cancellationToken);
 
         if (hasDuplicate)
         {
