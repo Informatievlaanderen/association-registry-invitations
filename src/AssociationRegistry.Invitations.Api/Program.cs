@@ -555,4 +555,4 @@ public class StartupConfigureOptions
         public CultureInfo? DefaultCulture { get; set; }
         public CultureInfo[] SupportedCultures { get; set; } = Array.Empty<CultureInfo>();
     }
-}
+} 
