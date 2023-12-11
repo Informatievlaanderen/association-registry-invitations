@@ -1,3 +1,10 @@
+## [1.23.1](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.23.0...v1.23.1) (2023-12-11)
+
+
+### Bug Fixes
+
+* OR-2009 remove non-IK4 workflows ([c59716c](https://github.com/informatievlaanderen/association-registry-invitations/commit/c59716cbe28a9c9693cf26c4ee97f16c7f919cb5))
+
 # [1.23.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.22.0...v1.23.0) (2023-12-11)
 
 
