@@ -136,7 +136,7 @@ jobs:
       - name: Build image
         shell: bash
         run: |
-          .github/build-scripts/build-docker.sh AssociationRegistry.Invitations.Api invitations-api
+          .github/build-scripts/build-docker.sh AssociationRegistry.Invitations.Api verenigingsregister-uitnodigingenapi
         env:
           BUILD_DOCKER_REGISTRY: ${{ secrets.BUILD_DOCKER_REGISTRY_IK4 }}
           CI_BUILD_NUMBER: ${{ needs.set-release-version.outputs.version }}
@@ -148,7 +148,7 @@ jobs:
       - name: Save Image
         if: needs.set-release-version.outputs.version != 'none'
         shell: bash
-        run: docker image save $BUILD_DOCKER_REGISTRY/association-registry/invitations-api:$SEMVER -o ~/invitations-api.tar
+        run: docker image save $BUILD_DOCKER_REGISTRY/association-registry/verenigingsregister-uitnodigingenapi:$SEMVER -o ~/verenigingsregister-uitnodigingenapi.tar
         env:
           BUILD_DOCKER_REGISTRY: ${{ secrets.BUILD_DOCKER_REGISTRY_IK4 }}
           SEMVER: ${{ needs.set-release-version.outputs.version }}
@@ -157,8 +157,8 @@ jobs:
         if: needs.set-release-version.outputs.version != 'none'
         uses: actions/upload-artifact@v3
         with:
-          name: invitations-api
-          path: ~/invitations-api.tar
+          name: verenigingsregister-uitnodigingenapi
+          path: ~/verenigingsregister-uitnodigingenapi.tar
 
       - name: Shows logs ACM container
         if: ${{ failure() }}
@@ -241,7 +241,7 @@ jobs:
       - name: Build image
         shell: bash
         run: |
-          .github/build-scripts/build-docker.sh AssociationRegistry.Invitations.Archiver invitations-archiver
+          .github/build-scripts/build-docker.sh AssociationRegistry.Invitations.Archiver verenigingsregister-uitnodigingenarchiver
         env:
           BUILD_DOCKER_REGISTRY: ${{ secrets.BUILD_DOCKER_REGISTRY_IK4 }}
           CI_BUILD_NUMBER: ${{ needs.set-release-version.outputs.version }}
@@ -253,7 +253,7 @@ jobs:
       - name: Save Image
         if: needs.set-release-version.outputs.version != 'none'
         shell: bash
-        run: docker image save $BUILD_DOCKER_REGISTRY/association-registry/invitations-archiver:$SEMVER -o ~/invitations-archiver.tar
+        run: docker image save $BUILD_DOCKER_REGISTRY/association-registry/verenigingsregister-uitnodigingenarchiver:$SEMVER -o ~/verenigingsregister-uitnodigingenarchiver.tar
         env:
           BUILD_DOCKER_REGISTRY: ${{ secrets.BUILD_DOCKER_REGISTRY_IK4 }}
           SEMVER: ${{ needs.set-release-version.outputs.version }}
@@ -262,8 +262,8 @@ jobs:
         if: needs.set-release-version.outputs.version != 'none'
         uses: actions/upload-artifact@v3
         with:
-          name: invitations-archiver
-          path: ~/invitations-archiver.tar
+          name: verenigingsregister-uitnodigingenarchiver
+          path: ~/verenigingsregister-uitnodigingenarchiver.tar
 
       - name: Shows logs db container
         if: ${{ failure() }}
@@ -425,22 +425,22 @@ jobs:
       - name: Download invitations-api artifact
         uses: actions/download-artifact@v3
         with:
-          name: invitations-api
+          name: verenigingsregister-uitnodigingenapi
           path: ~/
 
       - name: Load invitations-api image
         shell: bash
-        run: docker image load -i ~/invitations-api.tar
+        run: docker image load -i ~/verenigingsregister-uitnodigingenapi.tar
 
       - name: Download invitations-archiver artifact
         uses: actions/download-artifact@v3
         with:
-          name: invitations-archiver
+          name: verenigingsregister-uitnodigingenarchiver
           path: ~/
 
       - name: Load invitations-archiver image
         shell: bash
-        run: docker image load -i ~/invitations-archiver.tar
+        run: docker image load -i ~/verenigingsregister-uitnodigingenarchiver.tar
 
       - name: Push docker images to ECR DevOps
         if: needs.release.outputs.version != 'none'
