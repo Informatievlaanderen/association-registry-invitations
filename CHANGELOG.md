@@ -1,3 +1,11 @@
+## [1.23.4](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.23.3...v1.23.4) (2023-12-11)
+
+
+### Bug Fixes
+
+* OR-2009 correct ECR path for association registry ([4ca7d23](https://github.com/informatievlaanderen/association-registry-invitations/commit/4ca7d23c300d54f38aa167cc5ffd42ccefb91b8a))
+* OR-2009 remove repository name from build-docker.sh ([3da2dd1](https://github.com/informatievlaanderen/association-registry-invitations/commit/3da2dd1b0f959e600b2410fdf3e75cd96e24caed))
+
 ## [1.23.3](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.23.2...v1.23.3) (2023-12-11)
 
 
