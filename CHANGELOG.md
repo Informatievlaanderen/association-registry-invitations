@@ -1,3 +1,10 @@
+# [1.24.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.23.4...v1.24.0) (2023-12-11)
+
+
+### Features
+
+* or-2010 use string.Replace i.f.o. string.Trim ([3592b54](https://github.com/informatievlaanderen/association-registry-invitations/commit/3592b54454f753fa33df55f53ea62100c3a7a314))
+
 ## [1.23.4](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.23.3...v1.23.4) (2023-12-11)
 
 
