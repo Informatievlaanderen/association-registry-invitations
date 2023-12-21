@@ -1,3 +1,10 @@
+## [1.24.1](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.24.0...v1.24.1) (2023-12-21)
+
+
+### Bug Fixes
+
+* Update Program.cs ([a330c34](https://github.com/informatievlaanderen/association-registry-invitations/commit/a330c34d59402fd527c7705489947d41e025a404))
+
 # [1.24.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.23.4...v1.24.0) (2023-12-11)
 
 
