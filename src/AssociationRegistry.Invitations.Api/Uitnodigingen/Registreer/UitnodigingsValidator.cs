@@ -69,10 +69,19 @@ public class UitnodigingsValidator : AbstractValidator<UitnodigingsRequest>
         if (trimmedInsz.Length != 11) return false;
         if (!trimmedInsz.All(char.IsDigit)) return false;
 
-        var inszNumber = long.Parse(trimmedInsz);
-        if (97 - ((inszNumber / 100) % 97) != inszNumber % 100) return false;
+        return BeValidInszBefore2000(trimmedInsz) || BeValidInszAfter2000(trimmedInsz);
+    }
 
-        return true;
+    private static bool BeValidInszBefore2000(string trimmedInsz)
+    {
+        var inszNumber = long.Parse(trimmedInsz);
+        return 97 - ((inszNumber / 100) % 97) == inszNumber % 100;
+    }
+
+    private static bool BeValidInszAfter2000(string trimmedInsz)
+    {
+        var inszNumber = long.Parse("2" + trimmedInsz);
+        return 97 - ((inszNumber / 100) % 97) == inszNumber % 100;
     }
 
     private static bool BeValidVertegenwoordigerid(int vertegenwoordigerId) =>
