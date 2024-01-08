@@ -78,11 +78,7 @@ public class UitnodigingsValidator : AbstractValidator<UitnodigingsRequest>
         return 97 - ((inszNumber / 100) % 97) == inszNumber % 100;
     }
 
-    private static bool BeValidInszAfter2000(string trimmedInsz)
-    {
-        var inszNumber = long.Parse("2" + trimmedInsz);
-        return 97 - ((inszNumber / 100) % 97) == inszNumber % 100;
-    }
+    private static bool BeValidInszAfter2000(string trimmedInsz) => BeValidInszBefore2000("2" + trimmedInsz);
 
     private static bool BeValidVertegenwoordigerid(int vertegenwoordigerId) =>
         vertegenwoordigerId > 0;

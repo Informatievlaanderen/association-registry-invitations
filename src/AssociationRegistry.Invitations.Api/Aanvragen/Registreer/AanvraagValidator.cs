@@ -68,10 +68,16 @@ public class AanvraagValidator : AbstractValidator<AanvraagRequest>
 
         var inszNumber = long.Parse(trimmedInsz);
 
-        if (97 - inszNumber / 100 % 97 != inszNumber % 100) return false;
-
-        return true;
+        return BeValidInszBefore2000(trimmedInsz) || BeValidInszAfter2000(trimmedInsz);
     }
+
+    private static bool BeValidInszBefore2000(string trimmedInsz)
+    {
+        var inszNumber = long.Parse(trimmedInsz);
+        return 97 - ((inszNumber / 100) % 97) == inszNumber % 100;
+    }
+
+    private static bool BeValidInszAfter2000(string trimmedInsz) => BeValidInszBefore2000("2" + trimmedInsz);
 
     private bool BeValidFormat(string vCode)
     {
