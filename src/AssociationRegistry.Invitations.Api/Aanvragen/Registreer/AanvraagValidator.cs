@@ -65,9 +65,7 @@ public class AanvraagValidator : AbstractValidator<AanvraagRequest>
 
         if (trimmedInsz.Length != 11) return false;
         if (!trimmedInsz.All(char.IsDigit)) return false;
-
-        var inszNumber = long.Parse(trimmedInsz);
-
+        
         return BeValidInszBefore2000(trimmedInsz) || BeValidInszAfter2000(trimmedInsz);
     }
 
