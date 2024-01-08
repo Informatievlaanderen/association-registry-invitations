@@ -1,3 +1,12 @@
+## [1.24.2](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.24.1...v1.24.2) (2024-01-08)
+
+
+### Bug Fixes
+
+* OR-2030 remove unused variable ([9a525c3](https://github.com/informatievlaanderen/association-registry-invitations/commit/9a525c3530713fc77961b585616cfc6509c05ad7))
+* OR-2030 update insz number validation for aanvraag ([940b2fc](https://github.com/informatievlaanderen/association-registry-invitations/commit/940b2fc71f9c779c0e411c6fc798c39ba32063ac))
+* OR-2030 updated insz number validation ([881d528](https://github.com/informatievlaanderen/association-registry-invitations/commit/881d528b258d5cb72ddc4eee9fdbd17d41188b0d))
+
 ## [1.24.1](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.24.0...v1.24.1) (2023-12-21)
 
 
