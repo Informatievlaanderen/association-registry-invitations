@@ -41,6 +41,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 namespace AssociationRegistry.Invitations.Api;
 
 using Aanvragen.StatusWijziging;
+using Infrastructure.Middleware;
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Resources;
@@ -76,8 +77,8 @@ public class Program
         GlobalStringLocalizer.Instance = new GlobalStringLocalizer(app.Services);
 
         app
-            .ConfigureDevelopmentEnvironment()
-            .UseCors(StartupConstants.AllowSpecificOrigin);
+           .ConfigureDevelopmentEnvironment()
+           .UseCors(StartupConstants.AllowSpecificOrigin);
 
         ConfigureMiddleware(app);
 
@@ -87,9 +88,9 @@ public class Program
 
         // Deze volgorde is belangrijk ! DKW
         app.UseRouting()
-            .UseAuthentication()
-            .UseAuthorization()
-            .UseEndpoints(routeBuilder => routeBuilder.MapControllers());
+           .UseAuthentication()
+           .UseAuthorization()
+           .UseEndpoints(routeBuilder => routeBuilder.MapControllers());
 
         ConfigureLifetimeHooks(app);
 
@@ -99,8 +100,8 @@ public class Program
     private static void ConfigureRequestLocalization(WebApplication app)
     {
         var requestLocalizationOptions = app.Services
-            .GetRequiredService<IOptions<RequestLocalizationOptions>>()
-            .Value;
+                                            .GetRequiredService<IOptions<RequestLocalizationOptions>>()
+                                            .Value;
 
         app.UseRequestLocalization(requestLocalizationOptions);
     }
@@ -153,22 +154,23 @@ public class Program
     private static void LoadConfiguration(WebApplicationBuilder builder, params string[] args)
     {
         builder.Configuration
-            .AddJsonFile("appsettings.json")
-            .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName.ToLowerInvariant()}.json", optional: true,
-                reloadOnChange: false)
-            .AddJsonFile($"appsettings.{Environment.MachineName.ToLowerInvariant()}.json", optional: true,
-                reloadOnChange: false)
-            .AddEnvironmentVariables()
-            .AddCommandLine(args)
-            .AddInMemoryCollection();
+               .AddJsonFile("appsettings.json")
+               .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName.ToLowerInvariant()}.json", optional: true,
+                            reloadOnChange: false)
+               .AddJsonFile($"appsettings.{Environment.MachineName.ToLowerInvariant()}.json", optional: true,
+                            reloadOnChange: false)
+               .AddEnvironmentVariables()
+               .AddCommandLine(args)
+               .AddInMemoryCollection();
     }
 
     private static void ConfigureMiddleware(IApplicationBuilder app)
     {
         app
-            .UseMiddleware<AddHttpSecurityHeadersMiddleware>()
-            .UseMiddleware<AddVersionHeaderMiddleware>(AddVersionHeaderMiddleware.HeaderName)
-            .UseResponseCompression();
+           .UseMiddleware<ExceptionLoggerMiddleware>()
+           .UseMiddleware<AddHttpSecurityHeadersMiddleware>()
+           .UseMiddleware<AddVersionHeaderMiddleware>(AddVersionHeaderMiddleware.HeaderName)
+           .UseResponseCompression();
     }
 
     private static void ConfigureServices(WebApplicationBuilder builder)
@@ -177,171 +179,170 @@ public class Program
         var appSettings = builder.Configuration.Get<AppSettings>()!;
 
         builder.Services
-            .AddSingleton<UitnodigingsStatusHandler>()
-            .AddSingleton<AanvraagStatusHandler>()
-            .AddSingleton(postgreSqlOptionsSection)
-            .AddSingleton(appSettings)
-            .AddSingleton<IClock>(SystemClock.Instance)
-            .AddMarten(postgreSqlOptionsSection)
-            .AddOpenTelemetryServices(builder.Configuration)
-            .AddHttpContextAccessor()
-            .AddControllers();
+               .AddSingleton<UitnodigingsStatusHandler>()
+               .AddSingleton<AanvraagStatusHandler>()
+               .AddSingleton(postgreSqlOptionsSection)
+               .AddSingleton(appSettings)
+               .AddSingleton<IClock>(SystemClock.Instance)
+               .AddMarten(postgreSqlOptionsSection)
+               .AddOpenTelemetryServices(builder.Configuration)
+               .AddHttpContextAccessor()
+               .AddControllers();
 
         builder.Services.TryAddEnumerable(ServiceDescriptor
-            .Transient<IApiControllerSpecification, ApiControllerSpec>());
+                                             .Transient<IApiControllerSpecification, ApiControllerSpec>());
 
         builder.Services
-            .AddSingleton(
-                new StartupConfigureOptions
-                {
-                    Server =
+               .AddSingleton(
+                    new StartupConfigureOptions
                     {
-                        BaseUrl = builder.Configuration.GetValue<string>("BaseUrl").TrimEnd(trimChar: '/'),
-                    },
-                });
+                        Server =
+                        {
+                            BaseUrl = builder.Configuration.GetValue<string>("BaseUrl").TrimEnd(trimChar: '/'),
+                        },
+                    });
 
         builder.Services
-            .AddMvcCore(
-                cfg =>
-                {
-                    cfg.RespectBrowserAcceptHeader = false;
-                    cfg.ReturnHttpNotAcceptable = true;
+               .AddMvcCore(
+                    cfg =>
+                    {
+                        cfg.RespectBrowserAcceptHeader = false;
+                        cfg.ReturnHttpNotAcceptable = true;
 
-                    cfg.Filters.Add<OperationCancelledExceptionFilter>();
+                        cfg.Filters.Add<OperationCancelledExceptionFilter>();
 
-                    cfg.EnableEndpointRouting = false;
-                })
-            .AddCors(
-                cfg =>
-                {
-                    cfg.AddPolicy(
-                        StartupConstants.AllowAnyOrigin,
-                        configurePolicy: corsPolicy => corsPolicy
-                            .AllowAnyOrigin()
-                            .WithMethods(StartupConstants.HttpMethodsAsString)
-                            .WithHeaders(StartupConstants.Headers)
-                            .WithExposedHeaders(StartupConstants.ExposedHeaders)
-                            .SetPreflightMaxAge(TimeSpan.FromSeconds(60 * 15)));
+                        cfg.EnableEndpointRouting = false;
+                    })
+               .AddCors(
+                    cfg =>
+                    {
+                        cfg.AddPolicy(
+                            StartupConstants.AllowAnyOrigin,
+                            configurePolicy: corsPolicy => corsPolicy
+                                                          .AllowAnyOrigin()
+                                                          .WithMethods(StartupConstants.HttpMethodsAsString)
+                                                          .WithHeaders(StartupConstants.Headers)
+                                                          .WithExposedHeaders(StartupConstants.ExposedHeaders)
+                                                          .SetPreflightMaxAge(TimeSpan.FromSeconds(60 * 15)));
 
-                    cfg.AddPolicy(
-                        StartupConstants.AllowSpecificOrigin,
-                        configurePolicy: corsPolicy => corsPolicy
-                            .WithOrigins(builder.Configuration.GetValue<string[]>("Cors") ??
-                                         Array.Empty<string>())
-                            .WithMethods(StartupConstants.HttpMethodsAsString)
-                            .WithHeaders(StartupConstants.Headers)
-                            .WithExposedHeaders(StartupConstants.ExposedHeaders)
-                            .SetPreflightMaxAge(TimeSpan.FromSeconds(60 * 15))
-                            .AllowCredentials());
-                })
-            .AddControllersAsServices()
-            .AddNewtonsoftJson(
-                opt =>
-                {
-                    opt.SerializerSettings.Converters.Add(
-                        new StringEnumConverter(new DefaultNamingStrategy(), allowIntegerValues: false));
+                        cfg.AddPolicy(
+                            StartupConstants.AllowSpecificOrigin,
+                            configurePolicy: corsPolicy => corsPolicy
+                                                          .WithOrigins(builder.Configuration.GetValue<string[]>("Cors") ??
+                                                                       Array.Empty<string>())
+                                                          .WithMethods(StartupConstants.HttpMethodsAsString)
+                                                          .WithHeaders(StartupConstants.Headers)
+                                                          .WithExposedHeaders(StartupConstants.ExposedHeaders)
+                                                          .SetPreflightMaxAge(TimeSpan.FromSeconds(60 * 15))
+                                                          .AllowCredentials());
+                    })
+               .AddControllersAsServices()
+               .AddNewtonsoftJson(
+                    opt =>
+                    {
+                        opt.SerializerSettings.Converters.Add(
+                            new StringEnumConverter(new DefaultNamingStrategy(), allowIntegerValues: false));
 
-                    opt.SerializerSettings.NullValueHandling = NullValueHandling.Include;
-                    opt.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                })
-            .AddXmlDataContractSerializerFormatters()
-            .AddFormatterMappings()
-            .AddApiExplorer();
-
-        builder.Services
-            .AddAuthentication(options =>
-            {
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddOAuth2Introspection(
-                JwtBearerDefaults.AuthenticationScheme,
-                configureOptions: options =>
-                {
-                    var configOptions = builder.Configuration.GetSection(nameof(OAuth2IntrospectionOptions))
-                        .Get<OAuth2IntrospectionOptions>()!;
-
-                    options.ClientId = configOptions.ClientId;
-                    options.ClientSecret = configOptions.ClientSecret;
-                    options.Authority = configOptions.Authority;
-                    options.IntrospectionEndpoint = configOptions.IntrospectionEndpoint;
-                }
-            );
+                        opt.SerializerSettings.NullValueHandling = NullValueHandling.Include;
+                        opt.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                    })
+               .AddXmlDataContractSerializerFormatters()
+               .AddFormatterMappings()
+               .AddApiExplorer();
 
         builder.Services
-            .AddAuthorization(
-                options =>
-                    options.FallbackPolicy =
-                        new AuthorizationPolicyBuilder()
-                            .RequireClaim(Security.ClaimTypes.Scope, Security.Scopes.Uitnodigingen)
-                            .Build());
+               .AddAuthentication(options =>
+                {
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+               .AddOAuth2Introspection(
+                    JwtBearerDefaults.AuthenticationScheme,
+                    configureOptions: options =>
+                    {
+                        var configOptions = builder.Configuration.GetSection(nameof(OAuth2IntrospectionOptions))
+                                                   .Get<OAuth2IntrospectionOptions>()!;
+
+                        options.ClientId = configOptions.ClientId;
+                        options.ClientSecret = configOptions.ClientSecret;
+                        options.Authority = configOptions.Authority;
+                        options.IntrospectionEndpoint = configOptions.IntrospectionEndpoint;
+                    }
+                );
+
+        builder.Services
+               .AddAuthorization(
+                    options =>
+                        options.FallbackPolicy =
+                            new AuthorizationPolicyBuilder()
+                               .RequireClaim(Security.ClaimTypes.Scope, Security.Scopes.Uitnodigingen)
+                               .Build());
 
         builder.Services.AddHealthChecks();
 
-
         builder.Services
-            .AddLocalization(cfg => cfg.ResourcesPath = "Resources")
-            .AddSingleton<IStringLocalizerFactory, SharedStringLocalizerFactory<DefaultResources>>()
-            .AddSingleton<ResourceManagerStringLocalizerFactory, ResourceManagerStringLocalizerFactory>()
-            .Configure<RequestLocalizationOptions>(
-                opts =>
-                {
-                    opts.DefaultRequestCulture = new RequestCulture(new CultureInfo(StartupConstants.Culture));
-                    opts.SupportedCultures = new[] { new CultureInfo(StartupConstants.Culture) };
-                    opts.SupportedUICultures = new[] { new CultureInfo(StartupConstants.Culture) };
-
-                    opts.FallBackToParentCultures = true;
-                    opts.FallBackToParentUICultures = true;
-                })
-            .AddVersionedApiExplorer(
-                cfg =>
-                {
-                    cfg.GroupNameFormat = "'v'VVV";
-                    cfg.SubstituteApiVersionInUrl = true;
-                })
-            .AddApiVersioning(
-                cfg =>
-                {
-                    cfg.ReportApiVersions = true;
-                })
-            .AddEndpointsApiExplorer()
-            .AddResponseCompression(
-                cfg =>
-                {
-                    cfg.EnableForHttps = true;
-
-                    cfg.Providers.Add<BrotliCompressionProvider>();
-                    cfg.Providers.Add<GzipCompressionProvider>();
-
-                    cfg.MimeTypes = new[]
+               .AddLocalization(cfg => cfg.ResourcesPath = "Resources")
+               .AddSingleton<IStringLocalizerFactory, SharedStringLocalizerFactory<DefaultResources>>()
+               .AddSingleton<ResourceManagerStringLocalizerFactory, ResourceManagerStringLocalizerFactory>()
+               .Configure<RequestLocalizationOptions>(
+                    opts =>
                     {
-                        // General
-                        "text/plain",
-                        "text/csv",
+                        opts.DefaultRequestCulture = new RequestCulture(new CultureInfo(StartupConstants.Culture));
+                        opts.SupportedCultures = new[] { new CultureInfo(StartupConstants.Culture) };
+                        opts.SupportedUICultures = new[] { new CultureInfo(StartupConstants.Culture) };
 
-                        // Static files
-                        "text/css",
-                        "application/javascript",
+                        opts.FallBackToParentCultures = true;
+                        opts.FallBackToParentUICultures = true;
+                    })
+               .AddVersionedApiExplorer(
+                    cfg =>
+                    {
+                        cfg.GroupNameFormat = "'v'VVV";
+                        cfg.SubstituteApiVersionInUrl = true;
+                    })
+               .AddApiVersioning(
+                    cfg =>
+                    {
+                        cfg.ReportApiVersions = true;
+                    })
+               .AddEndpointsApiExplorer()
+               .AddResponseCompression(
+                    cfg =>
+                    {
+                        cfg.EnableForHttps = true;
 
-                        // MVC
-                        "text/html",
-                        "application/xml",
-                        "text/xml",
-                        "application/json",
-                        "text/json",
-                        "application/ld+json",
-                        "application/atom+xml",
+                        cfg.Providers.Add<BrotliCompressionProvider>();
+                        cfg.Providers.Add<GzipCompressionProvider>();
 
-                        // Fonts
-                        "application/font-woff",
-                        "font/otf",
-                        "application/vnd.ms-fontobject",
-                    };
-                })
-            .Configure<GzipCompressionProviderOptions>(cfg => cfg.Level = CompressionLevel.Fastest)
-            .Configure<BrotliCompressionProviderOptions>(cfg => cfg.Level = CompressionLevel.Fastest)
-            .Configure<KestrelServerOptions>(serverOptions => serverOptions.AllowSynchronousIO = true);
+                        cfg.MimeTypes = new[]
+                        {
+                            // General
+                            "text/plain",
+                            "text/csv",
+
+                            // Static files
+                            "text/css",
+                            "application/javascript",
+
+                            // MVC
+                            "text/html",
+                            "application/xml",
+                            "text/xml",
+                            "application/json",
+                            "text/json",
+                            "application/ld+json",
+                            "application/atom+xml",
+
+                            // Fonts
+                            "application/font-woff",
+                            "font/otf",
+                            "application/vnd.ms-fontobject",
+                        };
+                    })
+               .Configure<GzipCompressionProviderOptions>(cfg => cfg.Level = CompressionLevel.Fastest)
+               .Configure<BrotliCompressionProviderOptions>(cfg => cfg.Level = CompressionLevel.Fastest)
+               .Configure<KestrelServerOptions>(serverOptions => serverOptions.AllowSynchronousIO = true);
 
         builder.Services.AddAdminApiSwagger(appSettings);
     }
@@ -353,12 +354,12 @@ public class Program
     {
         var loggerConfig =
             new LoggerConfiguration()
-                .ReadFrom.Configuration(builder.Configuration)
-                .Enrich.FromLogContext()
-                .Enrich.WithMachineName()
-                .Enrich.WithThreadId()
-                .Enrich.WithEnvironmentUserName()
-                .Destructure.JsonNetTypes();
+               .ReadFrom.Configuration(builder.Configuration)
+               .Enrich.FromLogContext()
+               .Enrich.WithMachineName()
+               .Enrich.WithThreadId()
+               .Enrich.WithEnvironmentUserName()
+               .Destructure.JsonNetTypes();
 
         var logger = loggerConfig.CreateLogger();
 
@@ -373,7 +374,7 @@ public class Program
             options.IncludeFormattedMessage = true;
             options.ParseStateValues = true;
 
-            options.AddOtlpExporter((exporterOptions, _)  =>
+            options.AddOtlpExporter((exporterOptions, _) =>
             {
                 var collectorUrl = builder.Configuration["Collector_Url"] ?? OpenTelemetry.CollectorUrl;
                 exporterOptions.Protocol = OtlpExportProtocol.Grpc;
@@ -480,6 +481,7 @@ public class StartupConfigureOptions
     public StartupConfigureOptions EnableJsonErrorActionFilterOption()
     {
         EnableJsonErrorActionFilter = true;
+
         return this;
     }
 
@@ -498,7 +500,6 @@ public class StartupConfigureOptions
     public class ServerOptions
     {
         public string BaseUrl { get; set; } = string.Empty;
-
         public string VersionHeaderName { get; set; } = AddVersionHeaderMiddleware.HeaderName;
 
         public string[] MethodsToLog { get; set; } = new[]
@@ -556,4 +557,4 @@ public class StartupConfigureOptions
         public CultureInfo? DefaultCulture { get; set; }
         public CultureInfo[] SupportedCultures { get; set; } = Array.Empty<CultureInfo>();
     }
-} 
+}

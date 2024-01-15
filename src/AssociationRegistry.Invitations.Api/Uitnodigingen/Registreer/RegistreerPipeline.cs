@@ -55,7 +55,9 @@ public static class RegistreerPipeline
     public static async Task<IActionResult> Handle(this Either<UitnodigingsRequest> source, Func<Task<IActionResult>> action, ControllerBase controller)
     {
         if (source.Failure is not null)
+        {
             return await source.Failure(controller);
+        }
 
         return await action();
     }
