@@ -183,7 +183,7 @@ public class Program
             .AddSingleton(appSettings)
             .AddSingleton<IClock>(SystemClock.Instance)
             .AddMarten(postgreSqlOptionsSection)
-            .AddOpenTelemetryServices()
+            .AddOpenTelemetryServices(builder.Configuration)
             .AddHttpContextAccessor()
             .AddControllers();
 
@@ -375,8 +375,9 @@ public class Program
 
             options.AddOtlpExporter((exporterOptions, _)  =>
             {
+                var collectorUrl = builder.Configuration["Collector_Url"] ?? OpenTelemetry.CollectorUrl;
                 exporterOptions.Protocol = OtlpExportProtocol.Grpc;
-                exporterOptions.Endpoint = new Uri(OpenTelemetry.CollectorUrl);
+                exporterOptions.Endpoint = new Uri(collectorUrl);
             });
         });
     }

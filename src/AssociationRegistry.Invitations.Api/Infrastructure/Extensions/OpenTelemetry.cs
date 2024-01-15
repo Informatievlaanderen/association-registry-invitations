@@ -9,9 +9,9 @@ namespace AssociationRegistry.Invitations.Api.Infrastructure.Extensions;
 
 public static class OpenTelemetry
 {
-    public static IServiceCollection AddOpenTelemetryServices(this IServiceCollection services)
+    public static IServiceCollection AddOpenTelemetryServices(this IServiceCollection services, IConfiguration configuration)
     {
-        var collectorUrl = CollectorUrl;
+        var collectorUrl = configuration["Collector_Url"] ?? CollectorUrl;
         var configureResource = ConfigureResource();
 
         services.AddOpenTelemetry()
@@ -41,13 +41,12 @@ public static class OpenTelemetry
                                  options.Endpoint = new Uri(collectorUrl);
                              });
 
-
-                     builder.AddOtlpExporter(otlpOptions =>
-                     {
-                         otlpOptions.Protocol = OtlpExportProtocol.Grpc;
-
-                         otlpOptions.Endpoint = new Uri(collectorUrl);
-                     });
+                     // builder.AddOtlpExporter(otlpOptions =>
+                     // {
+                     //     otlpOptions.Protocol = OtlpExportProtocol.Grpc;
+                     //
+                     //     otlpOptions.Endpoint = new Uri(collectorUrl);
+                     // });
 
                  })
                 .WithMetrics(builder =>
@@ -69,7 +68,7 @@ public static class OpenTelemetry
         return services;
     }
 
-    public static string CollectorUrl
+    public static string CollectorUrl 
         => Environment.GetEnvironmentVariable("COLLECTOR_URL") ?? "http://localhost:4317";
 
     public static Action<ResourceBuilder> ConfigureResource()

@@ -7,6 +7,16 @@ services:
     ports:
       - "15051:80"
 
+  seq:
+    image: datalust/seq
+    restart: always
+    ports:
+      - "9581:80"
+    environment:
+      ACCEPT_EULA: Y
+    volumes:
+      - seq-data:/data
+
   db:
     container_name: pg_uitnodigingen
     image: postgres:15.4
@@ -31,3 +41,4 @@ services:
 
 volumes:
   pg-data:
+  seq-data:
