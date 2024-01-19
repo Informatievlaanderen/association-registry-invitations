@@ -360,16 +360,7 @@ jobs:
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('paket.lock') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
-
-      - name: Restore paket packages
-        id: cache-paket-restore
-        uses: actions/cache/restore@v3
-        with:
-          path: |
-            packages
-            .paket/Paket.Restore.targets
-          key: ${{ runner.os }}-paket-${{ hashFiles('paket.lock', '.paket/Paket.Restore.targets') }}
-
+            
       - name: Cache Python
         uses: actions/cache@v3
         env:
@@ -388,6 +379,28 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install requests markdown argparse
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ secrets.VBR_DOTNET_VERSION }}
+
+      - name: .NET version
+        shell: bash
+        run: dotnet --info
+
+      - name: Restore dotnet tools
+        shell: bash
+        run: |
+          dotnet tool restore
+
+      - name: Paket install
+        shell: bash
+        run: dotnet paket install
+
+      - name: Paket restore
+        shell: bash
+        run: dotnet paket restore
 
       - name: Publish to Confluence
         if: needs.set-release-version.outputs.version != 'none'
