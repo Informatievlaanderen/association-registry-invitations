@@ -1,3 +1,10 @@
+## [1.24.4](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.24.3...v1.24.4) (2024-01-19)
+
+
+### Bug Fixes
+
+* restore paket packages inside Atlassian step ([7e19f2f](https://github.com/informatievlaanderen/association-registry-invitations/commit/7e19f2f6b4a4fa3bfd8753f9343bb9a4350749f2))
+
 ## [1.24.3](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.24.2...v1.24.3) (2024-01-19)
 
 
