@@ -1,3 +1,10 @@
+## [1.24.5](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.24.4...v1.24.5) (2024-01-19)
+
+
+### Bug Fixes
+
+* add paket install and restore inside main workflow ([5e890d0](https://github.com/informatievlaanderen/association-registry-invitations/commit/5e890d08bc5d93f7d54a941f11e20a98251485fd))
+
 ## [1.24.4](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.24.3...v1.24.4) (2024-01-19)
 
 
