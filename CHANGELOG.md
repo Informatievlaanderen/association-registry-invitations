@@ -1,3 +1,10 @@
+## [1.24.3](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.24.2...v1.24.3) (2024-01-19)
+
+
+### Bug Fixes
+
+* add Seq inside docker compose and extend otlp collector ([0beca15](https://github.com/informatievlaanderen/association-registry-invitations/commit/0beca1523fccd2b697eae43294688974761658a5))
+
 ## [1.24.2](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.24.1...v1.24.2) (2024-01-08)
 
 
