@@ -361,6 +361,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
 
+      - name: Restore paket packages
+        id: cache-paket-restore
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            packages
+            .paket/Paket.Restore.targets
+          key: ${{ runner.os }}-paket-${{ hashFiles('paket.lock', '.paket/Paket.Restore.targets') }}
+
       - name: Cache Python
         uses: actions/cache@v3
         env:
