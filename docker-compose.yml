@@ -29,5 +29,16 @@ services:
       - "14317:4317"   # OTLP gRPC receiver
       - "13133:13133"
 
+  seq:
+    image: datalust/seq
+    restart: always
+    ports:
+      - "9581:80"
+    environment:
+      ACCEPT_EULA: Y
+    volumes:
+      - seq-data:/data
+
 volumes:
   pg-data:
+  seq-data:
