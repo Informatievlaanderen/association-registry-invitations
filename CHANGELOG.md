@@ -1,3 +1,10 @@
+## [1.24.6](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.24.5...v1.24.6) (2024-01-23)
+
+
+### Bug Fixes
+
+* or-2057 ondersteuning voor afzonderlijke bewaartijden voor uitnodigingen en aanvragen ([7fc636b](https://github.com/informatievlaanderen/association-registry-invitations/commit/7fc636b57ddcb7ebc9f72a891c63f16f1ed0bd3d))
+
 ## [1.24.5](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.24.4...v1.24.5) (2024-01-19)
 
 
