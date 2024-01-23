@@ -60,7 +60,7 @@ public class ArchiverService : BackgroundService
     
     private void ArchiveerUitnodigingenWachtOpAntwoord(IDocumentSession session)
     {
-        var archivalStartDate = ArchiverDateHelper.CalculateArchivalStartDate(_options.WachtOpAntwoord, _clock.GetCurrentInstant())
+        var archivalStartDate = ArchiverDateHelper.CalculateArchivalStartDate(_options.Uitnodigingen.WachtOpAntwoord, _clock.GetCurrentInstant())
                                                   .ToDateTimeOffset();
 
         var uitnodigingen = session
@@ -83,7 +83,7 @@ public class ArchiverService : BackgroundService
     {
         var archivalStartDate = ArchiverDateHelper
                                .CalculateArchivalStartDate(
-                                    _options.Aanvaard, _clock.GetCurrentInstant())
+                                    _options.Uitnodigingen.Aanvaard, _clock.GetCurrentInstant())
                                .ToDateTimeOffset();
 
         _logger.LogInformation("Beginnen met archiveren van uitnodigingen met status 'Aanvaard' die ouder zijn dan {StartDate}",
@@ -97,7 +97,7 @@ public class ArchiverService : BackgroundService
     {
         var archivalStartDate = ArchiverDateHelper
                                .CalculateArchivalStartDate(
-                                    _options.Geweigerd, _clock.GetCurrentInstant())
+                                    _options.Uitnodigingen.Geweigerd, _clock.GetCurrentInstant())
                                .ToDateTimeOffset();
 
         _logger.LogInformation("Beginnen met archiveren van uitnodigingen met status 'Geweigerd' die ouder zijn dan {StartDate}",
@@ -112,7 +112,7 @@ public class ArchiverService : BackgroundService
     {
         var archivalStartDate = ArchiverDateHelper
                                .CalculateArchivalStartDate(
-                                    _options.Ingetrokken, _clock.GetCurrentInstant())
+                                    _options.Uitnodigingen.Ingetrokken, _clock.GetCurrentInstant())
                                .ToDateTimeOffset();
 
         _logger.LogInformation("Beginnen met archiveren van uitnodigingen met status 'Ingetrokken' die ouder zijn dan {StartDate}",
@@ -127,7 +127,7 @@ public class ArchiverService : BackgroundService
     {
         var archivalStartDate = ArchiverDateHelper
                                .CalculateArchivalStartDate(
-                                    _options.Verlopen, _clock.GetCurrentInstant())
+                                    _options.Uitnodigingen.Verlopen, _clock.GetCurrentInstant())
                                .ToDateTimeOffset();
 
         _logger.LogInformation("Beginnen met archiveren van uitnodigingen met status 'Verlopen' die ouder zijn dan {StartDate}",
@@ -140,7 +140,7 @@ public class ArchiverService : BackgroundService
     
     private void ArchiveerAanvragenWachtOpAntwoord(IDocumentSession session)
     {
-        var archivalStartDate = ArchiverDateHelper.CalculateArchivalStartDate(_options.WachtOpAntwoord, _clock.GetCurrentInstant())
+        var archivalStartDate = ArchiverDateHelper.CalculateArchivalStartDate(_options.Aanvragen.WachtOpAntwoord, _clock.GetCurrentInstant())
                                                   .ToDateTimeOffset();
 
         var aanvragen = session
@@ -163,7 +163,7 @@ public class ArchiverService : BackgroundService
     {
         var archivalStartDate = ArchiverDateHelper
                                .CalculateArchivalStartDate(
-                                    _options.Aanvaard, _clock.GetCurrentInstant())
+                                    _options.Aanvragen.Aanvaard, _clock.GetCurrentInstant())
                                .ToDateTimeOffset();
 
         _logger.LogInformation("Beginnen met archiveren van aanvragen met status 'Aanvaard' die ouder zijn dan {StartDate}",
@@ -177,7 +177,7 @@ public class ArchiverService : BackgroundService
     {
         var archivalStartDate = ArchiverDateHelper
                                .CalculateArchivalStartDate(
-                                    _options.Geweigerd, _clock.GetCurrentInstant())
+                                    _options.Aanvragen.Geweigerd, _clock.GetCurrentInstant())
                                .ToDateTimeOffset();
 
         _logger.LogInformation("Beginnen met archiveren van aanvragen met status 'Geweigerd' die ouder zijn dan {StartDate}",
@@ -192,7 +192,7 @@ public class ArchiverService : BackgroundService
     {
         var archivalStartDate = ArchiverDateHelper
                                .CalculateArchivalStartDate(
-                                    _options.Ingetrokken, _clock.GetCurrentInstant())
+                                    _options.Aanvragen.Ingetrokken, _clock.GetCurrentInstant())
                                .ToDateTimeOffset();
 
         _logger.LogInformation("Beginnen met archiveren van aanvragen met status 'Ingetrokken' die ouder zijn dan {StartDate}",
@@ -207,7 +207,7 @@ public class ArchiverService : BackgroundService
     {
         var archivalStartDate = ArchiverDateHelper
                                .CalculateArchivalStartDate(
-                                    _options.Verlopen, _clock.GetCurrentInstant())
+                                    _options.Aanvragen.Verlopen, _clock.GetCurrentInstant())
                                .ToDateTimeOffset();
 
         _logger.LogInformation("Beginnen met archiveren van aanvragen met status 'Verlopen' die ouder zijn dan {StartDate}",

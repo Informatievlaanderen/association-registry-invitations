@@ -35,11 +35,11 @@ public class UitnodigingTestDataFactory
         };
         OverTijd = new Uitnodigingen
         {
-            WachtOpAntwoord = NietOverTijd.WachtOpAntwoord with { DatumLaatsteAanpassing = ArchiverDateHelper.CalculateArchivalStartDate(options.Bewaartijden.WachtOpAntwoord, date).ToDateTimeOffset() },
-            Aanvaard = NietOverTijd.Aanvaard with { DatumLaatsteAanpassing = ArchiverDateHelper.CalculateArchivalStartDate(options.Bewaartijden.Aanvaard, date).ToDateTimeOffset() },
-            Geweigerd = NietOverTijd.Geweigerd with { DatumLaatsteAanpassing  = ArchiverDateHelper.CalculateArchivalStartDate(options.Bewaartijden.Geweigerd, date).ToDateTimeOffset() },
-            Ingetrokken = NietOverTijd.Ingetrokken with { DatumLaatsteAanpassing  = ArchiverDateHelper.CalculateArchivalStartDate(options.Bewaartijden.Geweigerd, date).ToDateTimeOffset() },
-            Verlopen = NietOverTijd.Verlopen with { DatumLaatsteAanpassing  = ArchiverDateHelper.CalculateArchivalStartDate(options.Bewaartijden.Verlopen, date).ToDateTimeOffset() },
+            WachtOpAntwoord = NietOverTijd.WachtOpAntwoord with { DatumLaatsteAanpassing = ArchiverDateHelper.CalculateArchivalStartDate(options.Bewaartijden.Uitnodigingen.WachtOpAntwoord, date).ToDateTimeOffset() },
+            Aanvaard = NietOverTijd.Aanvaard with { DatumLaatsteAanpassing = ArchiverDateHelper.CalculateArchivalStartDate(options.Bewaartijden.Uitnodigingen.Aanvaard, date).ToDateTimeOffset() },
+            Geweigerd = NietOverTijd.Geweigerd with { DatumLaatsteAanpassing  = ArchiverDateHelper.CalculateArchivalStartDate(options.Bewaartijden.Uitnodigingen.Geweigerd, date).ToDateTimeOffset() },
+            Ingetrokken = NietOverTijd.Ingetrokken with { DatumLaatsteAanpassing  = ArchiverDateHelper.CalculateArchivalStartDate(options.Bewaartijden.Uitnodigingen.Geweigerd, date).ToDateTimeOffset() },
+            Verlopen = NietOverTijd.Verlopen with { DatumLaatsteAanpassing  = ArchiverDateHelper.CalculateArchivalStartDate(options.Bewaartijden.Uitnodigingen.Verlopen, date).ToDateTimeOffset() },
         };
     }
 
