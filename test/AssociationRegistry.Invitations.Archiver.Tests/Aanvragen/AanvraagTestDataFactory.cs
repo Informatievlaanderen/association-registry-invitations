@@ -36,11 +36,11 @@ public class AanvraagTestDataFactory
         };
         OverTijd = new Aanvragen
         {
-            WachtOpAntwoord = NietOverTijd.WachtOpAntwoord with { DatumLaatsteAanpassing = ArchiverDateHelper.CalculateArchivalStartDate(options.Bewaartijden.WachtOpAntwoord, date).ToDateTimeOffset() },
-            Aanvaard = NietOverTijd.Aanvaard with { DatumLaatsteAanpassing = ArchiverDateHelper.CalculateArchivalStartDate(options.Bewaartijden.Aanvaard, date).ToDateTimeOffset() },
-            Geweigerd = NietOverTijd.Geweigerd with { DatumLaatsteAanpassing  = ArchiverDateHelper.CalculateArchivalStartDate(options.Bewaartijden.Geweigerd, date).ToDateTimeOffset() },
-            Ingetrokken = NietOverTijd.Ingetrokken with { DatumLaatsteAanpassing  = ArchiverDateHelper.CalculateArchivalStartDate(options.Bewaartijden.Geweigerd, date).ToDateTimeOffset() },
-            Verlopen = NietOverTijd.Verlopen with { DatumLaatsteAanpassing  = ArchiverDateHelper.CalculateArchivalStartDate(options.Bewaartijden.Verlopen, date).ToDateTimeOffset() },
+            WachtOpAntwoord = NietOverTijd.WachtOpAntwoord with { DatumLaatsteAanpassing = ArchiverDateHelper.CalculateArchivalStartDate(options.Bewaartijden.Aanvragen.WachtOpAntwoord, date).ToDateTimeOffset() },
+            Aanvaard = NietOverTijd.Aanvaard with { DatumLaatsteAanpassing = ArchiverDateHelper.CalculateArchivalStartDate(options.Bewaartijden.Aanvragen.Aanvaard, date).ToDateTimeOffset() },
+            Geweigerd = NietOverTijd.Geweigerd with { DatumLaatsteAanpassing  = ArchiverDateHelper.CalculateArchivalStartDate(options.Bewaartijden.Aanvragen.Geweigerd, date).ToDateTimeOffset() },
+            Ingetrokken = NietOverTijd.Ingetrokken with { DatumLaatsteAanpassing  = ArchiverDateHelper.CalculateArchivalStartDate(options.Bewaartijden.Aanvragen.Geweigerd, date).ToDateTimeOffset() },
+            Verlopen = NietOverTijd.Verlopen with { DatumLaatsteAanpassing  = ArchiverDateHelper.CalculateArchivalStartDate(options.Bewaartijden.Aanvragen.Verlopen, date).ToDateTimeOffset() },
         };
     }
 

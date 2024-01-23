@@ -6,6 +6,12 @@ public class AppSettings
     
     public class BewaartijdenOptions
     {
+        public BewaartijdenCategorieOptions Uitnodigingen { get; set; }
+        public BewaartijdenCategorieOptions Aanvragen { get; set; }
+    }
+
+    public class BewaartijdenCategorieOptions
+    {
         public string WachtOpAntwoord { get; set; } = ""; 
         public string Aanvaard { get; set; } = "";
         public string Geweigerd { get; set; } = "";
