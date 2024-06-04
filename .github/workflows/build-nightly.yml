@@ -62,19 +62,19 @@ jobs:
       - name: Test via docker run
         shell: bash
         run: |
-          docker run --network host --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 /bin/sh .github/build-scripts/run-tests-docker.sh AssociationRegistry.Invitations.Api.Tests
+          docker run --network host --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:8.0.300 /bin/sh .github/build-scripts/run-tests-docker.sh AssociationRegistry.Invitations.Api.Tests
 
       - name: Set solution info
         shell: bash
         run: |
-          docker run --network host -e CI_BUILD_NUMBER -e GIT_HASH --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 /bin/sh .github/build-scripts/set-solution-info.sh
+          docker run --network host -e CI_BUILD_NUMBER -e GIT_HASH --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:8.0.300 /bin/sh .github/build-scripts/set-solution-info.sh
         env:
           CI_BUILD_NUMBER: ${{ needs.set-release-version.outputs.version }}
 
       - name: Publish via docker run
         shell: bash
         run: |
-          docker run --network host --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 /bin/sh .github/build-scripts/publish.sh AssociationRegistry.Invitations.Api
+          docker run --network host --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:8.0.300 /bin/sh .github/build-scripts/publish.sh AssociationRegistry.Invitations.Api
 
       - name: Build image
         shell: bash
@@ -151,19 +151,19 @@ jobs:
       - name: Test via docker run
         shell: bash
         run: |
-          docker run --network host --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 /bin/sh .github/build-scripts/run-tests-docker.sh AssociationRegistry.Invitations.Archiver.Tests
+          docker run --network host --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:8.0.300 /bin/sh .github/build-scripts/run-tests-docker.sh AssociationRegistry.Invitations.Archiver.Tests
 
       - name: Set solution info
         shell: bash
         run: |
-          docker run --network host -e CI_BUILD_NUMBER -e GIT_HASH --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 /bin/sh .github/build-scripts/set-solution-info.sh
+          docker run --network host -e CI_BUILD_NUMBER -e GIT_HASH --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:8.0.300 /bin/sh .github/build-scripts/set-solution-info.sh
         env:
           CI_BUILD_NUMBER: ${{ needs.set-release-version.outputs.version }}
 
       - name: Publish via docker run
         shell: bash
         run: |
-          docker run --network host --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:6.0.201 /bin/sh .github/build-scripts/publish.sh AssociationRegistry.Invitations.Archiver
+          docker run --network host --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:8.0.300 /bin/sh .github/build-scripts/publish.sh AssociationRegistry.Invitations.Archiver
 
       - name: Build image
         shell: bash
