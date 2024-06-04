@@ -1,6 +1,6 @@
 ﻿namespace AssociationRegistry.Invitations.Archiver.Tests.Aanvragen;
 
-using AssociationRegistry.Invitations.Archiver.Tests.Fixture;
+using Fixture;
 using FluentAssertions;
 using Marten;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,9 +23,10 @@ public class AanvraagArchiverServiceTests
         using var store = _fixture.Application.Services.GetRequiredService<IDocumentStore>();
         await using var session = store.QuerySession();
 
-        var aanvraag = session.Query<Aanvraag>()
-            .Where(x => x.Id == _testDataFactory.NietOverTijd.WachtOpAntwoord.Id)
-            .Single();
+        var aanvraag = session
+                      .Query<Aanvraag>()
+                      .Single(x => x.Id == _testDataFactory.NietOverTijd.WachtOpAntwoord.Id);
+
         aanvraag.Status.Should().Be(AanvraagStatus.WachtOpAntwoord);
         aanvraag.DatumRegistratie.Should().Be(_testDataFactory.NietOverTijd.WachtOpAntwoord.DatumRegistratie);
         aanvraag.DatumLaatsteAanpassing.Should().Be(_testDataFactory.NietOverTijd.WachtOpAntwoord.DatumLaatsteAanpassing);
@@ -37,9 +38,10 @@ public class AanvraagArchiverServiceTests
         using var store = _fixture.Application.Services.GetRequiredService<IDocumentStore>();
         await using var session = store.QuerySession();
 
-        var aanvraag = session.Query<Aanvraag>()
-            .Where(x => x.Id == _testDataFactory.NietOverTijd.Aanvaard.Id)
-            .Single();
+        var aanvraag = session
+                      .Query<Aanvraag>()
+                      .Single(x => x.Id == _testDataFactory.NietOverTijd.Aanvaard.Id);
+
         aanvraag.Status.Should().Be(AanvraagStatus.Aanvaard);
         aanvraag.DatumRegistratie.Should().Be(_testDataFactory.NietOverTijd.Aanvaard.DatumRegistratie);
         aanvraag.DatumLaatsteAanpassing.Should().Be(_testDataFactory.NietOverTijd.Aanvaard.DatumLaatsteAanpassing);
@@ -51,9 +53,10 @@ public class AanvraagArchiverServiceTests
         using var store = _fixture.Application.Services.GetRequiredService<IDocumentStore>();
         await using var session = store.QuerySession();
 
-        var aanvraag = session.Query<Aanvraag>()
-            .Where(x => x.Id == _testDataFactory.NietOverTijd.Geweigerd.Id)
-            .Single();
+        var aanvraag = session
+                      .Query<Aanvraag>()
+                      .Single(x => x.Id == _testDataFactory.NietOverTijd.Geweigerd.Id);
+
         aanvraag.Status.Should().Be(AanvraagStatus.Geweigerd);
         aanvraag.DatumRegistratie.Should().Be(_testDataFactory.NietOverTijd.Geweigerd.DatumRegistratie);
         aanvraag.DatumLaatsteAanpassing.Should().Be(_testDataFactory.NietOverTijd.Geweigerd.DatumLaatsteAanpassing);
@@ -65,9 +68,10 @@ public class AanvraagArchiverServiceTests
         using var store = _fixture.Application.Services.GetRequiredService<IDocumentStore>();
         await using var session = store.QuerySession();
 
-        var aanvraag = session.Query<Aanvraag>()
-            .Where(x => x.Id == _testDataFactory.NietOverTijd.Ingetrokken.Id)
-            .Single();
+        var aanvraag = session
+                      .Query<Aanvraag>()
+                      .Single(x => x.Id == _testDataFactory.NietOverTijd.Ingetrokken.Id);
+
         aanvraag.Status.Should().Be(AanvraagStatus.Ingetrokken);
         aanvraag.DatumRegistratie.Should().Be(_testDataFactory.NietOverTijd.Ingetrokken.DatumRegistratie);
         aanvraag.DatumLaatsteAanpassing.Should().Be(_testDataFactory.NietOverTijd.Ingetrokken.DatumLaatsteAanpassing);
@@ -79,40 +83,41 @@ public class AanvraagArchiverServiceTests
         using var store = _fixture.Application.Services.GetRequiredService<IDocumentStore>();
         await using var session = store.QuerySession();
 
-        var aanvraag = session.Query<Aanvraag>()
-            .Where(x => x.Id == _testDataFactory.NietOverTijd.Verlopen.Id)
-            .Single();
+        var aanvraag = session
+                      .Query<Aanvraag>()
+                      .Single(x => x.Id == _testDataFactory.NietOverTijd.Verlopen.Id);
+
         aanvraag.Status.Should().Be(AanvraagStatus.Verlopen);
         aanvraag.DatumRegistratie.Should().Be(_testDataFactory.NietOverTijd.Verlopen.DatumRegistratie);
         aanvraag.DatumLaatsteAanpassing.Should().Be(_testDataFactory.NietOverTijd.Verlopen.DatumLaatsteAanpassing);
     }
-    
+
     [Fact]
     public async Task OverTijd_WachtendOpAntwoord_VerandertNaar_Verlopen()
     {
         using var store = _fixture.Application.Services.GetRequiredService<IDocumentStore>();
         await using var session = store.QuerySession();
 
-        var aanvraag = session.Query<Aanvraag>()
-            .Where(x => x.Id == _testDataFactory.OverTijd.WachtOpAntwoord.Id)
-            .Single();
+        var aanvraag = session
+                      .Query<Aanvraag>()
+                      .Single(x => x.Id == _testDataFactory.OverTijd.WachtOpAntwoord.Id);
 
         aanvraag.Status.Should().Be(AanvraagStatus.Verlopen);
         aanvraag.DatumRegistratie.Should().Be(_testDataFactory.NietOverTijd.WachtOpAntwoord.DatumRegistratie);
         aanvraag.DatumLaatsteAanpassing.Should().BeAfter(_testDataFactory.NietOverTijd.WachtOpAntwoord.DatumLaatsteAanpassing);
     }
-    
+
     [Fact]
     public async Task OverTijd_Aanvaard_WerdVerwijderd()
     {
         using var store = _fixture.Application.Services.GetRequiredService<IDocumentStore>();
         await using var session = store.QuerySession();
 
-        session.Query<Aanvraag>()
-            .Where(x => x.Id == _testDataFactory.OverTijd.Aanvaard.Id)
-            .SingleOrDefault()
-            .Should()
-            .BeNull();
+        session
+           .Query<Aanvraag>()
+           .SingleOrDefault(x => x.Id == _testDataFactory.OverTijd.Aanvaard.Id)
+           .Should()
+           .BeNull();
     }
 
     [Fact]
@@ -121,34 +126,36 @@ public class AanvraagArchiverServiceTests
         using var store = _fixture.Application.Services.GetRequiredService<IDocumentStore>();
         await using var session = store.QuerySession();
 
-        session.Query<Aanvraag>()
-            .Where(x => x.Id == _testDataFactory.OverTijd.Geweigerd.Id)
-            .SingleOrDefault()
-            .Should()
-            .BeNull();
+        session
+           .Query<Aanvraag>()
+           .SingleOrDefault(x => x.Id == _testDataFactory.OverTijd.Geweigerd.Id)
+           .Should()
+           .BeNull();
     }
+
     [Fact]
     public async Task OverTijd_Ingetrokken_WerdVerwijderd()
     {
         using var store = _fixture.Application.Services.GetRequiredService<IDocumentStore>();
         await using var session = store.QuerySession();
 
-        session.Query<Aanvraag>()
-            .Where(x => x.Id == _testDataFactory.OverTijd.Ingetrokken.Id)
-            .SingleOrDefault()
-            .Should()
-            .BeNull();
+        session
+           .Query<Aanvraag>()
+           .SingleOrDefault(x => x.Id == _testDataFactory.OverTijd.Ingetrokken.Id)
+           .Should()
+           .BeNull();
     }
+
     [Fact]
     public async Task OverTijd_Verlopen_WerdVerwijderd()
     {
         using var store = _fixture.Application.Services.GetRequiredService<IDocumentStore>();
         await using var session = store.QuerySession();
 
-        session.Query<Aanvraag>()
-            .Where(x => x.Id == _testDataFactory.OverTijd.Verlopen.Id)
-            .SingleOrDefault()
-            .Should()
-            .BeNull();
+        session
+           .Query<Aanvraag>()
+           .SingleOrDefault(x => x.Id == _testDataFactory.OverTijd.Verlopen.Id)
+           .Should()
+           .BeNull();
     }
 }
