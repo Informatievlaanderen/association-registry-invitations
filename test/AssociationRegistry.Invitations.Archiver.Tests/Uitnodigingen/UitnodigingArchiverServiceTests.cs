@@ -26,7 +26,7 @@ public class UitnodigingArchiverServiceTests
     [Fact]
     public async Task NietOverTijd_WachtendOpAntwoord_VerandertNiet()
     {
-        using var store = _fixture.Application.Services.GetRequiredService<IDocumentStore>();
+        var store = _fixture.Application.Services.GetRequiredService<IDocumentStore>();
         await using var session = store.QuerySession();
 
         var uitnodiging = session.Query<Uitnodiging>()
@@ -40,7 +40,7 @@ public class UitnodigingArchiverServiceTests
     [Fact]
     public async Task NietOverTijd_Aanvaard_VerandertNiet()
     {
-        using var store = _fixture.Application.Services.GetRequiredService<IDocumentStore>();
+        var store = _fixture.Application.Services.GetRequiredService<IDocumentStore>();
         await using var session = store.QuerySession();
 
         var uitnodiging = session.Query<Uitnodiging>()
@@ -54,7 +54,7 @@ public class UitnodigingArchiverServiceTests
     [Fact]
     public async Task NietOverTijd_Geweigerd_VerandertNiet()
     {
-        using var store = _fixture.Application.Services.GetRequiredService<IDocumentStore>();
+        var store = _fixture.Application.Services.GetRequiredService<IDocumentStore>();
         await using var session = store.QuerySession();
 
         var uitnodiging = session.Query<Uitnodiging>()
@@ -68,7 +68,7 @@ public class UitnodigingArchiverServiceTests
     [Fact]
     public async Task NietOverTijd_Ingetrokken_VerandertNiet()
     {
-        using var store = _fixture.Application.Services.GetRequiredService<IDocumentStore>();
+        var store = _fixture.Application.Services.GetRequiredService<IDocumentStore>();
         await using var session = store.QuerySession();
 
         var uitnodiging = session.Query<Uitnodiging>()
@@ -82,7 +82,7 @@ public class UitnodigingArchiverServiceTests
     [Fact]
     public async Task NietOverTijd_Verlopen_VerandertNiet()
     {
-        using var store = _fixture.Application.Services.GetRequiredService<IDocumentStore>();
+        var store = _fixture.Application.Services.GetRequiredService<IDocumentStore>();
         await using var session = store.QuerySession();
 
         var uitnodiging = session.Query<Uitnodiging>()
@@ -96,7 +96,7 @@ public class UitnodigingArchiverServiceTests
     [Fact]
     public async Task OverTijd_WachtendOpAntwoord_VerandertNaar_Verlopen()
     {
-        using var store = _fixture.Application.Services.GetRequiredService<IDocumentStore>();
+        var store = _fixture.Application.Services.GetRequiredService<IDocumentStore>();
         await using var session = store.QuerySession();
 
         var uitnodiging = session.Query<Uitnodiging>()
@@ -111,7 +111,7 @@ public class UitnodigingArchiverServiceTests
     [Fact]
     public async Task OverTijd_Aanvaard_WerdVerwijderd()
     {
-        using var store = _fixture.Application.Services.GetRequiredService<IDocumentStore>();
+        var store = _fixture.Application.Services.GetRequiredService<IDocumentStore>();
         await using var session = store.QuerySession();
 
         session.Query<Uitnodiging>()
@@ -124,7 +124,7 @@ public class UitnodigingArchiverServiceTests
     [Fact]
     public async Task OverTijd_Geweigerd_WerdVerwijderd()
     {
-        using var store = _fixture.Application.Services.GetRequiredService<IDocumentStore>();
+        var store = _fixture.Application.Services.GetRequiredService<IDocumentStore>();
         await using var session = store.QuerySession();
 
         session.Query<Uitnodiging>()
@@ -136,7 +136,7 @@ public class UitnodigingArchiverServiceTests
     [Fact]
     public async Task OverTijd_Ingetrokken_WerdVerwijderd()
     {
-        using var store = _fixture.Application.Services.GetRequiredService<IDocumentStore>();
+        var store = _fixture.Application.Services.GetRequiredService<IDocumentStore>();
         await using var session = store.QuerySession();
 
         session.Query<Uitnodiging>()
@@ -148,7 +148,7 @@ public class UitnodigingArchiverServiceTests
     [Fact]
     public async Task OverTijd_Verlopen_WerdVerwijderd()
     {
-        using var store = _fixture.Application.Services.GetRequiredService<IDocumentStore>();
+        var store = _fixture.Application.Services.GetRequiredService<IDocumentStore>();
         await using var session = store.QuerySession();
 
         session.Query<Uitnodiging>()
