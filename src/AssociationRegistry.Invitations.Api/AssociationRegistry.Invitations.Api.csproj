@@ -20,7 +20,7 @@
     <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
     <RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
     <NoWarn>1701;1702;1705;1591</NoWarn>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <IsTestProject>false</IsTestProject>
   </PropertyGroup>
 
