@@ -1,3 +1,21 @@
+# [1.25.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.24.6...v1.25.0) (2024-06-04)
+
+
+### Bug Fixes
+
+* or-1566 fix apsettings and disposed usings in tests ([d269773](https://github.com/informatievlaanderen/association-registry-invitations/commit/d2697732ce48b32735d06ad2caf31d70c914a129))
+* or-1566 fix build and release in github workflow ([5d3daee](https://github.com/informatievlaanderen/association-registry-invitations/commit/5d3daeeee97f8e9b33147403b9895cf51c8e9157))
+* or-1566 fix github workflow publish script ([84501f9](https://github.com/informatievlaanderen/association-registry-invitations/commit/84501f94ebe2146a11d77e6e37acf136b97c9b15))
+* or-1566 incorrect output type on api ([cfc600d](https://github.com/informatievlaanderen/association-registry-invitations/commit/cfc600ddcbf0dc996cd80d2693ef9fb850537ce9))
+* or-1566 update github pre merge workflow to dotnet 8 ([c9e5a5b](https://github.com/informatievlaanderen/association-registry-invitations/commit/c9e5a5b45e441b4d5894dbfdc64f16af45025c4e))
+* or-1566 update github workflow to dotnet 8 ([1670387](https://github.com/informatievlaanderen/association-registry-invitations/commit/16703879f653f4e7260930eb0d8fe32417fde111))
+
+
+### Features
+
+* or-1566 move to dotnet 8 ([2e5d7bb](https://github.com/informatievlaanderen/association-registry-invitations/commit/2e5d7bb89fe07211c1ceac0fc9dc60fbf6a42ee4))
+* or-1566 update github workflow to dotnet 8 ([0b46d02](https://github.com/informatievlaanderen/association-registry-invitations/commit/0b46d0224e87f5c640025166903cf795af7f852b))
+
 ## [1.24.6](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.24.5...v1.24.6) (2024-01-23)
 
 
