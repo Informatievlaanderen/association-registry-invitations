@@ -124,7 +124,7 @@ jobs:
       - name: Set solution info
         shell: bash
         run: |
-          docker run --network host -e CI_BUILD_NUMBER -e GIT_HASH --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:8.0.300 /bin/sh .github/build-scripts/set-solution-info.sh
+          docker run --network host -e CI_BUILD_NUMBER -e GIT_HASH=${{ github.sha }} --rm -v $(pwd):/app -w /app/ mcr.microsoft.com/dotnet/sdk:8.0.300 /bin/sh .github/build-scripts/set-solution-info.sh
         env:
           CI_BUILD_NUMBER: ${{ needs.set-release-version.outputs.version }}
 
