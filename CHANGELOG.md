@@ -1,3 +1,10 @@
+## [1.25.1](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.25.0...v1.25.1) (2024-08-01)
+
+
+### Bug Fixes
+
+* or-2255 pass github sha to sln info ([3723841](https://github.com/informatievlaanderen/association-registry-invitations/commit/37238415e7671110880351f5a48081dca472ad17))
+
 # [1.25.0](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.24.6...v1.25.0) (2024-06-04)
 
 
