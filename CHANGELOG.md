@@ -1,3 +1,10 @@
+## [1.25.3](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.25.2...v1.25.3) (2024-10-01)
+
+
+### Bug Fixes
+
+* or-2441 use release output version instead of input version inside main workflow ([3822bb9](https://github.com/informatievlaanderen/association-registry-invitations/commit/3822bb9ce8082cd89b3b88804fd16975f2962d46))
+
 ## [1.25.2](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.25.1...v1.25.2) (2024-10-01)
 
 
