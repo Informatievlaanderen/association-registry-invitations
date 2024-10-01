@@ -1,3 +1,4 @@
+# Uses new deployment and status API
 name: Manual Deploy To Staging (IK4)
 
 on:
@@ -8,36 +9,34 @@ on:
         required: true
 
 jobs:
-
-  deploy_services_ik4:
-    name: Deploy services to Staging (IK4)
-    environment: 'staging_ik4'
-    runs-on: 'ubuntu-latest'
+  deployment:
+    name: Deploy services (Staging IK4)
+    environment: test_ik4
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         services:
           [
-            'uitnodigingenapi'
+            'uitnodigingenapi',
           ]
     steps:
-      - name: Output version to deploy
-        shell: bash
-        run: |
-          echo ${{ inputs.version }}
       - name: CD
+        id: awscurl-polling-action
         env:
-          BUILD_URL: ${{ secrets.VBR_AWS_BUILD_API }}/${{matrix.services}}
-          STATUS_URL: ${{ secrets.VBR_AWS_BUILD_STATUS_API }}/${{matrix.services}}
-        uses: informatievlaanderen/awscurl-polling-action/polling-action@main
+          BUILD_URL: ${{ secrets.VBR_AWS_BUILD_API }}/${{matrix.services}}/staging/deploy/v4
+          STATUS_URL: ${{ secrets.VBR_AWS_BUILD_STATUS_API }}/${{matrix.services}}/staging/deploy/v4/status
+        uses: informatievlaanderen/awscurl-polling-action/polling-action@deploy-v4
         with:
-          environment: 'stg'
-          version: ${{ inputs.version }}
+          environment: staging
+          version: ${{ github.event.inputs.version }}
           status-url: $STATUS_URL
           deploy-url: $BUILD_URL
           access-key: ${{ secrets.VBR_AWS_BUILD_USER_ACCESS_KEY_ID_IK4 }}
           secret-key: ${{ secrets.VBR_AWS_BUILD_USER_SECRET_ACCESS_KEY_IK4 }}
-          region: 'eu-west-1'
-          deploy-target: 'ecs_service'
+          deploy-target: 'ecs'
+          domain: 'verenigingsregister'
+          project: 'verenigingsregister'
+          application: ${{matrix.services}}
           interval: 2
       - name: output
         shell: bash
@@ -47,35 +46,34 @@ jobs:
           echo Status: ${{ steps.awscurl-polling-action.outputs.status }}
           echo ${{ steps.awscurl-polling-action.outputs.final-message }}
 
-  deploy_scheduled_tasks_ik4:
-    name: Deploy scheduled tasks to Staging (IK4)
-    environment: 'staging_ik4'
-    runs-on: 'ubuntu-latest'
+  deployment_scheduledtasks:
+    name: Deploy scheduled tasks (Staging IK4)
+    environment: staging_ik4
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         services:
           [
-            'uitnodigingenarchiver'
+            'uitnodigingenarchiver',
           ]
     steps:
-      - name: Output version to deploy
-        shell: bash
-        run: |
-          echo ${{ inputs.version }}
       - name: CD
+        id: awscurl-polling-action
         env:
-          BUILD_URL: ${{ secrets.VBR_AWS_BUILD_API }}/${{matrix.services}}
-          STATUS_URL: ${{ secrets.VBR_AWS_BUILD_STATUS_API }}/${{matrix.services}}
-        uses: informatievlaanderen/awscurl-polling-action/polling-action@main
+          BUILD_URL: ${{ secrets.VBR_AWS_BUILD_API }}/${{matrix.services}}/staging/deploy/v4
+          STATUS_URL: ${{ secrets.VBR_AWS_BUILD_STATUS_API }}/${{matrix.services}}/staging/deploy/v4/status
+        uses: informatievlaanderen/awscurl-polling-action/polling-action@deploy-v4
         with:
-          environment: 'stg'
-          version: ${{ inputs.version }}
+          environment: staging
+          version: ${{ github.event.inputs.version }}
           status-url: $STATUS_URL
           deploy-url: $BUILD_URL
           access-key: ${{ secrets.VBR_AWS_BUILD_USER_ACCESS_KEY_ID_IK4 }}
           secret-key: ${{ secrets.VBR_AWS_BUILD_USER_SECRET_ACCESS_KEY_IK4 }}
-          region: 'eu-west-1'
-          deploy-target: 'ecs_scheduled_task'
+          domain: 'verenigingsregister'
+          project: 'verenigingsregister'
+          deploy-target: 'ecs'
+          application: ${{matrix.services}}
           interval: 2
       - name: output
         shell: bash
