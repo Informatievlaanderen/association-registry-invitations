@@ -1,3 +1,10 @@
+## [1.25.5](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.25.4...v1.25.5) (2024-10-01)
+
+
+### Bug Fixes
+
+* or-2441 use stg instead of staging as environment name inside workflow files ([0ea1700](https://github.com/informatievlaanderen/association-registry-invitations/commit/0ea1700d1eda01d5cdc003ec76823b6eb2292878))
+
 ## [1.25.4](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.25.3...v1.25.4) (2024-10-01)
 
 
