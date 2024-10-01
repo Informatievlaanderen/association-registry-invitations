@@ -494,7 +494,7 @@ jobs:
         uses: informatievlaanderen/awscurl-polling-action/polling-action@deploy-v4
         with:
           environment: test
-          version: ${{ github.event.inputs.version }}
+          version: ${{ needs.release.outputs.version }}
           status-url: $STATUS_URL
           deploy-url: $BUILD_URL
           access-key: ${{ secrets.VBR_AWS_BUILD_USER_ACCESS_KEY_ID_IK4 }}
@@ -533,7 +533,7 @@ jobs:
         uses: informatievlaanderen/awscurl-polling-action/polling-action@deploy-v4
         with:
           environment: test
-          version: ${{ github.event.inputs.version }}
+          version: ${{ needs.release.outputs.version }}
           status-url: $STATUS_URL
           deploy-url: $BUILD_URL
           access-key: ${{ secrets.VBR_AWS_BUILD_USER_ACCESS_KEY_ID_IK4 }}
