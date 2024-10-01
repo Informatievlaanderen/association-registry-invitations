@@ -1,3 +1,4 @@
+# Uses new deployment and status API
 name: Manual Deploy To Test (IK4)
 
 on:
