@@ -473,38 +473,37 @@ jobs:
           SEMVER: ${{ needs.release.outputs.version }}
           WORKSPACE: ${{ github.workspace }}
            
+
   deploy_test_services_ik4:
+    name: Deploy services (Test IK4)
     if: needs.release.outputs.version != 'none'
     needs: [ set-release-version, push_images_to_devops_ik4, release ]
-    name: Deploy services to Test (IK4)
-    environment: 'test_ik4'
-    runs-on: 'ubuntu-latest'
+    environment: test_ik4
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         services:
           [
-            'uitnodigingenapi'
+            'uitnodigingenapi',
           ]
     steps:
-      - name: debug_output
-        shell: bash
-        run: |
-          echo ${{ needs.release.outputs.version }}
       - name: CD
-        if: needs.release.outputs.version != 'none'
+        id: awscurl-polling-action
         env:
-          BUILD_URL: ${{ secrets.VBR_AWS_BUILD_API }}/${{matrix.services}}
-          STATUS_URL: ${{ secrets.VBR_AWS_BUILD_STATUS_API }}/${{matrix.services}}
-        uses: informatievlaanderen/awscurl-polling-action/polling-action@main
+          BUILD_URL: ${{ secrets.VBR_AWS_BUILD_API }}/${{matrix.services}}/test/deploy/v4
+          STATUS_URL: ${{ secrets.VBR_AWS_BUILD_STATUS_API }}/${{matrix.services}}/test/deploy/v4/status
+        uses: informatievlaanderen/awscurl-polling-action/polling-action@deploy-v4
         with:
-          environment: 'test'
-          version: ${{ needs.release.outputs.version }}
+          environment: test
+          version: ${{ github.event.inputs.version }}
           status-url: $STATUS_URL
           deploy-url: $BUILD_URL
           access-key: ${{ secrets.VBR_AWS_BUILD_USER_ACCESS_KEY_ID_IK4 }}
           secret-key: ${{ secrets.VBR_AWS_BUILD_USER_SECRET_ACCESS_KEY_IK4 }}
-          region: 'eu-west-1'
-          deploy-target: 'ecs_service'
+          deploy-target: 'ecs'
+          domain: 'verenigingsregister'
+          project: 'verenigingsregister'
+          application: ${{matrix.services}}
           interval: 2
       - name: output
         shell: bash
@@ -517,35 +516,33 @@ jobs:
   deploy_test_scheduled_tasks_ik4:
     if: needs.release.outputs.version != 'none'
     needs: [ set-release-version, push_images_to_devops_ik4, release ]
-    name: Deploy scheduled tasks to Test (IK4)
-    environment: 'test_ik4'
-    runs-on: 'ubuntu-latest'
+    name: Deploy scheduled tasks (Test IK4)
+    environment: test_ik4
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         services:
           [
-            'uitnodigingenarchiver'
+            'uitnodigingenarchiver',
           ]
     steps:
-      - name: debug_output
-        shell: bash
-        run: |
-          echo ${{ needs.release.outputs.version }}
       - name: CD
-        if: needs.release.outputs.version != 'none'
+        id: awscurl-polling-action
         env:
-          BUILD_URL: ${{ secrets.VBR_AWS_BUILD_API }}/${{matrix.services}}
-          STATUS_URL: ${{ secrets.VBR_AWS_BUILD_STATUS_API }}/${{matrix.services}}
-        uses: informatievlaanderen/awscurl-polling-action/polling-action@main
+          BUILD_URL: ${{ secrets.VBR_AWS_BUILD_API }}/${{matrix.services}}/test/deploy/v4
+          STATUS_URL: ${{ secrets.VBR_AWS_BUILD_STATUS_API }}/${{matrix.services}}/test/deploy/v4/status
+        uses: informatievlaanderen/awscurl-polling-action/polling-action@deploy-v4
         with:
-          environment: 'test'
-          version: ${{ needs.release.outputs.version }}
+          environment: test
+          version: ${{ github.event.inputs.version }}
           status-url: $STATUS_URL
           deploy-url: $BUILD_URL
           access-key: ${{ secrets.VBR_AWS_BUILD_USER_ACCESS_KEY_ID_IK4 }}
           secret-key: ${{ secrets.VBR_AWS_BUILD_USER_SECRET_ACCESS_KEY_IK4 }}
-          region: 'eu-west-1'
-          deploy-target: 'ecs_scheduled_task'
+          domain: 'verenigingsregister'
+          project: 'verenigingsregister'
+          deploy-target: 'ecs'
+          application: ${{matrix.services}}
           interval: 2
       - name: output
         shell: bash
