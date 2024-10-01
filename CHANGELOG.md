@@ -1,3 +1,12 @@
+## [1.25.2](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.25.1...v1.25.2) (2024-10-01)
+
+
+### Bug Fixes
+
+* or-2441 use new deployment and status api ([5703e21](https://github.com/informatievlaanderen/association-registry-invitations/commit/5703e214d69cdf1cfc6c436860d49b0e140dcb90))
+* or-2441 use new deployment and status api ([bfe1022](https://github.com/informatievlaanderen/association-registry-invitations/commit/bfe1022284601d30ca60b0c45cebec8b19eb767b))
+* or-2441 use new deployment and status api for manual deploy to test ([ddd0b49](https://github.com/informatievlaanderen/association-registry-invitations/commit/ddd0b4923bcf65cf291904a42c6c8cf513935663))
+
 ## [1.25.1](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.25.0...v1.25.1) (2024-08-01)
 
 
