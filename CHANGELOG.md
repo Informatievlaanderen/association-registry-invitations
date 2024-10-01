@@ -1,3 +1,10 @@
+## [1.25.4](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.25.3...v1.25.4) (2024-10-01)
+
+
+### Bug Fixes
+
+* or-2441 use new deployment and status api for staging environment ([3189161](https://github.com/informatievlaanderen/association-registry-invitations/commit/3189161dbe0bf961540a7b9123c187c9e4c26e88))
+
 ## [1.25.3](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.25.2...v1.25.3) (2024-10-01)
 
 
