@@ -438,7 +438,7 @@ jobs:
 
       - name: Login to Amazon ECR (DevOps)
         if: needs.release.outputs.version != 'none'
-        uses: aws-actions/amazon-ecr-login@v1.5.3
+        uses: aws-actions/amazon-ecr-login@v1.7.1
 
       - name: Download invitations-api artifact
         uses: actions/download-artifact@v3
