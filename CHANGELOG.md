@@ -1,3 +1,10 @@
+## [1.25.6](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.25.5...v1.25.6) (2025-10-22)
+
+
+### Bug Fixes
+
+* or-2952 use devops api for production deploy ([f63004d](https://github.com/informatievlaanderen/association-registry-invitations/commit/f63004dc9602d4bc2b0b4ef3fbbe776875aaab4b))
+
 ## [1.25.5](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.25.4...v1.25.5) (2024-10-01)
 
 
