@@ -7,7 +7,8 @@ on:
 
 concurrency: CI
 
-jobs:  
+jobs:
+  
   set-release-version:
     if: github.repository_owner == 'Informatievlaanderen'
     name: Decide next version
