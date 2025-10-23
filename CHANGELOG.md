@@ -1,3 +1,10 @@
+## [1.25.7](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.25.6...v1.25.7) (2025-10-23)
+
+
+### Bug Fixes
+
+* or-2952 trigger build ([509140b](https://github.com/informatievlaanderen/association-registry-invitations/commit/509140b864de4debc574c226c55bf72c4f1c6055))
+
 ## [1.25.6](https://github.com/informatievlaanderen/association-registry-invitations/compare/v1.25.5...v1.25.6) (2025-10-22)
 
 
