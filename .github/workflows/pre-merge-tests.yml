@@ -135,9 +135,9 @@ jobs:
 
       - name: Archive code coverage results
         if: ${{ always() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: test-report
+          name: test-report-api
           path: testresults/*.html
 
       - name: Shows logs ACM container
@@ -183,9 +183,9 @@ jobs:
 
       - name: Archive code coverage results
         if: ${{ always() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: test-report
+          name: test-report-archiver
           path: testresults/*.html
 
       - name: Shows logs ACM container
